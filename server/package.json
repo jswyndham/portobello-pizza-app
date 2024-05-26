@@ -1,0 +1,28 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"main": "server.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "ts-node src/server.ts",
+		"build": "tsc"
+	},
+	"author": "James Saunders-Wyndham",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"@types/express": "^4.17.21",
+		"@types/mongoose": "^5.11.97",
+		"@types/node": "^20.12.12",
+		"concurrently": "^8.2.2",
+		"express": "^4.19.2",
+		"express-async-errors": "^3.1.1",
+		"express-validator": "^7.1.0",
+		"http-status-codes": "^2.3.0",
+		"mongoose": "^8.4.0",
+		"nodemon": "^3.1.1",
+		"sanitize-html": "^2.13.0",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.5"
+	}
+}
