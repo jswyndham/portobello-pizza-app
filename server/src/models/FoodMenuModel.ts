@@ -25,18 +25,7 @@ const FoodMenuSchema: Schema = new Schema({
 	},
 	pizzaType: {
 		type: String,
-		enum: Object.values(MEAT_OR_VEG).map((type) => type.value),
-		validate: {
-			validator: function (value: string[]) {
-				// Only require ingredients if foodCategory is 'PIZZA'
-				return (
-					this.foodCategory !== MENU_CATEGORY.PIZZA.value ||
-					(Array.isArray(value) && value.length > 0)
-				);
-			},
-			message:
-				'For pizza items, you need to choose either "vegetarian list" or "meat-eater list".',
-		},
+		required: false, // Make this field optional
 	},
 	name: {
 		type: String,
@@ -56,6 +45,18 @@ const FoodMenuSchema: Schema = new Schema({
 		type: Number,
 		required: true,
 	},
+});
+
+// Add custom validation middleware in a pre-save hook
+// Only require ingredients if foodCategory is 'PIZZA'
+FoodMenuSchema.pre('save', function (next) {
+	if (
+		this.menuCategory !== MENU_CATEGORY.PIZZA.value &&
+		(!Array.isArray(this.ingredients) || this.ingredients.length === 0)
+	) {
+		return next(new Error('Ingredients are required for cocktails.'));
+	}
+	next();
 });
 
 export default mongoose.model<FoodMenu>('FoodMenu', FoodMenuSchema);

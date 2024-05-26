@@ -2,7 +2,7 @@
 export const USER_STATUS = {
 	ADMIN: { value: 'ADMIN', label: 'admin' },
 	MANAGER: { value: 'MANAGER', label: 'manager' },
-	EMPLOYEE: { value: 'EMPLOYEE', label: 'employee' },
+	STAFF_MEMBER: { value: 'STAFF_MEMBER', label: 'staff member' },
 } as const;
 
 // Member status for admin group members
