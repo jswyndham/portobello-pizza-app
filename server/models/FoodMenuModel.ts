@@ -10,6 +10,7 @@ interface FoodMenu extends Document {
 	menuCategory: MenuCategory['value'];
 	pizzaType?: MeatOrVeg['value'];
 	name: string;
+	imageUrl?: string; // Optional field for image URL
 	ingredients: string[];
 	price: number;
 }
@@ -40,6 +41,10 @@ const FoodMenuSchema: Schema = new Schema({
 	name: {
 		type: String,
 		required: true,
+	},
+	imageUrl: {
+		type: String,
+		required: false, // Make this field optional
 	},
 	ingredients: [
 		{

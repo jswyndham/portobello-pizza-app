@@ -4,6 +4,7 @@ import { DRINK_CATEGORY, DrinkCategory } from '../utils/constants';
 interface DrinkMenu extends Document {
 	drinkCategory: DrinkCategory['value'];
 	name: string;
+	imageUrl?: string; // Optional field for image URL
 	ingredients: string[];
 	price: number;
 	size: string;
@@ -18,6 +19,10 @@ const DrinkMenuSchema: Schema = new Schema({
 	name: {
 		type: String,
 		required: true,
+	},
+	imageUrl: {
+		type: String,
+		required: false, // Make this field optional
 	},
 	ingredients: [
 		{
