@@ -13,3 +13,12 @@ export const validateRegisterUser = [
 		.withMessage('Password must be at least 6 characters long'),
 	body('userStatus').optional().isString(),
 ];
+
+export const validateLoginUser = [
+	body('email')
+		.notEmpty()
+		.withMessage('Email is required')
+		.isEmail()
+		.withMessage('Invalid email format'),
+	body('password').notEmpty().withMessage('Password is required'),
+];

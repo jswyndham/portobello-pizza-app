@@ -14,25 +14,13 @@ interface RegisterUserRequest {
 	userStatus?: string;
 }
 
-// Validation rules
-// export const validateRegisterUser = [
-// 	body('firstName')
-// 		.isString()
-// 		.notEmpty()
-// 		.withMessage('First name is required'),
-// 	body('lastName').isString().notEmpty().withMessage('Last name is required'),
-// 	body('email').isEmail().withMessage('Valid email is required'),
-// 	body('password')
-// 		.isString()
-// 		.isLength({ min: 6 })
-// 		.withMessage('Password must be at least 6 characters long'),
-// 	body('userStatus').optional().isString(),
-// ];
-
 export const registerUser = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
+	// Log request body for debugging
+	console.log('Request Body:', req.body);
+
 	// Validate the request body
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -43,7 +31,15 @@ export const registerUser = async (
 	try {
 		// Define the request body
 		const { firstName, lastName, email, password, userStatus } = req.body;
-
+		// Log request body for debugging
+		console.log(
+			'Request Body:',
+			firstName,
+			lastName,
+			email,
+			password,
+			userStatus
+		);
 		// Encrypt user password
 		const hashedPassword = await hashPassword(password);
 

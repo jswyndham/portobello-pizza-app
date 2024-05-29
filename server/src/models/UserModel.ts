@@ -1,7 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Types, Schema } from 'mongoose';
 import { USER_STATUS, UserStatus } from '../utils/constants';
 
 export interface User extends Document {
+	_id: Types.ObjectId;
 	firstName: string;
 	lastName: string;
 	email: string;
