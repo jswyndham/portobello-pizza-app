@@ -4,15 +4,7 @@ import User from '../../models/UserModel';
 import AuditLog from '../../models/AuditLogModel';
 import { ADMIN_STATUS, USER_STATUS } from '../../utils/constants';
 import { hashPassword } from '../../utils/passwordUtils';
-import { body, validationResult } from 'express-validator';
-
-interface RegisterUserRequest {
-	firstName: string;
-	lastName: string;
-	email: string;
-	password: string;
-	userStatus?: string;
-}
+import { validationResult } from 'express-validator';
 
 export const registerUser = async (
 	req: Request,
@@ -31,6 +23,22 @@ export const registerUser = async (
 	try {
 		// Define the request body
 		const { firstName, lastName, email, password, userStatus } = req.body;
+
+		// Encrypt user password
+		const hashedPassword = await hashPassword(password);
+
+		// Check if this is the first account to automatically assign super admin status
+		const isFirstAccount = (await User.countDocuments()) === 0;
+
+		// Determine the user role
+		let role = userStatus || USER_STATUS.MANAGER.value;
+		let adminRole: string[] = [];
+
+		if (isFirstAccount) {
+			role = USER_STATUS.ADMIN.value;
+			adminRole.push(ADMIN_STATUS.SUPER_ADMIN.value);
+		}
+
 		// Log request body for debugging
 		console.log(
 			'Request Body:',
@@ -40,20 +48,6 @@ export const registerUser = async (
 			password,
 			userStatus
 		);
-		// Encrypt user password
-		const hashedPassword = await hashPassword(password);
-
-		// Check if this is the first account to automatically assign super admin status
-		const isFirstAccount = (await User.countDocuments()) === 0;
-
-		// Determine the user role
-		let role = userStatus || USER_STATUS.STAFF_MEMBER.value;
-		let adminRole: string[] = [];
-
-		if (isFirstAccount) {
-			role = USER_STATUS.ADMIN.value;
-			adminRole.push(ADMIN_STATUS.SUPER_ADMIN.value);
-		}
 
 		// Create the user
 		const user = await User.create({

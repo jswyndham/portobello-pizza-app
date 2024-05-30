@@ -21,7 +21,7 @@ export const logoutUser = async (
 		const userId = user.userId;
 
 		// Set the cookie to a dummy value and make it expire immediately
-		res.cookie('token', 'logout', {
+		res.cookie('token', '', {
 			httpOnly: true,
 			expires: new Date(Date.now()),
 		});
@@ -31,6 +31,7 @@ export const logoutUser = async (
 			const auditLog = new AuditLog({
 				action: 'LOGOUT',
 				subjectType: 'Logout user',
+				subjectId: userId,
 				userId: userId,
 				details: { reason: 'User logged out' },
 			});

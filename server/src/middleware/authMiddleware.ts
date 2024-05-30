@@ -15,7 +15,7 @@ export const authenticateUser = (
 	next: NextFunction
 ): void => {
 	// Get the token from the cookie
-	let token = req.cookies.token;
+	let token = req.cookies?.token;
 
 	// If token is not found in cookie, check the authorization header
 	if (!token) {

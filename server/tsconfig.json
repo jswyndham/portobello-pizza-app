@@ -8,6 +8,6 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", "tests", "jest.config.js"],
 	"exclude": ["node_modules"]
 }

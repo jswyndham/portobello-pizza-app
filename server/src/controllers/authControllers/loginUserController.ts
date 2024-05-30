@@ -69,6 +69,8 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		});
 		await auditLog.save();
 
+		console.log('login user: ', email, password);
+
 		res.status(StatusCodes.OK).json({
 			msg: 'User is logged in',
 			user: { id: user._id, email: user.email },
