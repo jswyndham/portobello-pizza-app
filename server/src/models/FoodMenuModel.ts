@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Types, Schema } from 'mongoose';
 import {
 	MEAT_OR_VEG,
 	MENU_CATEGORY,
@@ -7,6 +7,7 @@ import {
 } from '../utils/constants';
 
 interface FoodMenu extends Document {
+	_id: Types.ObjectId;
 	menuCategory: MenuCategory['value'];
 	pizzaType?: MeatOrVeg['value'];
 	name: string;

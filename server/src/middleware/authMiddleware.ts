@@ -3,14 +3,14 @@ import { UnauthenticatedError } from '../errors/customErrors';
 import { verifyJWT } from '../utils/tokenUtils';
 
 interface AuthenticatedRequest extends Request {
-	user: {
+	user?: {
 		userId: string;
 		userStatus: string;
 	};
 }
 
 export const authenticateUser = (
-	req: Request,
+	req: AuthenticatedRequest,
 	res: Response,
 	next: NextFunction
 ): void => {
@@ -31,11 +31,11 @@ export const authenticateUser = (
 		// Verify the token and attach the user info to the request
 		const payload = verifyJWT(token);
 		const { userId, userStatus } = payload;
-		(req as AuthenticatedRequest).user = { userId, userStatus };
+		req.user = { userId, userStatus };
 
-		console.log('Authenticated user:', (req as AuthenticatedRequest).user);
+		console.log('Authenticated user:', req.user);
 		next();
-	} catch (error) {
+	} catch (error: any) {
 		throw new UnauthenticatedError('Authentication invalid');
 	}
 };

@@ -74,6 +74,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		res.status(StatusCodes.OK).json({
 			msg: 'User is logged in',
 			user: { id: user._id, email: user.email },
+			token,
 		});
 	} catch (error: any) {
 		console.error('Error signing in user:', error);
