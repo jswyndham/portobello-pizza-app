@@ -4,7 +4,7 @@ import {
 	MENU_CATEGORY,
 	MenuCategory,
 	MeatOrVeg,
-} from '../utils/constants';
+} from '../constants';
 
 interface FoodMenu extends Document {
 	_id: Types.ObjectId;

@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { ADMIN_STATUS, AdminStatus } from '../utils/constants';
+import { ADMIN_STATUS, AdminStatus } from '../constants';
 import { User } from './UserModel';
 
 interface Admin extends Document {

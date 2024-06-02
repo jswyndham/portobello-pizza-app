@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import User from '../../models/UserModel';
 import AuditLog from '../../models/AuditLogModel';
-import { ADMIN_STATUS, USER_STATUS } from '../../utils/constants';
+import { ADMIN_STATUS, USER_STATUS } from '../../constants';
 import { hashPassword } from '../../utils/passwordUtils';
 import { validationResult } from 'express-validator';
 

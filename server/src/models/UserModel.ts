@@ -1,5 +1,5 @@
 import mongoose, { Document, Types, Schema } from 'mongoose';
-import { USER_STATUS, UserStatus } from '../utils/constants';
+import { USER_STATUS, UserStatus } from '../constants';
 
 export interface User extends Document {
 	_id: Types.ObjectId;

@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { DRINK_CATEGORY, DrinkCategory } from '../utils/constants';
+import { DRINK_CATEGORY, DrinkCategory } from '../constants';
 
 interface DrinkMenu extends Document {
 	drinkCategory: DrinkCategory['value'];

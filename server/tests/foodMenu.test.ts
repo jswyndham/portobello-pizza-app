@@ -30,20 +30,26 @@ afterAll(async () => {
 	await mongoose.disconnect();
 }, 40000);
 
+let emailCounter = 1;
+
+const getEmail = () => `testuser${emailCounter++}@example.com`;
+
 describe('FoodMenu API', () => {
 	it('should register a new food menu item', async () => {
+		const email = getEmail();
+
 		// Step 1: Register a new user
 		await request(app).post('/api/v1/auth/register').send({
 			firstName: 'John',
 			lastName: 'Doe',
-			email: 'johndoe@example.com',
+			email,
 			password: 'password123',
 			userStatus: 'MANAGER',
 		});
 
 		// Step 2: Log in the user to get a token
 		const loginRes = await request(app).post('/api/v1/auth/login').send({
-			email: 'johndoe@example.com',
+			email,
 			password: 'password123',
 		});
 
@@ -52,18 +58,14 @@ describe('FoodMenu API', () => {
 
 		// Step 3: Use the token to create a food menu item
 		const res = await request(app)
-			.post('/api/v1/foodMenu/create')
+			.post('/api/v1/foodMenu/food-items')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				menuCategory: 'PIZZA',
 				pizzaType: 'MEAT',
 				name: 'Test Pizza',
-				ingredients: [
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				],
+				ingredients:
+					'test chicken, test basil, test chilli, test tomato paste',
 				price: 666,
 			});
 
@@ -73,18 +75,20 @@ describe('FoodMenu API', () => {
 	}, 40000);
 
 	it('should get food menu items', async () => {
+		const email = getEmail();
+
 		// Step 1: Register a new user
 		await request(app).post('/api/v1/auth/register').send({
 			firstName: 'John',
 			lastName: 'Doe',
-			email: 'johndoe2@example.com',
+			email,
 			password: 'password123',
 			userStatus: 'MANAGER',
 		});
 
 		// Step 2: Log in the user to get a token
 		const loginRes = await request(app).post('/api/v1/auth/login').send({
-			email: 'johndoe2@example.com',
+			email,
 			password: 'password123',
 		});
 
@@ -93,40 +97,32 @@ describe('FoodMenu API', () => {
 
 		// Step 3: Use the token to create a few food menu items
 		await request(app)
-			.post('/api/v1/foodMenu/create')
+			.post('/api/v1/foodMenu/food-items')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				menuCategory: 'PIZZA',
 				pizzaType: 'MEAT',
 				name: 'Test Pizza 1',
-				ingredients: [
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				],
+				ingredients:
+					'test chicken, test basil, test chilli, test tomato paste',
 				price: 666,
 			});
 
 		await request(app)
-			.post('/api/v1/foodMenu/create')
+			.post('/api/v1/foodMenu/food-items')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
 				menuCategory: 'PIZZA',
 				pizzaType: 'MEAT',
 				name: 'Test Pizza 2',
-				ingredients: [
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				],
+				ingredients:
+					'test chicken, test basil, test chilli, test tomato paste',
 				price: 666,
 			});
 
 		// Step 4: Use the token to fetch food menu items
 		const res = await request(app)
-			.get('/api/v1/foodMenu/food-menu-items')
+			.get('/api/v1/foodMenu/food-items')
 			.set('Authorization', `Bearer ${token}`)
 			.query({ page: 1, limit: 10 });
 
@@ -135,5 +131,79 @@ describe('FoodMenu API', () => {
 		expect(res.body.length).toBeGreaterThanOrEqual(2);
 		expect(res.body[0]).toHaveProperty('name', 'Test Pizza 1');
 		expect(res.body[1]).toHaveProperty('name', 'Test Pizza 2');
+	}, 40000);
+
+	it('should delete a food menu item', async () => {
+		const email = getEmail();
+
+		// Step 1: Register a new user
+		await request(app).post('/api/v1/auth/register').send({
+			firstName: 'Jane',
+			lastName: 'Doe',
+			email,
+			password: 'password123',
+			userStatus: 'ADMIN',
+		});
+
+		// Step 2: Log in the user to get a token
+		const loginRes = await request(app).post('/api/v1/auth/login').send({
+			email,
+			password: 'password123',
+		});
+
+		const token = loginRes.body.token;
+		expect(token).toBeDefined();
+
+		// Step 3: Use the token to create a food menu item
+		const createRes = await request(app)
+			.post('/api/v1/foodMenu/food-items')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				menuCategory: 'PIZZA',
+				pizzaType: 'MEAT',
+				name: 'Test Pizza To Delete',
+				ingredients:
+					'test chicken, test basil, test chilli, test tomato paste',
+				price: 666,
+			});
+
+		expect(createRes.statusCode).toEqual(201);
+		expect(createRes.body).toHaveProperty('msg', 'New food item created');
+		expect(createRes.body.foodItem).toHaveProperty(
+			'name',
+			'Test Pizza To Delete'
+		);
+
+		// Step 4: Use the token to delete the food menu item
+		const deleteRes = await request(app)
+			.delete('/api/v1/foodMenu/food-items')
+			.set('Authorization', `Bearer ${token}`)
+			.send({
+				menuCategory: 'PIZZA',
+				pizzaType: 'MEAT',
+				name: 'Test Pizza To Delete',
+				imageUrl: '',
+				ingredients:
+					'test chicken, test basil, test chilli, test tomato paste',
+				price: 666,
+			});
+
+		expect(deleteRes.statusCode).toEqual(200);
+		expect(deleteRes.body).toHaveProperty('msg', 'Food menu item deleted');
+		expect(deleteRes.body).toHaveProperty('foodItemId');
+
+		// Step 5: Verify the item is deleted
+		const fetchRes = await request(app)
+			.get('/api/v1/foodMenu/food-items')
+			.set('Authorization', `Bearer ${token}`)
+			.query({ page: 1, limit: 10 });
+
+		expect(fetchRes.statusCode).toEqual(200);
+		expect(fetchRes.body).toBeInstanceOf(Array);
+		expect(
+			fetchRes.body.find(
+				(item: any) => item.name === 'Test Pizza To Delete'
+			)
+		).toBeUndefined();
 	}, 40000);
 });
