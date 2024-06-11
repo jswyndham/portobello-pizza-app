@@ -140,14 +140,14 @@ describe('FoodMenu API', () => {
 		await request(app).post('/api/v1/auth/register').send({
 			firstName: 'Jane',
 			lastName: 'Doe',
-			email,
+			email: 'jane.doe@email.com',
 			password: 'password123',
 			userStatus: 'ADMIN',
 		});
 
 		// Step 2: Log in the user to get a token
 		const loginRes = await request(app).post('/api/v1/auth/login').send({
-			email,
+			email: 'john.doe@example.com',
 			password: 'password123',
 		});
 

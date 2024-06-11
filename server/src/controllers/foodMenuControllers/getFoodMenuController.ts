@@ -51,6 +51,8 @@ export const getFoodMenu = async (
 			.limit(limit)
 			.exec();
 
+		console.log('Get Food Menu items: ', allFoodMenuItems);
+
 		// Cache the fetched data
 		setCache(cacheKey, allFoodMenuItems, 7200); // Cache for 2 hours
 
