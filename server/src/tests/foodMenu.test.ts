@@ -1,8 +1,8 @@
 import request from 'supertest';
-import app from '../src/server';
+import app from '../server';
 import mongoose, { ConnectOptions } from 'mongoose';
-import FoodMenu from '../src/models/FoodMenuModel';
-import User from '../src/models/UserModel';
+import FoodMenu from '../models/FoodMenuModel';
+import User from '../models/UserModel';
 
 const url = `mongodb://127.0.0.1:27017/test_database`;
 

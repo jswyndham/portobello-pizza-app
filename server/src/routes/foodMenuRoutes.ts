@@ -3,14 +3,21 @@ import {
 	createFoodMenu,
 	getFoodMenu,
 	deleteFoodMenu,
+	editFoodMenu,
 } from '../controllers/foodMenuControllers';
 import { authenticateUser } from '../middleware/authMiddleware';
 import { validateFoodMenu } from '../validators/foodMenuValidators';
 
 const router = express.Router();
 
-router.post('/food-items', authenticateUser, validateFoodMenu, createFoodMenu);
-router.get('/food-items', authenticateUser, getFoodMenu);
-router.delete('/food-items', authenticateUser, deleteFoodMenu);
+router
+	.route('/')
+	.post(authenticateUser, validateFoodMenu, createFoodMenu)
+	.get(authenticateUser, getFoodMenu);
+
+router
+	.route('/:id/')
+	.patch(authenticateUser, validateFoodMenu, editFoodMenu)
+	.delete(authenticateUser, deleteFoodMenu);
 
 export default router;

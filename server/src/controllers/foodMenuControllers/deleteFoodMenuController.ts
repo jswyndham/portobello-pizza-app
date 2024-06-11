@@ -34,20 +34,11 @@ export const deleteFoodMenu = async (
 			return;
 		}
 
-		const { menuCategory, pizzaType, name, imageUrl, ingredients, price } =
-			req.body;
+		// Get food menu item ID from request params
+		const foodMenuId = req.params.id;
 
-		const foodItem = {
-			menuCategory,
-			pizzaType,
-			name,
-			imageUrl,
-			ingredients,
-			price,
-		};
-
-		// Find the food menu item by criteria and delete
-		const deleteFoodMenuItem = await FoodMenu.findOneAndDelete(foodItem);
+		// Find the food menu item by ID and delete
+		const deleteFoodMenuItem = await FoodMenu.findByIdAndDelete(foodMenuId);
 		if (!deleteFoodMenuItem) {
 			res.status(StatusCodes.NOT_FOUND).json({
 				msg: 'Menu item not found',
@@ -70,7 +61,8 @@ export const deleteFoodMenu = async (
 
 		const page = parseInt(req.query.page as string, 10) || 1;
 		const limit = parseInt(req.query.limit as string, 10) || 10;
-		// Clear the cache for the updated quiz
+
+		// Clear the cache for the food menu item
 		const cacheKey = `foodMenu_page_${page}_limit_${limit}`;
 		clearCache(cacheKey);
 

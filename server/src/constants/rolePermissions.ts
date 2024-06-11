@@ -1,7 +1,11 @@
 export const ROLE_PERMISSIONS = {
-	ADMIN: ['DELETE_FOOD_ITEM'] as const,
-	MANAGER: ['DELETE_FOOD_ITEM'] as const,
-	STAFF_MEMBER: ['DELETE_FOOD_ITEM'] as const,
+	ADMIN: [
+		'EDIT_FOOD_ITEM',
+		'DELETE_FOOD_ITEM',
+		'DELETE_USER',
+		'EDIT_USER',
+	] as const,
+	MANAGER: ['EDIT_FOOD_ITEM'] as const,
 } as const;
 
 export type Role = keyof typeof ROLE_PERMISSIONS;
