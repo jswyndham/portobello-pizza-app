@@ -20,7 +20,7 @@ export const getAllUsers = async (
 		const skip = (page - 1) * limit;
 
 		// Set cache parameters
-		const cacheKey = 'all_users';
+		const cacheKey = `all_users_page_${page}_limit_${limit}`;
 		let userData = getCache(cacheKey);
 
 		if (userData) {
@@ -30,11 +30,10 @@ export const getAllUsers = async (
 		}
 
 		// Fetch from DB if not cached
-		const allUsers = await User.find({})
-			.populate({
-				path: 'user',
-				select: 'firstName lastName email userStatus',
-			})
+		const allUsers = await User.find(
+			{},
+			'firstName lastName email userStatus lastLogin'
+		)
 			.skip(skip)
 			.limit(limit)
 			.exec();
@@ -44,7 +43,7 @@ export const getAllUsers = async (
 
 		res.status(StatusCodes.OK).json(allUsers);
 	} catch (error: any) {
-		console.error('Error registering user:', error);
+		console.error('Error fetching users:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message || 'An error occurred while requesting users',

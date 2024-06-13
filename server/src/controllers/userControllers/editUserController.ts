@@ -5,6 +5,7 @@ import { clearCache } from '../../cache/cache';
 import { ROLE_PERMISSIONS } from '../../constants';
 import hasPermission from '../../utils/hasPermission';
 import User from '../../models/UserModel';
+import { hashPassword } from '../../utils/passwordUtils';
 
 interface AuthenticatedRequest extends Request {
 	user?: {
@@ -32,6 +33,7 @@ export const editUser = async (
 			return;
 		}
 
+		// Ensure the authenticated user is present
 		if (!req.user) {
 			res.status(StatusCodes.UNAUTHORIZED).json({
 				message: 'User not authenticated',
@@ -39,6 +41,7 @@ export const editUser = async (
 			return;
 		}
 
+		// Ensure user has the permission to edit other user's details
 		const { userStatus } = req.user;
 		if (!hasPermission(userStatus, 'EDIT_USER')) {
 			res.status(StatusCodes.FORBIDDEN).json({
@@ -48,7 +51,7 @@ export const editUser = async (
 			return;
 		}
 
-		// Find the existing user
+		// Find the existing user on the database
 		const user = await User.findById(userIdToEdit);
 		if (!user) {
 			res.status(StatusCodes.NOT_FOUND).json({
@@ -57,12 +60,14 @@ export const editUser = async (
 			return;
 		}
 
-		// Update user details
-		user.firstName = firstName;
-		user.lastName = lastName;
-		user.email = email;
-		user.password = password;
-
+		// Update user details if provided
+		if (firstName) user.firstName = firstName;
+		if (lastName) user.lastName = lastName;
+		if (email) user.email = email;
+		if (password) {
+			// Hash the new password before saving
+			user.password = await hashPassword(password);
+		}
 		const updatedUser = await user.save();
 
 		// Log request body for debugging
