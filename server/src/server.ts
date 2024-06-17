@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import foodMenuRoutes from './routes/foodMenuRoutes';
+import drinkMenuRoutes from './routes/drinkMenuRoutes';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/foodMenu', foodMenuRoutes);
+app.use('/api/v1/drinkMenu', drinkMenuRoutes);
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hello from Express!');

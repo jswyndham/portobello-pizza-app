@@ -4,6 +4,8 @@ export const ROLE_PERMISSIONS = {
 		'DELETE_FOOD_ITEM',
 		'DELETE_USER',
 		'EDIT_USER',
+		'EDIT_DRINK_ITEM',
+		'DELETE_DRINK_ITEM',
 	] as const,
 	MANAGER: ['EDIT_FOOD_ITEM'] as const,
 } as const;
