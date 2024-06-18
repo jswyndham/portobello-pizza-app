@@ -1,11 +1,15 @@
-import {
-	createBrowserRouter,
-	RouterProvider,
-	Route,
-	Link,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
-import { Layout, Home, Menu, Error } from '../pages';
+import {
+	Layout,
+	Home,
+	FoodMenu,
+	DrinksMenu,
+	Error,
+	Admin,
+	AddItemPage,
+	Contact,
+} from './pages';
 
 const router = createBrowserRouter([
 	{
@@ -19,8 +23,24 @@ const router = createBrowserRouter([
 				element: <Home />,
 			},
 			{
-				path: '/menu',
-				element: <Menu />,
+				path: '/admin',
+				element: <Admin />,
+			},
+			{
+				path: '/addmenu',
+				element: <AddItemPage />,
+			},
+			{
+				path: '/foodmenu',
+				element: <FoodMenu />,
+			},
+			{
+				path: '/drinksmenu',
+				element: <DrinksMenu />,
+			},
+			{
+				path: '/contact',
+				element: <Contact />,
 			},
 		],
 	},

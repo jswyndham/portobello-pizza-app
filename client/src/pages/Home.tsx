@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import logo from '/images/logo-main.png';
-import logoBackImage from '/images/backgroundImages/pexels-edwardeyer-ing-home-sm.jpg';
+import logo from '/images/portobello-logo-square.png';
+import homeImage from '/images/pizza-eneida-nieves.jpg';
 // import ImageCarousel from '../components/homePage/ImageCarousel';
 import Footer from '../components/Footer';
 import { Helmet } from 'react-helmet-async';
@@ -49,7 +49,7 @@ const Home = () => {
 
 	return (
 		<>
-			<motion.article className="relative overflow-hidden w-screen h-full bg-black my-12 md:m-auto">
+			<motion.article className="relative overflow-hidden w-screen h-full bg-red-700 my-12 md:m-auto">
 				{/* Serverside SEO using react-helmet-async */}
 				<Helmet>
 					<title>Portobello - Best Koh Tao Pizza</title>
@@ -61,13 +61,13 @@ const Home = () => {
 					/>
 
 					{/* Canonical tag */}
-					<link rel="canonical" href="http://www.kyotoingbar.com/" />
+					<link rel="canonical" href="" />
 
 					{/* Social Media tags */}
 					<meta property="og:type" content="website" />
 					<meta
 						property="og:title"
-						content="Rock Bar ING Kyoto - Best Rock Music and Nightlife in Kyoto"
+						content="Portobello - Koh Tao Pizza"
 					/>
 					<meta
 						property="og:description"
@@ -76,17 +76,14 @@ const Home = () => {
 					{/* Twitter tags */}
 					<meta
 						property="og:url"
-						content="http://www.kyotoingbar.com/"
+						content="http://www.portobello.com/"
 					/>
 					<meta
 						property="og:image"
 						content="./images/ing-white-logo-black-background.jpg"
 					/>
 					<meta name="twitter:card" content="summary_large_image" />
-					<meta
-						name="twitter:title"
-						content="Rock Bar ING Kyoto - Experience Exciting Nightlife and Live Music"
-					/>
+					<meta name="twitter:title" content="Portobello, Koh Tao" />
 					<meta
 						name="twitter:description"
 						content="Dive into Kyoto's rock scene with live music and great drinks at Rock Bar ING. Located in the heart of Kyoto's nightlife district on Kiyamachi Street."
@@ -95,14 +92,14 @@ const Home = () => {
 
 				{/* Json-Ld data for extra SEO structure */}
 				<HomeJSONLD
-					name="Rock Bar ING Kyoto"
+					name="Portobello, Koh Tao"
 					address={{
 						streetAddress:
-							'Royalbuilding 2F Nishikiyamachi Takoyakushi Nakagyouku',
+							'Sai Ree Road, Ban Ko Tao, Thailand, Surat Thani',
 						imagePath: '../images/logo-main.png',
 					}}
-					telephone="075-255-5087"
-					url="http://www.kyotoingbar.com/"
+					telephone="+66 77 457 029"
+					url="http://www.portobello.com/"
 					openingHours={openingHours}
 				/>
 
@@ -118,7 +115,7 @@ const Home = () => {
 				/>
 
 				<motion.img
-					src={logoBackImage}
+					src={homeImage}
 					alt="Background"
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}

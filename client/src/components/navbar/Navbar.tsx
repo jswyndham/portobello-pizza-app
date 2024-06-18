@@ -6,28 +6,31 @@ const Navbar = () => {
 			<ul className="w-fit text-white text-sm sm:text-md md:text-lg lg:text-2xl font-robotoSlab flex flex-row justify-around md:justify-between items-center">
 				<Link to="/">
 					<li className="w-25 md:w-50 li-hover relative border-white border-r-2 inline-block transition-all duration-500 hover:text-red-500 hover:cursor-pointer">
-						<span className="text-content">ING BAR</span>
-						<span className="text-hover-content font-japaneseNoto">
-							イング居酒屋
-						</span>
+						HOME PAGE
 					</li>
 				</Link>
 
-				<Link to="/menu">
+				<Link to="/foodmenu">
+					<li className="w-25 md:w-50 li-hover relative border-white border-r-2 inline-block transition-all duration-500 hover:text-red-500 hover:cursor-pointer">
+						FOOD MENU
+					</li>
+				</Link>
+
+				<Link to="/drinksmenu">
 					<li className="li-hover relative border-white border-r-2 inline-block transition-all w-25 md:w-50 duration-500 hover:text-red-500 hover:cursor-pointer">
-						<span className="text-content ">MENU</span>
-						<span className="text-hover-content font-japaneseNoto">
-							メニュー
-						</span>
+						DRINKS MENU
 					</li>
 				</Link>
 
-				<Link to="/access">
+				<Link to="/contact">
 					<li className="li-hover relative inline-block transition-all duration-500 w-25 md:w-50 hover:text-red-500 hover:cursor-pointer">
-						<span className="text-content ">ACCESS</span>
-						<span className="text-hover-content font-japaneseNoto">
-							アクセス
-						</span>
+						CONTACT
+					</li>
+				</Link>
+
+				<Link to="/admin">
+					<li className="li-hover relative inline-block transition-all duration-500 w-25 md:w-50 hover:text-red-500 hover:cursor-pointer">
+						ADMIN
 					</li>
 				</Link>
 			</ul>

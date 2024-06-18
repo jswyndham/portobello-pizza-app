@@ -1,7 +1,7 @@
 import React from 'react';
 
-function Menu() {
+function FoodMenu() {
 	return <div>Menu</div>;
 }
 
-export default Menu;
+export default FoodMenu;

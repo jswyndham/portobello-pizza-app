@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { RiBeerFill } from 'react-icons/ri';
 import { PiBowlFoodFill } from 'react-icons/pi';
 import { FaMapMarkedAlt } from 'react-icons/fa';
-import ingOnlyLogo from '/images/logo-ing-only-white.png';
 
 const sidebarVariants = {
 	open: { x: 0 },
@@ -51,7 +50,7 @@ const SidebarMenu = () => {
 			>
 				{/* Logo */}
 
-				<motion.img
+				{/* <motion.img
 					src={ingOnlyLogo}
 					alt="Main Logo"
 					initial={{ opacity: 0 }}
@@ -60,7 +59,7 @@ const SidebarMenu = () => {
 					exit={{ opacity: 0 }}
 					className="h-9 w-16 m-5 shadow-[0_10px_60px_-15px_rgba(0,0,0,0.1)] shadow-slate-400"
 					transition={{ duration: 1, delay: 0.3 }} // Adding delay to ensure the sidebar animation completes
-				/>
+				/> */}
 
 				{/* Unordered list of links */}
 				<ul className="flex flex-col text-2xl pl-4 py-4 font-robotoSlab">

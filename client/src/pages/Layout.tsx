@@ -3,19 +3,27 @@ import { Navbar, SidebarMenu } from '../components/navbar';
 import { Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
-const LayoutContext = createContext();
+interface LayoutContextType {
+	showSidebar: boolean;
+	handleSidebar: () => void;
+}
+
+const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 function Layout() {
 	// ************** useState
-	const [showSidebar, setShowSidebar] = useState(false);
+	const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
 	// ********* useRef
-	const sidebarRef = useRef();
+	const sidebarRef = useRef<HTMLDivElement | null>(null);
 
 	// ****** Detect click outside the sidebar and close
 	useEffect(() => {
-		const handleClickOutside = (e) => {
-			if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+		const handleClickOutside = (e: MouseEvent) => {
+			if (
+				sidebarRef.current &&
+				!sidebarRef.current.contains(e.target as Node)
+			) {
 				setShowSidebar(false);
 			}
 		};
@@ -49,7 +57,9 @@ function Layout() {
 		<HelmetProvider context={helmetContext}>
 			<LayoutContext.Provider value={value}>
 				<Navbar />
-				<SidebarMenu />
+				<div ref={sidebarRef}>
+					<SidebarMenu />
+				</div>
 				<section className="z-0 w-screen h-full bg-black text-white overflow-hidden">
 					<Outlet />
 				</section>
