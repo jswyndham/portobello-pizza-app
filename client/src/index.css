@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 body {
-  width: 100%;
+	width: 100%;
+}
+
+.map-iframe {
+	border: 1px solid black; /* Adjust as needed */
+}
+
+.image-carousel {
+	height: 80%;
 }

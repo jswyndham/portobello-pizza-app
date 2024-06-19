@@ -7,6 +7,9 @@ const Footer = () => {
 		<>
 			<footer className="w-screen h-fit flex justify-center bg-primary p-3">
 				<div className="flex flex-col justify-center items-center">
+					<p className="text-yellow-400 text-2xl lg:text-4xl font-caveat font-semibold">
+						FOLLOW US!
+					</p>
 					{/* Social Media */}
 					<div className="pt-4">
 						<SocialMediaLinks />

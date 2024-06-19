@@ -13,6 +13,9 @@ export default {
 		fontFamily: {
 			'noto-serif-display': ['Noto Serif Display', 'serif'],
 			'handlee-regular': ['Noto Serif Display', 'serif'],
+			montserrat: ['Montserrat', 'sans-serif'],
+			caveat: ['Caveat', 'cursive'],
+			cinzel: ['Cinzel', 'serif'],
 		},
 	},
 	plugins: [],
