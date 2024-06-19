@@ -34,9 +34,10 @@ export const getFoodMenu = async (
 		const page = parseInt(req.query.page as string, 10) || 1;
 		const limit = parseInt(req.query.limit as string, 10) || 10;
 		const skip = (page - 1) * limit;
+		const menuCategory = req.query.menuCategory as string;
 
 		// Set cache parameters
-		const cacheKey = `foodMenu_page_${page}_limit_${limit}`;
+		const cacheKey = `foodMenu_${menuCategory}_page_${page}_limit_${limit}`;
 		let foodMenuData = getCache(cacheKey);
 
 		if (foodMenuData) {
@@ -45,8 +46,14 @@ export const getFoodMenu = async (
 			return;
 		}
 
+		// Build query object
+		const query: any = {};
+		if (menuCategory) {
+			query.menuCategory = menuCategory.toUpperCase();
+		}
+
 		// Fetch from DB if not cached
-		const allFoodMenuItems = await FoodMenu.find({})
+		const allFoodMenuItems = await FoodMenu.find(query)
 			.skip(skip)
 			.limit(limit)
 			.exec();
