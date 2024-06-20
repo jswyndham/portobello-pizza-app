@@ -16,7 +16,7 @@ export const menuCategories = [
   },
   {
     title: "Starters",
-    imageUrl: "/images/starters.jpg",
+    imageUrl: "/images/sides-meats.jpg",
     link: "/menu?menuCategory=starters",
   },
   {
@@ -26,7 +26,7 @@ export const menuCategories = [
   },
   {
     title: "Sides",
-    imageUrl: "/images/sides.jpg",
+    imageUrl: "/images/side-salad.jpg",
     link: "/menu?menuCategory=sides",
   },
   {

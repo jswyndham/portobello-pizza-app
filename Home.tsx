@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import logo from "/images/portobello-logo-square.png";
+import homeImageSmall from "/images/pizza-eneida-nieves.jpg";
+import homeImageLarge from "/images/pizza-eneida-nieves-large.jpg";
+// import ImageCarousel from '../components/homePage/ImageCarousel';
 import Footer from "../components/Footer";
 import { Helmet } from "react-helmet-async";
 import HomeJSONLD from "../components/seo/HomeJSONLD";
 import { HomeMidSection } from "../components/homePage";
 import AboutUs from "../components/homePage/AboutUs";
-import ImageCarousel from "../components/homePage/ImageCarousel";
-import homeImageSmall from "/images/pizza-eneida-nieves.jpg";
-import homeImageLarge from "/images/pizza-eneida-nieves-large.jpg";
 
 const Home = () => {
   const ref = useRef(null);
@@ -52,20 +52,28 @@ const Home = () => {
 
   return (
     <>
-      <motion.article className="relative overflow-hidden w-full h-auto bg-red-700 md:mx-auto">
+      <motion.article className="relative overflow-hidden w-screen h-full bg-red-700 md:mx-auto">
+        {/* Serverside SEO using react-helmet-async */}
         <Helmet>
           <title>Portobello - Best Koh Tao Pizza</title>
+
+          {/* Metadata description */}
           <meta
             name="description"
             content="Experience the best of Kyoto nightlife at Rock Bar ING. Enjoy rock music, expertly crafted drinks, and a vibrant atmosphere on Kiyamachi Street."
           />
+
+          {/* Canonical tag */}
           <link rel="canonical" href="" />
+
+          {/* Social Media tags */}
           <meta property="og:type" content="website" />
           <meta property="og:title" content="Portobello - Koh Tao Pizza" />
           <meta
             property="og:description"
             content="Experience the best of Kyoto nightlife at Rock Bar ING. Enjoy live rock music, expertly crafted drinks, and a vibrant atmosphere on Kiyamachi Street."
           />
+          {/* Twitter tags */}
           <meta property="og:url" content="http://www.portobello.com/" />
           <meta
             property="og:image"
@@ -79,6 +87,7 @@ const Home = () => {
           />
         </Helmet>
 
+        {/* Json-Ld data for extra SEO structure */}
         <HomeJSONLD
           name="Portobello, Koh Tao"
           address={{
@@ -90,6 +99,7 @@ const Home = () => {
           openingHours={openingHours}
         />
 
+        {/* Portobello logo */}
         <motion.img
           src={logo}
           ref={ref}
@@ -115,36 +125,25 @@ const Home = () => {
           alt="Portobello homepage image"
           className="w-full hidden lg:flex"
         />
-        <div className="bg-gradient-to-b from-third via-white to-primary">
-          <motion.div
-            initial="hidden"
-            animate={animationTriggered ? "visible" : "hidden"}
-            variants={contentFadeInVariants}
-            className=""
-          >
-            <HomeMidSection />
-          </motion.div>
 
-          <motion.div
-            initial="hidden"
-            animate={animationTriggered ? "visible" : "hidden"}
-            variants={contentFadeInVariants}
-            className=""
-          >
-            <AboutUs />
-          </motion.div>
+        <motion.div
+          initial="hidden"
+          animate={animationTriggered ? "visible" : "hidden"}
+          variants={contentFadeInVariants}
+          className=""
+        >
+          <HomeMidSection />
+        </motion.div>
 
-          <div className="flex justify-center items-center">
-            <motion.div
-              initial="hidden"
-              animate={animationTriggered ? "visible" : "hidden"}
-              variants={logoBackgroundVariants}
-              className="w-full"
-            >
-              <ImageCarousel />
-            </motion.div>
-          </div>
-        </div>
+        <motion.div
+          initial="hidden"
+          animate={animationTriggered ? "visible" : "hidden"}
+          variants={contentFadeInVariants}
+          className=""
+        >
+          <AboutUs />
+        </motion.div>
+
         <motion.div
           initial="hidden"
           animate={animationTriggered ? "visible" : "hidden"}
