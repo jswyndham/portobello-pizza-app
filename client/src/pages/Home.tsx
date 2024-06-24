@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import logo from '/images/portobello-logo-square.png';
+import logo from '/images/portobello-logo-round-black.png';
 import Footer from '../components/Footer';
 import { Helmet } from 'react-helmet-async';
 import HomeJSONLD from '../components/seo/HomeJSONLD';
@@ -9,7 +9,6 @@ import AboutUs from '../components/homePage/AboutUs';
 import ImageCarousel from '../components/homePage/ImageCarousel';
 import homeImageSmall from '/images/pizza-eneida-nieves.jpg';
 import homeImageLarge from '/images/pizza-eneida-nieves-large.jpg';
-import roundLogo from '/images/portobello-logo-round.png';
 
 const Home = () => {
 	const ref = useRef(null);
