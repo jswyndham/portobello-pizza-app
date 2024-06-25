@@ -6,7 +6,10 @@
 		"start": "ts-node src/server.ts",
 		"build": "tsc",
 		"test": "jest",
-		"test:watch": "jest --watch"
+		"test:watch": "jest --watch",
+		"server": "nodemon --exec ts-node src/server.ts",
+		"client": "cd .. && cd client && npm run dev",
+		"dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
 	},
 	"author": "James Saunders-Wyndham",
 	"license": "ISC",
@@ -31,6 +34,7 @@
 		"mongoose": "^8.4.0",
 		"multer-storage-cloudinary": "^4.0.0",
 		"node-cache": "^5.1.2",
+		"nodemon": "^3.1.4",
 		"sanitize-html": "^2.13.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.4.5"

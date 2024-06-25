@@ -22,14 +22,6 @@ export const getFoodMenu = async (
 		return;
 	}
 
-	// Validate user authentication
-	if (!req.user) {
-		res.status(StatusCodes.UNAUTHORIZED).json({
-			message: 'User not authenticated',
-		});
-		return;
-	}
-
 	try {
 		const page = parseInt(req.query.page as string, 10) || 1;
 		const limit = parseInt(req.query.limit as string, 10) || 10;
