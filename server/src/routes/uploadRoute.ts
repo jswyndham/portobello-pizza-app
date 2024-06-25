@@ -13,14 +13,16 @@ router.post(
 				return res.status(400).send('No file uploaded.');
 			}
 
-			// Save the Cloudinary URL in MongoDB
+			const { menuCategory, pizzaType, name, ingredients, price } =
+				req.body;
+
 			const newFoodMenu = new FoodMenu({
-				menuCategory: req.body.menuCategory,
-				pizzaType: req.body.pizzaType,
-				name: req.body.name,
+				menuCategory,
+				pizzaType,
+				name,
 				imageUrl: req.file.path, // Save the Cloudinary URL
-				ingredients: req.body.ingredients,
-				price: req.body.price,
+				ingredients,
+				price,
 			});
 
 			await newFoodMenu.save();
