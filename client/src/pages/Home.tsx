@@ -7,7 +7,7 @@ import HomeJSONLD from '../components/seo/HomeJSONLD';
 import { HomeMidSection } from '../components/homePage';
 import AboutUs from '../components/homePage/AboutUs';
 import ImageCarousel from '../components/homePage/ImageCarousel';
-import homeImageSmall from '/images/pizza-eneida-nieves.jpg';
+import homeImageSmall from '/images/pizza-eneida-nieves-2.jpg';
 import homeImageLarge from '/images/pizza-eneida-nieves-large.jpg';
 
 const Home = () => {
@@ -104,7 +104,7 @@ const Home = () => {
 					variants={logoVariants}
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
-					className="absolute inset-0 left-12 md:left-20 lg:left-28 xl:left-28 top-3 md:top-36 2xl:top-40 w-3/12 lg:w-2/12 md:max-w-3xl pt-6 z-10"
+					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-36 2xl:top-48 w-3/12 max-w-xl md:w-2/12 xl:w-60 2xl:w-72 pt-6 z-10"
 				/>
 
 				{/* Background image */}

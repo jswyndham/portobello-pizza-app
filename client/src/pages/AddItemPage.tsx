@@ -1,4 +1,4 @@
-import { AddMenuItem } from '../components/newMenuItem';
+import { AddMenuItem } from '../components/newFoodItem';
 
 const AddItemPage = () => {
 	const initialData = {

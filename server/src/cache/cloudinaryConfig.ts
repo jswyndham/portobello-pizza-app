@@ -4,6 +4,7 @@ import multer from 'multer';
 
 // Load environment variables from .env file
 import dotenv from 'dotenv';
+import { CloudinaryStorageParams } from '../constants';
 dotenv.config();
 
 // Configure Cloudinary with your credentials
@@ -13,13 +14,6 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
-// Define the parameters type for CloudinaryStorage
-interface CloudinaryStorageParams {
-	folder: string;
-	format: string | undefined;
-	public_id: string;
-}
-
 // Set up Multer storage to use Cloudinary
 const storage = new CloudinaryStorage({
 	cloudinary: cloudinary,
@@ -28,7 +22,7 @@ const storage = new CloudinaryStorage({
 		file: Express.Multer.File
 	): Promise<CloudinaryStorageParams> => ({
 		folder: 'portobello', // Folder name in Cloudinary
-		format: 'png', // File format
+		format: 'jpg', // File format
 		public_id: `${Date.now()}-${file.originalname}`, // File name
 	}),
 });

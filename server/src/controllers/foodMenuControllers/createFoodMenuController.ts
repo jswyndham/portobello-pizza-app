@@ -26,12 +26,12 @@ export const createFoodMenu = async (
 		return;
 	}
 
-	if (!req.user) {
-		res.status(StatusCodes.UNAUTHORIZED).json({
-			message: 'User not authenticated',
-		});
-		return;
-	}
+	// if (!req.user) {
+	// 	res.status(StatusCodes.UNAUTHORIZED).json({
+	// 		message: 'User not authenticated',
+	// 	});
+	// 	return;
+	// }
 
 	try {
 		const foodItem = await FoodMenu.create({
@@ -51,7 +51,7 @@ export const createFoodMenu = async (
 			action: 'CREATE_FOOD_ITEM',
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
-			userId: req.user.userId,
+			// userId: req.user.userId,
 			details: { reason: 'New food item created' },
 		});
 		await auditLog.save();

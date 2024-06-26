@@ -12,3 +12,10 @@ export type MenuCategory = ValueOf<typeof MENU_CATEGORY>;
 export type DrinkCategory = ValueOf<typeof DRINK_CATEGORY>;
 export type MeatOrVeg = ValueOf<typeof MEAT_OR_VEG>;
 export type rolePermissions = ValueOf<typeof ROLE_PERMISSIONS>;
+
+// Define the parameters type for CloudinaryStorage
+export interface CloudinaryStorageParams {
+	folder: string;
+	format: string | undefined;
+	public_id: string;
+}
