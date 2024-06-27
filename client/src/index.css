@@ -13,3 +13,19 @@ body {
 .image-carousel {
 	height: 80%;
 }
+
+/* toastify-custom.css */
+.toast-container {
+	top: 12%;
+	transform: translateY(-50%);
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+}
+
+.toast {
+	text-align: center;
+	font-size: 1.2em;
+}

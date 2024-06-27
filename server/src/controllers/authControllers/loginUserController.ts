@@ -7,19 +7,11 @@ import { setCache } from '../../cache/cache';
 import AuditLog from '../../models/AuditLogModel';
 import { StatusCodes } from 'http-status-codes';
 
-// Define a type for the user object attached to the request
-interface AuthenticatedRequest extends Request {
-	user: {
-		userId: string;
-		_id: string;
-	};
-}
-
 // Controller for user login and setting authentication cookie
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
 	try {
 		// Define request body
-		const { firstName, lastName, email, password, userStatus } = req.body;
+		const { email, password } = req.body;
 
 		// Find the user by email
 		const user = await User.findOne({ email });
@@ -69,11 +61,17 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		});
 		await auditLog.save();
 
-		console.log('login user: ', email, password);
+		console.log('User logged in:', user);
 
 		res.status(StatusCodes.OK).json({
 			msg: 'User is logged in',
-			user: { id: user._id, email: user.email },
+			user: {
+				id: user._id,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				email: user.email,
+				userStatus: user.userStatus,
+			},
 			token,
 		});
 	} catch (error: any) {

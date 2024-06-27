@@ -1,12 +1,12 @@
-import express, { Request, Response } from "express";
-import authRoutes from "./routes/authRoutes";
-import userRoutes from "./routes/userRoutes";
-import foodMenuRoutes from "./routes/foodMenuRoutes";
-import drinkMenuRoutes from "./routes/drinkMenuRoutes";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import express, { Request, Response } from 'express';
+import authRoutes from './routes/authRoutes';
+import userRoutes from './routes/userRoutes';
+import foodMenuRoutes from './routes/foodMenuRoutes';
+import drinkMenuRoutes from './routes/drinkMenuRoutes';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 dotenv.config(); // Load environment variables
 
@@ -21,35 +21,39 @@ app.use(cookieParser());
 
 // Configure CORS
 app.use(
-  cors({
-    origin: "http://localhost:5173", // Allow requests from this origin
-  })
+	cors({
+		origin: 'http://localhost:5173', // Allow requests from this origin
+		credentials: true, // Allow credentials to be sent with requests
+		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+	})
 );
 
 // ROUTER
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/foodMenu", foodMenuRoutes);
-app.use("/api/v1/drinkMenu", drinkMenuRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/foodMenu', foodMenuRoutes);
+app.use('/api/v1/drinkMenu', drinkMenuRoutes);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello from Express!");
+app.get('/', (req: Request, res: Response) => {
+	res.send('Hello from Express!');
 });
 
 const startServer = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URL!);
-    app.listen(PORT, () => {
-      console.log(`Server running on PORT ${PORT}... Connected to MongoDB`);
-    });
-  } catch (error) {
-    console.error("Error starting server:", error);
-    process.exit(1);
-  }
+	try {
+		await mongoose.connect(process.env.MONGO_URL!);
+		app.listen(PORT, () => {
+			console.log(
+				`Server running on PORT ${PORT}... Connected to MongoDB`
+			);
+		});
+	} catch (error) {
+		console.error('Error starting server:', error);
+		process.exit(1);
+	}
 };
 
-if (process.env.NODE_ENV !== "test") {
-  startServer();
+if (process.env.NODE_ENV !== 'test') {
+	startServer();
 }
 
 export default app;

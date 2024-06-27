@@ -27,5 +27,5 @@ export interface IngredientListProps {
 
 export interface ImageUploadProps {
 	imagePreview: string | null;
-	onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	setImageUrl: (url: string) => void;
 }

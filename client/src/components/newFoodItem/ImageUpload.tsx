@@ -3,24 +3,32 @@ import { ImageUploadProps } from '../../types/newFoodItemInterfaces';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	imagePreview,
-	onImageUpload,
+	setImageUrl,
 }) => {
+	const handleUpload = () => {
+		const myWidget = window.cloudinary.createUploadWidget(
+			{
+				cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME!,
+				uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET!,
+			},
+			(error: any, result: any) => {
+				if (!error && result && result.event === 'success') {
+					console.log('Done! Here is the image info: ', result.info);
+					setImageUrl(result.info.secure_url);
+				}
+			}
+		);
+		myWidget.open();
+	};
+
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-col">
-				<label
-					htmlFor="imageUrl"
-					className="font-handlee-regular text-lg p-2 font-semibold"
-				>
-					Image Upload
-				</label>
-				<input
-					type="file"
-					onChange={onImageUpload}
-					placeholder="Find image file"
-					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-				/>
-			</div>
+			<button
+				onClick={handleUpload}
+				className="p-3 mb-3 bg-blue-500 text-white rounded-md"
+			>
+				Upload Image
+			</button>
 			{imagePreview && (
 				<div className="mb-3">
 					<p>Image Preview:</p>

@@ -60,15 +60,12 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		}
 	};
 
-	const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImagePreview(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-		}
+	const handleImageUrl = (url: string) => {
+		setImagePreview(url);
+		setFoodMenuItem((prev) => ({
+			...prev,
+			imageUrl: url,
+		}));
 	};
 
 	const handleAddIngredient = () => {
@@ -161,7 +158,7 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 
 				<ImageUpload
 					imagePreview={imagePreview}
-					onImageUpload={handleImageUpload}
+					setImageUrl={handleImageUrl}
 				/>
 
 				<IngredientList
