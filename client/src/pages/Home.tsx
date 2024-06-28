@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import logo from "/images/portobello-logo-round-black.png";
-import Footer from "../components/Footer";
 import { Helmet } from "react-helmet-async";
 import HomeJSONLD from "../components/seo/HomeJSONLD";
 import { HomeMidSection } from "../components/homePage";
@@ -115,7 +114,7 @@ const Home = () => {
           alt="Portobello homepage image"
           className="w-full hidden lg:flex"
         />
-        <div className="bg-gradient-to-b from-third via-white to-primary">
+        <div className="bg-gradient-to-b from-secondary via-white to-primary">
           <motion.div
             initial="hidden"
             animate={animationTriggered ? "visible" : "hidden"}
@@ -145,14 +144,6 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
-        <motion.div
-          initial="hidden"
-          animate={animationTriggered ? "visible" : "hidden"}
-          variants={contentFadeInVariants}
-          className=""
-        >
-          <Footer />
-        </motion.div>
       </motion.article>
     </>
   );
