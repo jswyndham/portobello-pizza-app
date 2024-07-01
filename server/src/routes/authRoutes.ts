@@ -3,6 +3,7 @@ import {
 	registerUser,
 	loginUser,
 	logoutUser,
+	authStatus,
 } from '../controllers/authControllers';
 import {
 	validateRegisterUser,
@@ -14,6 +15,7 @@ const router = Router();
 
 router.post('/register', validateRegisterUser, registerUser);
 router.post('/login', validateLoginUser, loginUser);
-router.get('/logout', authenticateUser, logoutUser);
+router.get('/status', authenticateUser, authStatus);
+router.post('/logout', authenticateUser, logoutUser);
 
 export default router;

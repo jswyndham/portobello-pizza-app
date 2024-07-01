@@ -14,28 +14,25 @@ export const authenticateUser = (
 	res: Response,
 	next: NextFunction
 ): void => {
-	// Get the token from the cookie
-	let token = req.cookies?.token;
+	let token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
 
-	// If token is not found in cookie, check the authorization header
 	if (!token) {
-		token = req.headers.authorization?.split(' ')[1];
-	}
-
-	// If no token is found in either place, throw an error
-	if (!token) {
+		console.error('Authentication token missing');
 		throw new UnauthenticatedError('Authentication invalid');
 	}
 
 	try {
-		// Verify the token and attach the user info to the request
 		const payload = verifyJWT(token);
-		const { userId, userStatus } = payload;
-		req.user = { userId, userStatus };
+		if (!payload) {
+			console.error('Invalid token');
+			throw new UnauthenticatedError('Authentication invalid');
+		}
+		req.user = { userId: payload.userId, userStatus: payload.userStatus };
 
 		console.log('Authenticated user:', req.user);
 		next();
 	} catch (error: any) {
+		console.error('Error during authentication:', error);
 		throw new UnauthenticatedError('Authentication invalid');
 	}
 };

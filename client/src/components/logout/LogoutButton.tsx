@@ -1,43 +1,55 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const LogoutButton: React.FC = () => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("http://localhost:5001/api/v1/auth/logout", {
-        method: "GET",
-        credentials: "include", // Include cookies in the request
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+	const { logout } = useAuth();
 
-      if (response.ok) {
-        // Navigate to the home page upon logout
-        navigate("/");
-        console.log("Logged out user: ", response);
-      } else {
-        const errorData = await response.json();
-        console.error("Logout failed:", errorData.message);
-      }
-    } catch (error) {
-      console.error("An error occurred while logging out:", error);
-    }
-  };
+	const handleLogout = async () => {
+		try {
+			const response = await fetch(
+				'http://localhost:5001/api/v1/auth/logout',
+				{
+					method: 'POST',
+					credentials: 'include', // Include cookies in the request
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
 
-  return (
-    <div className="flex justify-end">
-      <button
-        type="button"
-        onClick={handleLogout}
-        className="w-24 h-9 m-2 bg-red-500 text-white font-semibold rounded-lg hover:text-primary drop-shadow-md  hover:shadow-gray-600 hover:shadow-md hover:border-2 hover:border-secondary active:shadow-md active:bg-white active:text-blue-800 active:border-solid active:border-2 active:border-blue-800"
-      >
-        logout
-      </button>
-    </div>
-  );
+			if (response.ok) {
+				// Logout of AuthContext
+				logout();
+				console.log(
+					'user is logged out using the logout method: ',
+					response
+				);
+
+				// Navigate to the home page upon logout
+				navigate('/');
+				console.log('Logged out user: ', response);
+			} else {
+				const errorData = await response.json();
+				console.error('Logout failed:', errorData.message);
+			}
+		} catch (error) {
+			console.error('An error occurred while logging out:', error);
+		}
+	};
+
+	return (
+		<div className="flex justify-end">
+			<button
+				type="button"
+				onClick={handleLogout}
+				className="w-24 h-9 m-2 bg-red-500 text-white font-semibold rounded-lg hover:text-primary drop-shadow-md  hover:shadow-gray-600 hover:shadow-md hover:border-2 hover:border-secondary active:shadow-md active:bg-white active:text-blue-800 active:border-solid active:border-2 active:border-blue-800"
+			>
+				logout
+			</button>
+		</div>
+	);
 };
 
 export default LogoutButton;

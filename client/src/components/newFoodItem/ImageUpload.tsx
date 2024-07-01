@@ -1,4 +1,3 @@
-import React from 'react';
 import { ImageUploadProps } from '../../types/newFoodItemInterfaces';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({

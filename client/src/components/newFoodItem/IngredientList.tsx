@@ -1,4 +1,3 @@
-import React from 'react';
 import { IngredientListProps } from '../../types/newFoodItemInterfaces';
 
 const IngredientList: React.FC<IngredientListProps> = ({

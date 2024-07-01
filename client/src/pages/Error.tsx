@@ -1,9 +1,18 @@
-import React from 'react';
 import { Link, useRouteError } from 'react-router-dom';
+
+const isRouteErrorResponse = (error: unknown): error is { status: number } => {
+	return (
+		typeof error === 'object' &&
+		error !== null &&
+		'status' in error &&
+		typeof (error as any).status === 'number'
+	);
+};
 
 const Error = () => {
 	const error = useRouteError();
-	if (error.status === 404) {
+
+	if (isRouteErrorResponse(error) && error.status === 404) {
 		return (
 			<article className="relative overflow-hidden h-screen flex justify-center align-middle">
 				<img
@@ -33,7 +42,7 @@ const Error = () => {
 
 						<p className="text-xl lg:text-2xl 2xl:text-3xl py-12  text-white">
 							We cannot find the page you are looking for. Confirm
-							that you have entered the correct url address.
+							that you have entered the correct URL address.
 						</p>
 						<p className="text-xl lg:text-2xl 2xl:text-3xl text-white">
 							申し訳ありませんが、お探しのページが見つかりません。それを確認します

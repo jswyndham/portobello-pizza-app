@@ -1,10 +1,27 @@
-import React from 'react';
+// !! Must add SEO data!!
 
-function HomeJSONLD({ name, address, telephone, url, openingHours }) {
+export interface HomeJSONLDProps {
+	name: string;
+	address: {
+		streetAddress: string;
+		imagePath: string;
+	};
+	telephone: string;
+	url: string;
+	openingHours: string;
+}
+
+const HomeJSONLD: React.FC<HomeJSONLDProps> = ({
+	name,
+	address,
+	telephone,
+	url,
+	openingHours,
+}) => {
 	const structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'BarOrPub',
-		name: name,
+		name: 'Porto Bello',
 		description: `${name} in Kyoto offers an exciting rock music experience and a great selection of drinks in a vibrant atmosphere.`,
 		address: {
 			'@type': 'PostalAddress',
@@ -18,8 +35,8 @@ function HomeJSONLD({ name, address, telephone, url, openingHours }) {
 		url: url,
 		openingHoursSpecification: openingHours,
 		sameAs: [
-			'https://www.facebook.com/kyotoingbar/',
-			'https://www.instagram.com/ingbarhacokatsuyuki/',
+			'https://www.facebook.com/portobellokohtao/',
+			'https://www.instagram.com/portobellokohtao/',
 		],
 		image: address.imagePath,
 	};
@@ -30,6 +47,6 @@ function HomeJSONLD({ name, address, telephone, url, openingHours }) {
 			dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 		/>
 	);
-}
+};
 
 export default HomeJSONLD;

@@ -1,4 +1,3 @@
-import React from 'react';
 import Path from './Path'; // Adjust the import path as needed
 
 interface MenuToggleProps {
@@ -8,8 +7,10 @@ interface MenuToggleProps {
 
 const MenuToggle: React.FC<MenuToggleProps> = ({ toggle, isOpen }) => (
 	<button
+		type="button"
 		onClick={toggle}
 		className="menu-toggle block md:hidden p-4 bg-primary drop-shadow-xl border-b-2 border-l-2 border-forth"
+		aria-label={isOpen ? 'Close menu' : 'Open menu'}
 	>
 		<svg width="30" height="30" viewBox="0 0 23 23">
 			<Path

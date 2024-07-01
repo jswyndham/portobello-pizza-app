@@ -44,7 +44,14 @@ export const logoutUser = async (
 		clearCache(`class_${userId}`);
 		clearCache(`membership_${userId}`);
 
-		res.status(StatusCodes.OK).json({ msg: 'User logged out' });
+		console.log('User logged out:', user);
+
+		res.status(StatusCodes.OK).json({
+			msg: 'User logged out',
+			user: {
+				id: user._id,
+			},
+		});
 	} catch (error: any) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
