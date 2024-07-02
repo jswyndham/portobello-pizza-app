@@ -4,10 +4,10 @@ import {
 	getFoodMenu,
 	deleteFoodMenu,
 	editFoodMenu,
-	upload,
 } from '../controllers/foodMenuControllers';
 import { validateFoodMenu } from '../validators/foodMenuValidators';
 import { authenticateUser } from '../middleware/authMiddleware';
+import { upload } from '../middleware/uploadMiddleware';
 
 const router = express.Router();
 

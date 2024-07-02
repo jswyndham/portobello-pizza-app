@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LogoutButton: React.FC = () => {
 	const navigate = useNavigate();
@@ -26,21 +28,38 @@ const LogoutButton: React.FC = () => {
 					response
 				);
 
+				// Dispatch the global 'logout' state
 				dispatch({ type: 'LOGOUT' });
+				toast.success('Logout successful');
 				// Navigate to the home page upon logout
 				navigate('/');
 				console.log('Logged out user: ', response);
 			} else {
 				const errorData = await response.json();
 				console.error('Logout failed:', errorData.message);
+				toast.error('Logout failed');
 			}
 		} catch (error) {
 			console.error('An error occurred while logging out:', error);
+			toast.error('Logout failed');
 		}
 	};
 
 	return (
 		<div className="flex justify-end">
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				className="toast-container"
+				toastClassName="toast"
+			/>
 			<button
 				type="button"
 				onClick={handleLogout}

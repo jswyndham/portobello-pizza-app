@@ -1,6 +1,6 @@
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 import { CloudinaryStorageParams } from '../constants';
 
@@ -34,5 +34,4 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-export { cloudinary, upload };
-export default cloudinary;
+export { upload };

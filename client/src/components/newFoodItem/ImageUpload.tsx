@@ -1,29 +1,30 @@
 import { ImageUploadProps } from '../../types/newFoodItemInterfaces';
+import { useEffect, useRef } from 'react';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	imagePreview,
 	setImageUrl,
 }) => {
-	const handleUpload = () => {
-		const myWidget = window.cloudinary.createUploadWidget(
+	const cloudinaryRef = useRef<any>(null);
+	const widgetRef = useRef<any>(null);
+
+	useEffect(() => {
+		cloudinaryRef.current = window.cloudinary;
+		widgetRef.current = cloudinaryRef.current.createUploadWidget(
 			{
-				cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME!,
-				uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET!,
+				cloudName: 'ducq9yzyn',
+				uploadPreset: 'u9bu7hdq',
 			},
-			(error: any, result: any) => {
-				if (!error && result && result.event === 'success') {
-					console.log('Done! Here is the image info: ', result.info);
-					setImageUrl(result.info.secure_url);
-				}
+			function (error: any, result: any) {
+				console.log(result);
 			}
 		);
-		myWidget.open();
-	};
+	}, []);
 
 	return (
 		<div className="flex flex-col">
 			<button
-				onClick={handleUpload}
+				onClick={() => widgetRef.current.open()}
 				className="p-3 mb-3 bg-blue-500 text-white rounded-md"
 			>
 				Upload Image

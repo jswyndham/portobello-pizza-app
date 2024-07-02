@@ -1,13 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
-import cloudinary from '../../config/cloudinary'; // Adjust the path accordingly
-import multer from 'multer';
+import cloudinary from '../../config/cloudinary';
 import { AuthenticatedRequest } from '../../types/request';
-
-const storage = multer.memoryStorage();
-export const upload = multer({ storage });
 
 interface CloudinaryResult {
 	secure_url: string;
@@ -19,7 +15,6 @@ export const createFoodMenu = async (
 ): Promise<void> => {
 	const { menuCategory, pizzaType, name, ingredients, price } = req.body;
 
-	// Validate request body
 	if (!menuCategory || !name || !Array.isArray(ingredients) || !price) {
 		res.status(StatusCodes.BAD_REQUEST).json({
 			message:
@@ -41,7 +36,7 @@ export const createFoodMenu = async (
 			const result = await new Promise<CloudinaryResult>(
 				(resolve, reject) => {
 					const stream = cloudinary.uploader.upload_stream(
-						(error, result) => {
+						(error: unknown, result: any) => {
 							if (error) {
 								reject(error);
 							} else {
@@ -50,10 +45,9 @@ export const createFoodMenu = async (
 						}
 					);
 					if (req.file) {
-						// Type guard to ensure req.file is defined
 						stream.end(req.file.buffer);
 					} else {
-						reject(new Error('File not found'));
+						reject(new Error('File buffer is missing'));
 					}
 				}
 			);
@@ -69,10 +63,8 @@ export const createFoodMenu = async (
 			price,
 		});
 
-		// Log request body for debugging
 		console.log('Menu created:', foodItem);
 
-		// Create an audit log entry of the user's action
 		const auditLog = new AuditLog({
 			action: 'CREATE_FOOD_ITEM',
 			subjectType: 'FoodMenu',

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { IngredientListProps } from '../../types/newFoodItemInterfaces';
 import { FaTrashAlt } from 'react-icons/fa';
+import { IoAddOutline } from 'react-icons/io5';
 
 const IngredientList: FC<IngredientListProps> = ({
 	ingredients,
@@ -40,9 +41,10 @@ const IngredientList: FC<IngredientListProps> = ({
 			<button
 				type="button"
 				onClick={onAddIngredient}
-				className="w-10/12 mb-3 py-2 ml-2 bg-green-600 text-white rounded-md"
+				className="w-fit mb-3 p-2 ml-2 bg-green-600 text-white rounded-md"
+				aria-label={`Add ingredient`}
 			>
-				+ Add Ingredient
+				<IoAddOutline className="text-3xl font-bold" />
 			</button>
 		</div>
 	);

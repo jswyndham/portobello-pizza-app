@@ -9,7 +9,7 @@ const MenuToggle: React.FC<MenuToggleProps> = ({ toggle, isOpen }) => (
 	<button
 		type="button"
 		onClick={toggle}
-		className="menu-toggle block md:hidden p-4 bg-primary drop-shadow-xl border-b-2 border-l-2 border-forth"
+		className="menu-toggle block lg:hidden p-4 bg-primary drop-shadow-xl border-b-2 border-l-2 border-forth"
 		aria-label={isOpen ? 'Close menu' : 'Open menu'}
 	>
 		<svg width="30" height="30" viewBox="0 0 23 23">
