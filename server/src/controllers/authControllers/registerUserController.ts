@@ -1,88 +1,86 @@
-import { Request, Response } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import User from '../../models/UserModel';
-import AuditLog from '../../models/AuditLogModel';
-import { ADMIN_STATUS, USER_STATUS } from '../../constants';
-import { hashPassword } from '../../utils/passwordUtils';
-import { validationResult } from 'express-validator';
+import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import User from "../../models/UserModel";
+import AuditLog from "../../models/AuditLogModel";
+import { ADMIN_STATUS, USER_STATUS } from "../../constants";
+import { hashPassword } from "../../utils/passwordUtils";
+import { validationResult } from "express-validator";
 
 export const registerUser = async (
-	req: Request,
-	res: Response
+  req: Request,
+  res: Response
 ): Promise<void> => {
-	// Log request body for debugging
-	console.log('Request Body:', req.body);
+  // Log request body for debugging
+  console.log("Request Body:", req.body);
 
-	// Validate the request body
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
-		return;
-	}
+  // Validate the request body
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
+    return;
+  }
 
-	try {
-		// Define the request body
-		const { firstName, lastName, email, password, userStatus } = req.body;
+  try {
+    // Define the request body
+    const { firstName, lastName, email, password, userStatus } = req.body;
 
-		// Encrypt user password
-		const hashedPassword = await hashPassword(password);
+    // Encrypt user password
+    const hashedPassword = await hashPassword(password);
 
-		// Check if this is the first account to automatically assign super admin status
-		const isFirstAccount = (await User.countDocuments()) === 0;
+    // Check if this is the first account to automatically assign super admin status
+    const isFirstAccount = (await User.countDocuments()) === 0;
 
-		// Determine the user role
-		let role = userStatus || USER_STATUS.MANAGER.value;
-		let adminRole: string[] = [];
+    // Determine the user role
+    let role = userStatus || USER_STATUS.MANAGER;
+    let adminRole: string[] = [];
 
-		if (isFirstAccount) {
-			role = USER_STATUS.ADMIN.value;
-			adminRole.push(ADMIN_STATUS.SUPER_ADMIN.value);
-		}
+    if (isFirstAccount) {
+      role = USER_STATUS.ADMIN;
+    }
 
-		// Log request body for debugging
-		console.log(
-			'Request Body:',
-			firstName,
-			lastName,
-			email,
-			password,
-			userStatus
-		);
+    // Log request body for debugging
+    console.log(
+      "Request Body:",
+      firstName,
+      lastName,
+      email,
+      password,
+      userStatus
+    );
 
-		// Create the user
-		const user = await User.create({
-			firstName,
-			lastName,
-			email,
-			password: hashedPassword,
-			userStatus: role,
-		});
+    // Create the user
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      userStatus: role,
+    });
 
-		// Create an audit log entry of the user's action
-		const auditLog = new AuditLog({
-			action: 'REGISTER',
-			subjectType: 'User',
-			subjectId: user._id,
-			userId: user._id,
-			details: { reason: 'User registered' },
-		});
-		await auditLog.save();
+    // Create an audit log entry of the user's action
+    const auditLog = new AuditLog({
+      action: "REGISTER",
+      subjectType: "User",
+      subjectId: user._id,
+      userId: user._id,
+      details: { reason: "User registered" },
+    });
+    await auditLog.save();
 
-		res.status(StatusCodes.CREATED).json({
-			msg: 'User registered',
-			user: {
-				id: user._id,
-				firstName: user.firstName,
-				lastName: user.lastName,
-				email: user.email,
-				userStatus: user.userStatus,
-			},
-		});
-	} catch (error: any) {
-		console.error('Error registering user:', error);
-		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			message:
-				error.message || 'An error occurred while registering the user',
-		});
-	}
+    res.status(StatusCodes.CREATED).json({
+      msg: "User registered",
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        userStatus: user.userStatus,
+      },
+    });
+  } catch (error: any) {
+    console.error("Error registering user:", error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: error.message || "An error occurred while registering the user",
+    });
+  }
 };

@@ -1,13 +1,26 @@
 export enum USER_STATUS {
-	ADMIN = 'ADMIN',
-	MANAGER = 'MANAGER',
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
 }
 
-// Defining a constant object for user status labels
 export const USER_STATUS_LABELS = {
-	[USER_STATUS.ADMIN]: 'admin',
-	[USER_STATUS.MANAGER]: 'manager',
+  [USER_STATUS.ADMIN]: "admin",
+  [USER_STATUS.MANAGER]: "manager",
 } as const;
 
-// Defining the UserStatus type as the keys of the USER_STATUS enum
-export type UserStatus = keyof typeof USER_STATUS;
+export type UserStatus = USER_STATUS;
+
+export const ROLE_PERMISSIONS = {
+  [USER_STATUS.ADMIN]: [
+    "EDIT_FOOD_ITEM",
+    "DELETE_FOOD_ITEM",
+    "DELETE_USER",
+    "EDIT_USER",
+    "EDIT_DRINK_ITEM",
+    "DELETE_DRINK_ITEM",
+  ] as const,
+  [USER_STATUS.MANAGER]: ["EDIT_FOOD_ITEM"] as const,
+} as const;
+
+export type Role = USER_STATUS;
+export type Permission = (typeof ROLE_PERMISSIONS)[Role][number];
