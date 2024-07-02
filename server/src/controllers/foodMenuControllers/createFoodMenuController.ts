@@ -2,20 +2,22 @@ import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
 import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
+import cloudinary from '../../config/cloudinary'; // Adjust the path accordingly
+import multer from 'multer';
+import { AuthenticatedRequest } from '../../types/request';
 
-interface AuthenticatedRequest extends Request {
-	user?: {
-		userId: string;
-		userStatus: string;
-	};
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
+
+interface CloudinaryResult {
+	secure_url: string;
 }
 
 export const createFoodMenu = async (
 	req: AuthenticatedRequest,
 	res: Response
 ): Promise<void> => {
-	const { menuCategory, pizzaType, name, imageUrl, ingredients, price } =
-		req.body;
+	const { menuCategory, pizzaType, name, ingredients, price } = req.body;
 
 	// Validate request body
 	if (!menuCategory || !name || !Array.isArray(ingredients) || !price) {
@@ -26,14 +28,38 @@ export const createFoodMenu = async (
 		return;
 	}
 
-	// if (!req.user) {
-	// 	res.status(StatusCodes.UNAUTHORIZED).json({
-	// 		message: 'User not authenticated',
-	// 	});
-	// 	return;
-	// }
+	if (!req.user) {
+		res.status(StatusCodes.UNAUTHORIZED).json({
+			message: 'User not authenticated',
+		});
+		return;
+	}
 
 	try {
+		let imageUrl = '';
+		if (req.file) {
+			const result = await new Promise<CloudinaryResult>(
+				(resolve, reject) => {
+					const stream = cloudinary.uploader.upload_stream(
+						(error, result) => {
+							if (error) {
+								reject(error);
+							} else {
+								resolve(result as CloudinaryResult);
+							}
+						}
+					);
+					if (req.file) {
+						// Type guard to ensure req.file is defined
+						stream.end(req.file.buffer);
+					} else {
+						reject(new Error('File not found'));
+					}
+				}
+			);
+			imageUrl = result.secure_url;
+		}
+
 		const foodItem = await FoodMenu.create({
 			menuCategory,
 			pizzaType,
@@ -51,7 +77,7 @@ export const createFoodMenu = async (
 			action: 'CREATE_FOOD_ITEM',
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
-			// userId: req.user.userId,
+			userId: req.user.userId,
 			details: { reason: 'New food item created' },
 		});
 		await auditLog.save();

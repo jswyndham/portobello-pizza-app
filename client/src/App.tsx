@@ -11,16 +11,8 @@ import {
 	Contact,
 	Login,
 } from './pages';
-import { AuthProvider, useAuth } from './context/AuthContext';
-
-// takes an element as a prop and uses the useAuth hook to check if the user is authenticated
-const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
-	element,
-}) => {
-	const { isLoggedIn } = useAuth();
-	console.log('ProtectedRoute isLoggedIn:', isLoggedIn);
-	return isLoggedIn ? element : <Login />;
-};
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
 	{

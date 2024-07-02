@@ -1,15 +1,9 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { getCache, setCache } from '../../cache/cache';
 import { validationResult } from 'express-validator';
 import DrinkMenu from '../../models/DrinkMenuModel';
-
-interface AuthenticatedRequest extends Request {
-	user?: {
-		userId: string;
-		userStatus: string;
-	};
-}
+import { AuthenticatedRequest } from '../../types/request';
 
 export const getDrinkMenu = async (
 	req: AuthenticatedRequest,

@@ -4,16 +4,35 @@ import {
 	getFoodMenu,
 	deleteFoodMenu,
 	editFoodMenu,
+	upload,
 } from '../controllers/foodMenuControllers';
 import { validateFoodMenu } from '../validators/foodMenuValidators';
+import { authenticateUser } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
-router.route('/').post(validateFoodMenu, createFoodMenu).get(getFoodMenu);
+// Casting routes as express.RequestHandler. This aligns with Express's expected types and ensures TypeScript recognizes them as valid request handlers.
+
+router
+	.route('/')
+	.post(
+		upload.single('image'),
+		validateFoodMenu,
+		authenticateUser as express.RequestHandler,
+		createFoodMenu as express.RequestHandler
+	)
+	.get(getFoodMenu as express.RequestHandler);
 
 router
 	.route('/:id/')
-	.patch(validateFoodMenu, editFoodMenu)
-	.delete(deleteFoodMenu);
+	.patch(
+		validateFoodMenu,
+		authenticateUser as express.RequestHandler,
+		editFoodMenu as express.RequestHandler
+	)
+	.delete(
+		authenticateUser as express.RequestHandler,
+		deleteFoodMenu as express.RequestHandler
+	);
 
 export default router;

@@ -1,6 +1,8 @@
+import { FC } from 'react';
 import { IngredientListProps } from '../../types/newFoodItemInterfaces';
+import { FaTrashAlt } from 'react-icons/fa';
 
-const IngredientList: React.FC<IngredientListProps> = ({
+const IngredientList: FC<IngredientListProps> = ({
 	ingredients,
 	onAddIngredient,
 	onRemoveIngredient,
@@ -29,8 +31,9 @@ const IngredientList: React.FC<IngredientListProps> = ({
 						type="button"
 						onClick={() => onRemoveIngredient(index)}
 						className="ml-2 p-2 bg-red-500 text-white rounded-md"
+						aria-label={`Remove ingredient ${index + 1}`}
 					>
-						Remove
+						<FaTrashAlt />
 					</button>
 				</div>
 			))}

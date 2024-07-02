@@ -1,5 +1,6 @@
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { USER_STATUS } from '../constants/userStatus';
 
 dotenv.config(); // Load environment variables
 
@@ -11,7 +12,7 @@ if (!JWT_SECRET) {
 
 interface UserPayload extends JwtPayload {
 	userId: string;
-	userStatus: string;
+	userStatus: (typeof USER_STATUS)[keyof typeof USER_STATUS];
 }
 
 export const createJWT = (payload: UserPayload): string => {

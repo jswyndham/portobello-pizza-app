@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import { IngredientListProps } from '../../types/newFoodItemInterfaces';
 
-const IngredientList: React.FC<IngredientListProps> = ({
+const IngredientList: FC<IngredientListProps> = ({
 	ingredients,
 	onAddIngredient,
 	onRemoveIngredient,

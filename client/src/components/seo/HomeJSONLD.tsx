@@ -1,5 +1,7 @@
 // !! Must add SEO data!!
 
+import { FC } from 'react';
+
 export interface HomeJSONLDProps {
 	name: string;
 	address: {
@@ -11,7 +13,7 @@ export interface HomeJSONLDProps {
 	openingHours: string;
 }
 
-const HomeJSONLD: React.FC<HomeJSONLDProps> = ({
+const HomeJSONLD: FC<HomeJSONLDProps> = ({
 	name,
 	address,
 	telephone,

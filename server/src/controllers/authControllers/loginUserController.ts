@@ -41,6 +41,8 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			sameSite: isProduction ? 'none' : 'lax', // use 'none' for cross-site requests in production
 		});
 
+		console.log('Token set in cookie:', token);
+
 		// Attempt to cache user data
 		try {
 			const userData = { ...user.toObject(), password: undefined }; // Exclude password
@@ -61,7 +63,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		});
 		await auditLog.save();
 
-		console.log('User logged in:', user);
+		console.log('User logged in and token set in cookie:', user);
 
 		res.status(StatusCodes.OK).json({
 			msg: 'User is logged in',

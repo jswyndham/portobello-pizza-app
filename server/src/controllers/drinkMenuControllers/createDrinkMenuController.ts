@@ -1,14 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import AuditLog from '../../models/AuditLogModel';
 import DrinkMenu from '../../models/DrinkMenuModel';
-
-interface AuthenticatedRequest extends Request {
-	user?: {
-		userId: string;
-		userStatus: string;
-	};
-}
+import { AuthenticatedRequest } from '../../types/request';
 
 export const createDrinkMenu = async (
 	req: AuthenticatedRequest,

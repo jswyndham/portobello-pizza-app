@@ -1,6 +1,19 @@
-import React from 'react';
+import { FC } from 'react';
 
-function AccessJSONLD({ name, address, telephone, url, geoCoordinates }) {
+export interface AccessJSONLDProps {
+	name: string;
+	address: {
+		streetAddress: string;
+		imagePath: string;
+	};
+	telephone: string;
+	url: string;
+	geoCoordinates: string;
+}
+
+const AccessJSONLD: : FC<AccessJSONLDProps> = ({ 
+	name, address, telephone, url, geoCoordinates 
+}) => {
 	const structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'Place',

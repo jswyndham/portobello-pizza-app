@@ -1,19 +1,22 @@
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import logo from '/images/portobello-no-background-small-2.png';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { LoginData } from '../types/loginInterface';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../context/AuthContext';
+import { FC } from 'react';
 
-const Login = () => {
-	const navigate = useNavigate();
+interface LoginData {
+	email: string;
+	password: string;
+}
 
+const Login: FC = () => {
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState: { isSubmitting },
 	} = useForm<LoginData>();
+	const navigate = useNavigate();
+	const { dispatch } = useAuth();
 
 	const onSubmit: SubmitHandler<LoginData> = async (data) => {
 		try {
@@ -25,46 +28,32 @@ const Login = () => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify(data),
-					credentials: 'include', // Manages cookies for authentication
+					credentials: 'include',
 				}
 			);
 
 			if (response.ok) {
 				const { user } = await response.json();
 				console.log('User logged in:', user);
-				toast.success(`Welcome to Porto Bello, ${user.firstName}!`);
+				dispatch({ type: 'LOGIN' });
 				reset();
-				navigate('/admin');
+				navigate('/');
 			} else {
 				console.error('Failed to login user');
-				toast.error(
-					'Failed to login user. Please check your credentials and try again.'
-				);
 			}
 		} catch (error) {
 			console.error('Error submitting form:', error);
-			toast.error('An error occurred while trying to login.');
 		}
 	};
 
 	return (
 		<section className="flex flex-row justify-center align-middle h-screen w-screen bg-gradient-to-b from-yellow-50 via-white to-primary pt-32 md:pt-48 px-2">
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
 			<article className="flex flex-col justify-start bg-gradient-to-b from-primary via-white to-white align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">
 				<div className="mx-auto h-12 w-10/12 md:w-8/12">
-					<img src={logo} alt="Portobello logo" />
+					<img
+						src="/images/portobello-no-background-small-2.png"
+						alt="Portobello logo"
+					/>
 				</div>
 				<div className="flex justify-center items-center align-middle h-fit pt-20 lg:pt-24">
 					<form

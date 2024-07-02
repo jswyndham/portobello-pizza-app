@@ -1,3 +1,10 @@
+export const USER_STATUS = {
+	ADMIN: { value: 'ADMIN', label: 'admin' },
+	MANAGER: { value: 'MANAGER', label: 'manager' },
+} as const;
+
+export type UserStatus = keyof typeof USER_STATUS;
+
 export const ROLE_PERMISSIONS = {
 	ADMIN: [
 		'EDIT_FOOD_ITEM',

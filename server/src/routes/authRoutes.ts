@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express from 'express';
 import {
 	registerUser,
 	loginUser,
@@ -11,11 +11,25 @@ import {
 } from '../validators/authValidators';
 import { authenticateUser } from '../middleware/authMiddleware';
 
-const router = Router();
+const router = express.Router();
 
-router.post('/register', validateRegisterUser, registerUser);
-router.post('/login', validateLoginUser, loginUser);
-router.get('/status', authenticateUser, authStatus);
-router.post('/logout', authenticateUser, logoutUser);
+// Casting routes as express.RequestHandler. This aligns with Express's expected types and ensures TypeScript recognizes them as valid request handlers.
+
+router.post(
+	'/register',
+	validateRegisterUser,
+	registerUser as express.RequestHandler
+);
+router.post('/login', validateLoginUser, loginUser as express.RequestHandler);
+router.get(
+	'/status',
+	authenticateUser as express.RequestHandler,
+	authStatus as express.RequestHandler
+);
+router.post(
+	'/logout',
+	authenticateUser as express.RequestHandler,
+	logoutUser as express.RequestHandler
+);
 
 export default router;

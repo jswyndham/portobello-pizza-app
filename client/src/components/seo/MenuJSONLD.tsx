@@ -1,5 +1,3 @@
-import React from 'react';
-
 function MenuJSONLD({ menuItems }) {
 	const structuredData = {
 		'@context': 'https://schema.org',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import MenuToggle from './MenuToogle';
 import { Link } from 'react-router-dom';
@@ -23,10 +23,16 @@ const backdropVariants = {
 
 const SidebarMenu = () => {
 	const [isOpen, setIsOpen] = useState(false);
-
-	const { isLoggedIn } = useAuth();
+	const { state } = useAuth();
+	const { isLoggedIn } = state;
 
 	const toggleSidebar = () => setIsOpen(!isOpen);
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			setIsOpen(false);
+		}
+	}, [isLoggedIn]);
 
 	return (
 		<>

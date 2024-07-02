@@ -1,8 +1,14 @@
 import { ReactNode } from 'react';
 
-interface AuthContextProps {
+// Define the shape of the state
+interface AuthState {
 	isLoggedIn: boolean;
-	setIsLoggedIn: (status: boolean) => void;
+}
+
+// Define the context properties including state and dispatch
+interface AuthContextProps {
+	state: AuthState;
+	dispatch: React.Dispatch<any>;
 	logout: () => void;
 }
 

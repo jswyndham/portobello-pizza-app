@@ -7,7 +7,7 @@ export interface User extends Document {
 	lastName: string;
 	email: string;
 	password: string;
-	userStatus: UserStatus['value'];
+	userStatus: UserStatus;
 	lastLogin?: Date;
 }
 
@@ -19,7 +19,7 @@ const UserSchema: Schema = new Schema(
 		password: { type: String, required: true },
 		userStatus: {
 			type: String,
-			enum: Object.values(USER_STATUS).map((type) => type.value),
+			enum: Object.values(USER_STATUS),
 			required: true,
 		},
 		lastLogin: {

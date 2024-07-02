@@ -1,9 +1,28 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
+
+// Define initial state
+const initialState = {
+	isLoggedIn: false,
+};
+
+// Define a reducer
+const authReducer = (state, action) => {
+	switch (action.type) {
+		case 'LOGIN':
+			return { ...state, isLoggedIn: true };
+		case 'LOGOUT':
+			return { ...state, isLoggedIn: false };
+		case 'SET_AUTH':
+			return { ...state, isLoggedIn: action.payload };
+		default:
+			return state;
+	}
+};
 
 const AuthContext = createContext();
 
-export const AuthProvider = (props) => {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const AuthProvider = ({ children }) => {
+	const [state, dispatch] = useReducer(authReducer, initialState);
 
 	useEffect(() => {
 		const checkAuthStatus = async () => {
@@ -20,14 +39,14 @@ export const AuthProvider = (props) => {
 				if (response.ok) {
 					const data = await response.json();
 					console.log('Authentication status:', data);
-					setIsLoggedIn(data.isLoggedIn);
+					dispatch({ type: 'SET_AUTH', payload: data.isLoggedIn });
 				} else {
-					setIsLoggedIn(true);
+					dispatch({ type: 'SET_AUTH', payload: false });
 					console.log('Failed to fetch authentication status');
 				}
 			} catch (error) {
 				console.error('Error checking authentication status:', error);
-				setIsLoggedIn(true);
+				dispatch({ type: 'SET_AUTH', payload: false });
 			}
 		};
 
@@ -45,7 +64,7 @@ export const AuthProvider = (props) => {
 			);
 
 			if (response.ok) {
-				setIsLoggedIn(false);
+				dispatch({ type: 'LOGOUT' });
 			} else {
 				console.error('Failed to logout');
 			}
@@ -55,8 +74,8 @@ export const AuthProvider = (props) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, logout }}>
-			{props.children}
+		<AuthContext.Provider value={{ state, dispatch, logout }}>
+			{children}
 		</AuthContext.Provider>
 	);
 };

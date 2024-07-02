@@ -1,18 +1,11 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import hasPermission from '../../utils/hasPermission';
 import AuditLog from '../../models/AuditLogModel';
 import { clearCache } from '../../cache/cache';
-import { ROLE_PERMISSIONS } from '../../constants/rolePermissions';
 import DrinkMenu from '../../models/DrinkMenuModel';
-
-interface AuthenticatedRequest extends Request {
-	user?: {
-		userId: string;
-		userStatus: keyof typeof ROLE_PERMISSIONS;
-	};
-}
+import { AuthenticatedRequest } from '../../types/request';
 
 export const deleteDrinkMenu = async (
 	req: AuthenticatedRequest,

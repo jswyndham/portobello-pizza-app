@@ -1,17 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import AuditLog from '../../models/AuditLogModel';
 import { clearCache } from '../../cache/cache';
-import { ROLE_PERMISSIONS } from '../../constants';
 import hasPermission from '../../utils/hasPermission';
 import DrinkMenu from '../../models/DrinkMenuModel';
-
-interface AuthenticatedRequest extends Request {
-	user?: {
-		userId: string;
-		userStatus: keyof typeof ROLE_PERMISSIONS;
-	};
-}
+import { AuthenticatedRequest } from '../../types/request';
 
 export const editDrinkMenu = async (
 	req: AuthenticatedRequest,

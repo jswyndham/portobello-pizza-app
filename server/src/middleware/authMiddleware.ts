@@ -1,16 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-import { UnauthenticatedError } from '../errors/customErrors';
 import { verifyJWT } from '../utils/tokenUtils';
-
-interface AuthenticatedRequest extends Request {
-	user?: {
-		userId: string;
-		userStatus: string;
-	};
-}
+import { AuthenticatedRequest } from '../types/request';
+import { USER_STATUS } from '../constants/userStatus';
 
 export const authenticateUser = (
-	req: AuthenticatedRequest,
+	req: Request,
 	res: Response,
 	next: NextFunction
 ): void => {
@@ -18,21 +12,33 @@ export const authenticateUser = (
 
 	if (!token) {
 		console.error('Authentication token missing');
-		throw new UnauthenticatedError('Authentication invalid');
+		res.status(401).json({ message: 'Authentication invalid - token' });
+		return;
 	}
 
 	try {
 		const payload = verifyJWT(token);
+		console.log('Token payload:', payload);
+
 		if (!payload) {
 			console.error('Invalid token');
-			throw new UnauthenticatedError('Authentication invalid');
+			res.status(401).json({
+				message: 'Authentication invalid - payload',
+			});
+			return;
 		}
-		req.user = { userId: payload.userId, userStatus: payload.userStatus };
 
-		console.log('Authenticated user:', req.user);
+		// Type assertion to AuthenticatedRequest
+		(req as AuthenticatedRequest).user = {
+			userId: payload.userId,
+			userStatus: payload.userStatus as USER_STATUS,
+		};
+
+		console.log('Authenticated user:', (req as AuthenticatedRequest).user);
 		next();
 	} catch (error: any) {
 		console.error('Error during authentication:', error);
-		throw new UnauthenticatedError('Authentication invalid');
+		res.status(401).json({ message: 'Authentication invalid - catch' });
+		return;
 	}
 };
