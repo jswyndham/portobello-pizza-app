@@ -35,14 +35,14 @@ const Login: FC = () => {
 			);
 
 			if (response.ok) {
-				const { user } = await response.json();
+				const { user, token } = await response.json(); // Assuming the token is returned with the user data
 				console.log('User logged in:', user);
 				// Success modal
 				toast.success(
 					`You have successfully logged in, ${user.firstName}!`
 				);
 				// Dispatch global login state
-				dispatch({ type: 'LOGIN' });
+				dispatch({ type: 'LOGIN', payload: { token } }); // Include token in payload
 				// Reset the form
 				reset();
 				// Navigate to home page

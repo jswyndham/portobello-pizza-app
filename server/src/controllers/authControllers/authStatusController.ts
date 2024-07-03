@@ -20,6 +20,7 @@ export const authStatus = async (
 			res.status(StatusCodes.OK).json({
 				isLoggedIn: true,
 				user: payload,
+				token,
 			});
 			return;
 		} else {

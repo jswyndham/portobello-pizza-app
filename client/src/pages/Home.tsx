@@ -121,7 +121,7 @@ const Home = () => {
 				<img
 					src={homeImageSmall}
 					alt="Portobello homepage image"
-					className="w-full hidden lg:flex"
+					className="w-full hidden lg:flex -mt-1"
 				/>
 				<div className="bg-gradient-to-b from-secondary via-white to-primary">
 					<motion.div

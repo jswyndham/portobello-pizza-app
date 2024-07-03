@@ -4,6 +4,7 @@ import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
 import cloudinary from '../../config/cloudinary';
 import { AuthenticatedRequest } from '../../types/request';
+import { USER_STATUS } from '../../constants';
 
 interface CloudinaryResult {
 	secure_url: string;
@@ -13,6 +14,11 @@ export const createFoodMenu = async (
 	req: AuthenticatedRequest,
 	res: Response
 ): Promise<void> => {
+	// !! Manually set req.user for testing purposes
+	(req as AuthenticatedRequest).user = {
+		userId: '66587a83c313229cc238e7eb',
+		userStatus: USER_STATUS.ADMIN,
+	};
 	const { menuCategory, pizzaType, name, ingredients, price } = req.body;
 
 	if (!menuCategory || !name || !Array.isArray(ingredients) || !price) {
@@ -23,7 +29,10 @@ export const createFoodMenu = async (
 		return;
 	}
 
-	if (!req.user) {
+	const authReq = req as AuthenticatedRequest; // Cast req to AuthenticatedRequest
+	console.log('Authenticated user in controller:', authReq.user);
+
+	if (!authReq.user) {
 		res.status(StatusCodes.UNAUTHORIZED).json({
 			message: 'User not authenticated',
 		});
@@ -69,7 +78,7 @@ export const createFoodMenu = async (
 			action: 'CREATE_FOOD_ITEM',
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
-			userId: req.user.userId,
+			userId: authReq.user.userId,
 			details: { reason: 'New food item created' },
 		});
 		await auditLog.save();

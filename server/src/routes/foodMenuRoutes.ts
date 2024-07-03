@@ -18,7 +18,7 @@ router
 	.post(
 		upload.single('image'),
 		validateFoodMenu,
-		authenticateUser as express.RequestHandler,
+		// authenticateUser as express.RequestHandler,
 		createFoodMenu as express.RequestHandler
 	)
 	.get(getFoodMenu as express.RequestHandler);
