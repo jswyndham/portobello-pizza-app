@@ -61,6 +61,8 @@ export const createFoodMenu = async (
 				}
 			);
 			imageUrl = result.secure_url;
+		} else {
+			imageUrl = 'default_image_url'; // Set a default image URL if no image is provided
 		}
 
 		const foodItem = await FoodMenu.create({

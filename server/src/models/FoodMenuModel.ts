@@ -34,7 +34,7 @@ const FoodMenuSchema: Schema = new Schema({
 	},
 	imageUrl: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	ingredients: [
 		{
