@@ -10,7 +10,10 @@ import {
 import { useAuth } from '../../context/AuthContext'; // Import your useAuth hook
 
 const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
-	const { state } = useAuth(); // Use the useAuth hook
+	// Use the useAuth hook
+	const { state } = useAuth();
+
+	// Create state for the food menu
 	const [foodMenuItem, setFoodMenuItem] = useState({
 		menuCategory: initialData.menuCategory || [],
 		pizzaType: initialData.pizzaType || '',
@@ -20,8 +23,11 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		price: initialData.price || 0,
 	});
 
+	// Create state to handle the cloudinary image
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
+	const [imageFile, setImageFile] = useState<File | null>(null);
 
+	// Create state to handle the react form
 	const {
 		register,
 		handleSubmit,
@@ -35,20 +41,33 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
-			console.log('Authorization Header:', `Bearer ${state.token}`);
+			const formData = new FormData();
+			formData.append('menuCategory', data.menuCategory);
+			formData.append('pizzaType', data.pizzaType || ''); // handle optional fields properly
+			formData.append('name', data.name);
+			formData.append(
+				'ingredients',
+				JSON.stringify(foodMenuItem.ingredients)
+			);
+			formData.append('price', data.price.toString());
+
+			if (foodMenuItem.imageUrl) {
+				formData.append('imageUrl', foodMenuItem.imageUrl);
+			}
+
+			console.log(
+				'FormData to be sent:',
+				Object.fromEntries(formData.entries())
+			); // Debugging statement
+
 			const response = await fetch(
 				'http://localhost:5001/api/v1/foodMenu',
 				{
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${state.token}`, // Ensure state.token is defined
+						Authorization: `Bearer ${state.token}`,
 					},
-					body: JSON.stringify({
-						...data,
-						imageUrl: foodMenuItem.imageUrl,
-						ingredients: foodMenuItem.ingredients,
-					}),
+					body: formData,
 				}
 			);
 
@@ -56,21 +75,25 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 				console.log('Menu item created:', await response.json());
 				reset();
 			} else {
-				console.error('Failed to create menu item');
+				const errorData = await response.json();
+				console.error('Failed to create menu item:', errorData.message);
 			}
 		} catch (error) {
 			console.error('Error submitting form:', error);
 		}
 	};
 
-	const handleImageUrl = (url: string) => {
-		setImagePreview(url);
+	// Update handleImageUrl to store the file object and URL separately
+	const handleImageUrl = (file: any) => {
+		const fileUrl = file.secure_url;
+		setImagePreview(fileUrl);
 		setFoodMenuItem((prev) => ({
 			...prev,
-			imageUrl: url,
+			imageUrl: fileUrl,
 		}));
 	};
 
+	// Add the new ingredient field to form
 	const handleAddIngredient = () => {
 		setFoodMenuItem((prev) => ({
 			...prev,
@@ -78,6 +101,7 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		}));
 	};
 
+	// Remove an ingredient field to form
 	const handleRemoveIngredient = (index: number) => {
 		setFoodMenuItem((prev) => ({
 			...prev,
@@ -85,6 +109,7 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		}));
 	};
 
+	// Handle change to the ingredients state
 	const handleIngredientChange = (index: number, value: string) => {
 		const newIngredients = [...foodMenuItem.ingredients];
 		newIngredients[index] = value;

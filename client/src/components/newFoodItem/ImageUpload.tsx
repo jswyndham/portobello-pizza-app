@@ -9,22 +9,37 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	const widgetRef = useRef<any>(null);
 
 	useEffect(() => {
-		cloudinaryRef.current = window.cloudinary;
-		widgetRef.current = cloudinaryRef.current.createUploadWidget(
-			{
-				cloudName: 'ducq9yzyn',
-				uploadPreset: 'u9bu7hdq',
-			},
-			function (error: any, result: any) {
-				console.log(result);
-			}
-		);
-	}, []);
+		if (window.cloudinary) {
+			cloudinaryRef.current = window.cloudinary;
+			widgetRef.current = cloudinaryRef.current.createUploadWidget(
+				{
+					cloudName: 'ducq9yzyn',
+					uploadPreset: 'u9bu7hdq',
+				},
+				(error: any, result: any) => {
+					if (!error && result && result.event === 'success') {
+						console.log(
+							'Done! Here is the image info: ',
+							result.info
+						);
+						const file = result.info; // Assuming this is the file object
+						setImageUrl(file);
+					} else if (error) {
+						console.error('Upload error:', error);
+					}
+				}
+			);
+		}
+	}, [setImageUrl]);
 
 	return (
 		<div className="flex flex-col">
 			<button
-				onClick={() => widgetRef.current.open()}
+				onClick={() => {
+					if (widgetRef.current) {
+						widgetRef.current.open();
+					}
+				}}
 				className="p-3 mb-3 bg-blue-500 text-white rounded-md"
 			>
 				Upload Image

@@ -7,7 +7,9 @@ import {
 } from '../controllers/foodMenuControllers';
 import { validateFoodMenu } from '../validators/foodMenuValidators';
 import { authenticateUser } from '../middleware/authMiddleware';
-import { upload } from '../middleware/uploadMiddleware';
+import multer from 'multer';
+
+const upload = multer();
 
 const router = express.Router();
 
@@ -16,9 +18,9 @@ const router = express.Router();
 router
 	.route('/')
 	.post(
-		upload.single('image'),
+		upload.none(), // Multer is needed to parse the multipart form data
 		validateFoodMenu,
-		// authenticateUser as express.RequestHandler,
+		authenticateUser as express.RequestHandler,
 		createFoodMenu as express.RequestHandler
 	)
 	.get(getFoodMenu as express.RequestHandler);

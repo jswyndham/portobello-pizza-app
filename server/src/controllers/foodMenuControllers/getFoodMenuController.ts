@@ -38,18 +38,29 @@ export const getFoodMenu = async (
 			query.menuCategory = menuCategory.toUpperCase();
 		}
 
-		// Fetch from DB if not cached
+		// Fetch all items or handle pagination
 		const allFoodMenuItems = await FoodMenu.find(query)
 			.skip(skip)
 			.limit(limit)
 			.exec();
 
+		const totalItems = await FoodMenu.countDocuments(query).exec();
+		const totalPages = Math.ceil(totalItems / limit);
+
 		console.log('Get Food Menu items: ', allFoodMenuItems);
 
 		// Cache the fetched data
-		setCache(cacheKey, allFoodMenuItems, 7200); // Cache for 2 hours
+		setCache(
+			cacheKey,
+			{ items: allFoodMenuItems, totalItems, totalPages },
+			7200
+		); // Cache for 2 hours
 
-		res.status(StatusCodes.OK).json(allFoodMenuItems);
+		res.status(StatusCodes.OK).json({
+			items: allFoodMenuItems,
+			totalItems,
+			totalPages,
+		});
 	} catch (error: any) {
 		console.error('Error getting food menu items:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
