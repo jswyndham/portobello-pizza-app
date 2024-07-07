@@ -36,7 +36,7 @@ const SidebarMenu = () => {
 
 	return (
 		<>
-			<div className="absolute z-50 top-0 right-0">
+			<div className="fixed z-50 top-0 right-0">
 				<MenuToggle toggle={toggleSidebar} isOpen={isOpen} />
 			</div>
 

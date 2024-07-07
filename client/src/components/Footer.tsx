@@ -5,7 +5,7 @@ import SocialMediaLinks from './SocialMediaLinks';
 const Footer = () => {
 	return (
 		<>
-			<footer className="w-screen h-fit flex justify-center bg-primary p-3">
+			<footer className="w-screen h-fit flex justify-center bg-primary px-3 pb-10 pt-12">
 				<div className="flex flex-col justify-center items-center">
 					<p className="text-yellow-400 text-2xl lg:text-4xl font-caveat font-semibold">
 						FOLLOW US!

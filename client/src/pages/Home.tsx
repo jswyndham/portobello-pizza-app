@@ -123,7 +123,7 @@ const Home = () => {
 					alt="Portobello homepage image"
 					className="w-full hidden lg:flex -mt-1"
 				/>
-				<div className="bg-gradient-to-b from-secondary via-white to-primary">
+				<div className="bg-main-gradient">
 					<motion.div
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}

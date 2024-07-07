@@ -74,33 +74,35 @@ const FoodMenuCard: React.FC = () => {
 				{foodItems.map((food) => (
 					<article
 						key={food._id}
-						className="w-80 h-fit border border-slate-400 rounded-lg p-2 bg-slate-200 bg-opacity-70"
+						className="w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
 					>
 						<div className="w-full h-full flex flex-col">
 							{food.imageUrl ? (
 								<img
 									src={food.imageUrl || '/placeholder.jpg'}
 									alt={food.name}
-									className="h-56 w-full object-cover border border-slate-300 rounded-md mb-4"
+									className="h-40 md:h-56 w-full object-cover rounded-t-md mb-4"
 								/>
 							) : (
 								<img
 									src={food.imageUrl || '/placeholder.jpg'}
 									alt="No image available"
-									className="h-56 w-full object-cover flex border border-slate-300 bg-white items-center justify-center rounded-md text-xl font-cinzel mb-4"
+									className="h-28 md:h-56 w-full object-cover flex bg-white items-center justify-center rounded-t-md text-xl font-cinzel mb-4"
 								/>
 							)}
 
-							<div className="flex flex-col justify-between items-center p-3">
-								<h2 className="text-lg font-bold font-montserrat">
-									{food.name}
-								</h2>
-								<div className="h-20 flex items-center my-3">
-									<p className="text-lg text-gray-600 text-center flex-grow font-sans font-bold">
+							<div className="flex flex-col justify-between items-center">
+								<div className="w-full -mt-9 bg-food-menu-gradient border-y border-slate-300 text-center drop-shadow-lg">
+									<h2 className="text-xl font-bold font-dmsans text-white py-1">
+										{food.name}
+									</h2>
+								</div>
+								<div className="h-20 flex items-center my-2">
+									<p className="text-lg text-slate-700 text-center flex-grow font-sans font-bold">
 										{food.ingredients.join(', ')}
 									</p>
 								</div>
-								<div className="flex flex-row text-xl text-green-600 mt-2 flex-grow font-cinzel">
+								<div className="flex flex-row text-xl text-primary flex-grow font-cinzel pb-4">
 									<p>฿ </p>
 									<p className="font-semibold">
 										{food.price}
@@ -111,18 +113,20 @@ const FoodMenuCard: React.FC = () => {
 					</article>
 				))}
 			</div>
-			<div className="flex justify-between mt-4">
+			<div className="flex justify-between pt-10 pb-16 px-4 text-xl font-semibold text-yellow-400">
 				<button
+					type="button"
 					disabled={page === 1}
 					onClick={handlePrevPage}
-					className="text-lg font-semibold underline underline-offset-4 text-yellow-500 hover:cursor-pointer hover:text-blue-400"
+					className="underline underline-offset-4 hover:cursor-pointer hover:text-yellow-600 active:text-blue-600"
 				>
 					Previous
 				</button>
 				<button
+					type="button"
 					disabled={page === totalPages}
 					onClick={handleNextPage}
-					className="text-lg font-semibold underline underline-offset-4 text-yellow-500 hover:cursor-pointer hover:text-blue-400"
+					className="underline underline-offset-4 hover:cursor-pointer hover:text-yellow-600 active:text-blue-600"
 				>
 					Next
 				</button>
