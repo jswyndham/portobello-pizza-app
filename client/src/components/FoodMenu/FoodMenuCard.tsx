@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { FiEdit } from 'react-icons/fi';
+import { RxCross2 } from 'react-icons/rx';
 
 interface FoodMenuItem {
 	_id: string;
@@ -16,6 +19,9 @@ const FoodMenuCard: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
+
+	const { state } = useAuth();
+	const { isLoggedIn } = state;
 
 	useEffect(() => {
 		const fetchFoodItems = async () => {
@@ -69,13 +75,25 @@ const FoodMenuCard: React.FC = () => {
 	}
 
 	return (
-		<section>
+		<section className="pt-8">
 			<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 2xl:gap-14 justify-center items-center">
 				{foodItems.map((food) => (
 					<article
 						key={food._id}
-						className="w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
+						className="relative w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
 					>
+						{isLoggedIn && (
+							<div className="absolute z-20 w-full bg-slate-500 bg-opacity-50">
+								<div className="flex justify-between p-2">
+									<div className="w-8 h-8 flex justify-center items-center bg-yellow-500 text-white rounded-full hover:cursor-pointer">
+										<FiEdit />
+									</div>
+									<div className="w-8 h-8 flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer">
+										<RxCross2 />
+									</div>
+								</div>
+							</div>
+						)}
 						<div className="w-full h-full flex flex-col">
 							{food.imageUrl ? (
 								<img

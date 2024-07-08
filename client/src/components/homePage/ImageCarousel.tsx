@@ -5,6 +5,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import imageCarouselData, {
 	ImageCarouselSchemaItem,
 } from '../../data/imageCarouselData';
+import HeadingTwo from '../HeadingTwo';
 
 const ImageCarousel: React.FC = () => {
 	const [key, setKey] = useState<number>(0);
@@ -34,11 +35,9 @@ const ImageCarousel: React.FC = () => {
 
 	return (
 		<div className="w-full lg:w-10/12 px-2 xl:my-24 flex flex-col justify-center items-center mx-auto">
-			<div className="w-full border-t-2 border-b-2 border-forth text-center my-2">
-				<h2 className="text-3xl lg:text-4xl 2xl:text-6xl py-3 lg:px-24 font-cinzel">
-					Porto Bello - Image Gallery
-				</h2>
-			</div>
+			{/* Heading */}
+			<HeadingTwo headingTwoText={'Porto Bello - Image Gallery'} />
+
 			<div className="w-full lg:w-10/12 py-20 px-8">
 				<Slider key={key} {...settings}>
 					{images.map((image, index) => (

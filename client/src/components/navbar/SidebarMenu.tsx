@@ -51,7 +51,7 @@ const SidebarMenu = () => {
 			/>
 
 			<motion.nav
-				className="fixed z-40 top-0 right-0 bottom-0 w-8/12 sm:w-6/12 md:w-5/12 bg-forth text-white border-l-2 border-third lg:hidden"
+				className="fixed z-40 top-0 right-0 bottom-0 w-9/12 sm:w-6/12 md:w-5/12 bg-forth text-white border-l-2 border-third lg:hidden"
 				style={{ opacity: 1 }}
 				initial="closed"
 				animate={isOpen ? 'open' : 'closed'}
