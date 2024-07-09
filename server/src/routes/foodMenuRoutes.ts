@@ -2,6 +2,7 @@ import express from 'express';
 import {
 	createFoodMenu,
 	getFoodMenu,
+	getFoodMenuItem,
 	deleteFoodMenu,
 	editFoodMenu,
 } from '../controllers/foodMenuControllers';
@@ -27,6 +28,10 @@ router
 
 router
 	.route('/:id/')
+	.get(
+		// authenticateUser as express.RequestHandler,
+		getFoodMenuItem as express.RequestHandler
+	)
 	.patch(
 		validateFoodMenu,
 		authenticateUser as express.RequestHandler,

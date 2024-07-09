@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator';
 import FoodMenu from '../../models/FoodMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
 
-export const getFoodMenu = async (
+export const getFoodMenuItem = async (
 	req: AuthenticatedRequest,
 	res: Response
 ): Promise<void> => {
@@ -17,13 +17,13 @@ export const getFoodMenu = async (
 	}
 
 	try {
-		const page = parseInt(req.query.page as string, 10) || 1;
-		const limit = parseInt(req.query.limit as string, 10) || 10;
-		const skip = (page - 1) * limit;
+		// ************** Define params ******************
+		const foodMenuId = req.params.id; // ID of the food menu item being updated
+
 		const menuCategory = req.query.menuCategory as string;
 
 		// Set cache parameters
-		const cacheKey = `foodMenu_${menuCategory}_page_${page}_limit_${limit}`;
+		const cacheKey = `foodMenu_${foodMenuId}`;
 		let foodMenuData = getCache(cacheKey);
 
 		if (foodMenuData) {
@@ -32,39 +32,28 @@ export const getFoodMenu = async (
 			return;
 		}
 
-		// Build query object
-		const query: any = {};
-		if (menuCategory) {
-			query.menuCategory = menuCategory.toUpperCase();
+		// Fetch all items or handle pagination
+		const foodMenuItem = await FoodMenu.findById(foodMenuId).exec();
+
+		if (!foodMenuItem) {
+			res.status(StatusCodes.NOT_FOUND).json({
+				message: 'Food item not found',
+			});
+			return;
 		}
 
-		// Fetch all items or handle pagination
-		const allFoodMenuItems = await FoodMenu.find(query)
-			.skip(skip)
-			.limit(limit)
-			.exec();
-
-		const totalItems = await FoodMenu.countDocuments(query).exec();
-		const totalPages = Math.ceil(totalItems / limit);
+		console.log('Get Food Menu item: ', foodMenuItem);
 
 		// Cache the fetched data
-		setCache(
-			cacheKey,
-			{ items: allFoodMenuItems, totalItems, totalPages },
-			7200
-		); // Cache for 2 hours
+		setCache(cacheKey, { items: foodMenuItem }, 7200); // Cache for 2 hours
 
-		res.status(StatusCodes.OK).json({
-			items: allFoodMenuItems,
-			totalItems,
-			totalPages,
-		});
+		res.status(StatusCodes.OK).json(foodMenuItem);
 	} catch (error: any) {
-		console.error('Error getting food menu items:', error);
+		console.error('Error getting food menu item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message ||
-				'An error occurred while requesting food menu items',
+				'An error occurred while requesting food menu item',
 		});
 	}
 };

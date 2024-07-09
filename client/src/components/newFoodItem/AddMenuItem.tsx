@@ -14,11 +14,11 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 	const { id } = useParams<{ id: string }>();
 	const { state } = useAuth();
 	const [foodMenuItem, setFoodMenuItem] = useState({
-		menuCategory: initialData?.menuCategory || '',
+		menuCategory: initialData?.menuCategory || '', // Ensure it's a scalar value
 		pizzaType: initialData?.pizzaType || '',
 		name: initialData?.name || '',
 		imageUrl: initialData?.imageUrl || '',
-		ingredients: initialData?.ingredients || [''],
+		ingredients: initialData?.ingredients || [], // Initialize as an empty array
 		price: initialData?.price || 0,
 	});
 	const [imagePreview, setImagePreview] = useState<string | null>(
@@ -34,18 +34,26 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (id) {
-			const fetchFoodMenuItem = async () => {
+		const fetchFoodMenuItem = async () => {
+			if (id) {
 				const response = await fetch(
 					`http://localhost:5001/api/v1/foodMenu/${id}`
 				);
 				const data = await response.json();
-				setFoodMenuItem(data);
+				setFoodMenuItem({
+					...data,
+					menuCategory: data.menuCategory || '',
+					pizzaType: data.pizzaType || '',
+					name: data.name || '',
+					imageUrl: data.imageUrl || '',
+					ingredients: data.ingredients || [],
+					price: data.price || 0,
+				});
 				setImagePreview(data.imageUrl || null);
-			};
+			}
+		};
 
-			fetchFoodMenuItem();
-		}
+		fetchFoodMenuItem();
 	}, [id]);
 
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
@@ -58,6 +66,8 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 				price: data.price,
 				imageUrl: foodMenuItem.imageUrl,
 			};
+
+			console.log('Submitting form with data:', formData); // Debugging output
 
 			const method = id ? 'PATCH' : 'POST';
 			const url = id
@@ -85,8 +95,10 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		}
 	};
 
+	// Handler for cloudinary image
 	const handleImageUrl = (file: any) => {
 		const fileUrl = file.secure_url;
+		console.log('Cloudinary URL:', fileUrl); // Debugging output
 		setImagePreview(fileUrl);
 		setFoodMenuItem((prev) => ({
 			...prev,
@@ -94,10 +106,11 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		}));
 	};
 
+	// Handlers for ingredients array
 	const handleAddIngredient = () => {
 		setFoodMenuItem((prev) => ({
 			...prev,
-			ingredients: [...prev.ingredients, ''],
+			ingredients: prev.ingredients ? [...prev.ingredients, ''] : [''],
 		}));
 	};
 

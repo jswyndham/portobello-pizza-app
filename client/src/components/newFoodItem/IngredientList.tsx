@@ -4,7 +4,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { IoAddOutline } from 'react-icons/io5';
 
 const IngredientList: FC<IngredientListProps> = ({
-	ingredients,
+	ingredients = [], // Default to an empty array
 	onAddIngredient,
 	onRemoveIngredient,
 	onIngredientChange,
@@ -49,5 +49,4 @@ const IngredientList: FC<IngredientListProps> = ({
 		</div>
 	);
 };
-
 export default IngredientList;

@@ -93,7 +93,7 @@ const FoodMenuCard: React.FC = () => {
 	}, [page]);
 
 	// Submit menu item deletion
-	const onSubmit = async (id: string) => {
+	const onSubmitDelete = async (id: string) => {
 		try {
 			const response = await fetch(
 				`http://localhost:5001/api/v1/foodMenu/${id}`,
@@ -119,19 +119,41 @@ const FoodMenuCard: React.FC = () => {
 				console.error('Failed to delete menu item:', errorData.message);
 			}
 		} catch (error) {
-			console.error('Error submitting form:', error);
+			console.error('Error deleting item:', error);
+		}
+	};
+
+	// Submit menu item to edit
+	const onSubmitEdit = async (id: string) => {
+		try {
+			const response = await fetch(
+				`http://localhost:5001/api/v1/foodMenu/${id}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${state.token}`,
+					},
+					credentials: 'include',
+				}
+			);
+			if (response.ok) {
+				const data = await response.json();
+				// Assuming `setFoodItemToEdit` will be used to set the state and then navigate
+				setFoodItemToEdit(data);
+				setIsEditOpen(true);
+			} else {
+				const errorData = await response.json();
+				console.error('Failed to get menu item:', errorData.message);
+			}
+		} catch (error) {
+			console.error('Error finding menu item:', error);
 		}
 	};
 
 	// Handle editing
 	const handleEdit = (foodItem: FoodMenuItem) => {
+		onSubmitEdit(foodItem._id);
 		navigate(`/editmenu/${foodItem._id}`);
-	};
-
-	// Handle close edit modal
-	const closeEditModal = () => {
-		setIsEditOpen(false);
-		setFoodItemToEdit(null);
 	};
 
 	// Handle delete functions
@@ -142,7 +164,7 @@ const FoodMenuCard: React.FC = () => {
 
 	const confirmDelete = () => {
 		if (itemIdToDelete) {
-			onSubmit(itemIdToDelete);
+			onSubmitDelete(itemIdToDelete);
 			setIsDeleteOpen(false);
 			setItemIdToDelete(null);
 		}
