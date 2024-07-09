@@ -17,6 +17,8 @@ export default {
 				'linear-gradient(to right, transparent 0%, black 30%, black 70%, transparent 100%)',
 			'card-gradient':
 				'linear-gradient(to top, white 0%, transparent 100%)',
+			'login-gradient':
+				'linear-gradient(to bottom, #991E23 0%, white 80%, white 100%)',
 		},
 		fontFamily: {
 			'noto-serif-display': ['Noto Serif Display', 'serif'],

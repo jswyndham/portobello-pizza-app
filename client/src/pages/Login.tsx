@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { FC } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import backgroundImage from '/images/pizza-and-wine.jpg';
 
 interface LoginData {
 	email: string;
@@ -74,8 +75,13 @@ const Login: FC = () => {
 				className="toast-container"
 				toastClassName="toast"
 			/>
-			<section className="flex flex-row justify-center align-middle h-screen w-screen bg-gradient-to-b from-yellow-50 via-white to-primary pt-32 md:pt-48 px-2">
-				<article className="flex flex-col justify-start bg-gradient-to-b from-primary via-white to-white align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">
+			<section className="flex flex-row justify-center align-middle h-screen w-screen pt-32 md:pt-48 px-2">
+				<img
+					src={backgroundImage}
+					alt={backgroundImage}
+					className="relative object-fill blur-sm"
+				/>
+				<article className="absolute top-56 lg:top-72 flex flex-col justify-start bg-login-gradient align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">
 					<div className="mx-auto h-12 w-10/12 md:w-8/12">
 						<img
 							src="/images/portobello-no-background-small-2.png"

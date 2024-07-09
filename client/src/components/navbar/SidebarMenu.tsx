@@ -121,7 +121,7 @@ const SidebarMenu = () => {
 
 					{/* Conditionally render ADMIN link if logged in */}
 					{isLoggedIn && (
-						<Link to="/admin">
+						<Link to="/addmenu">
 							<li
 								className="flex flex-row w-fit py-8 relative transition-all active:text-secondary  hover:cursor-pointer hover:text-secondary"
 								onClick={toggleSidebar}
@@ -129,7 +129,7 @@ const SidebarMenu = () => {
 								<div className="mt-0.5 pr-4">
 									<MdOutlineAdminPanelSettings />
 								</div>
-								ADMIN
+								ADD MENU
 							</li>
 						</Link>
 					)}

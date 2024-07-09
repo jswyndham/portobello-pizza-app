@@ -1,7 +1,7 @@
 import AddMenuItem from '../components/newFoodItem/AddMenuItem';
 import { Outlet } from 'react-router-dom';
 
-const AddFoodMenuItem = () => {
+const EditItemPage = () => {
 	const initialData = {
 		menuCategory: [''],
 		pizzaType: '',
@@ -16,9 +16,9 @@ const AddFoodMenuItem = () => {
 			<article className="w-full 4xl:w-8/12 h-fit overflow-hidden pb-24">
 				<div className="relative h-36 mt-12 lg:mt-36 2xl:ml-36">
 					<div className="mt-12 w-24 h-24 m-5 pl-6 bg-forth rounded-xl drop-shadow-2xl"></div>
-					<div className="absolute top-0 left-12 w-40 h-72 m-5 pl-6 bg-primary rounded-md shadow-xl shadow-slate-500">
-						<h1 className="text-third text-4xl md:text-5xl font-thin tracking-tighter">
-							add
+					<div className="absolute top-0 left-12 w-40 h-72 m-5 pl-6 bg-yellow-600 rounded-md shadow-xl shadow-slate-500">
+						<h1 className="text-primary text-4xl md:text-5xl font-thin tracking-tighter">
+							edit
 						</h1>
 						<h1 className="text-forth font-roboto font-bold text-7xl tracking-widest">
 							MENU
@@ -32,4 +32,4 @@ const AddFoodMenuItem = () => {
 	);
 };
 
-export default AddFoodMenuItem;
+export default EditItemPage;

@@ -63,7 +63,7 @@ const LogoutButton: React.FC = () => {
 			<button
 				type="button"
 				onClick={handleLogout}
-				className="w-24 h-9 m-2 bg-red-500 text-white font-semibold rounded-lg hover:text-primary drop-shadow-md hover:shadow-gray-600 hover:shadow-md hover:border-2 hover:border-secondary active:shadow-md active:bg-white active:text-blue-800 active:border-solid active:border-2 active:border-blue-800"
+				className="w-24 h-9 m-2 bg-red-500 text-white font-semibold rounded-lg hover:text-yellow-100 drop-shadow-md hover:shadow-gray-600 hover:shadow-md hover:border-2 hover:border-white active:shadow-md active:bg-white active:text-blue-800 active:border-solid active:border-2 active:border-blue-800"
 			>
 				Logout
 			</button>

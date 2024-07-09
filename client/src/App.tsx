@@ -8,6 +8,7 @@ import {
 	Error,
 	Admin,
 	AddItemPage,
+	EditItemPage,
 	Contact,
 	Login,
 } from './pages';
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
 			{
 				path: '/addmenu',
 				element: <ProtectedRoute element={<AddItemPage />} />,
+			},
+			{
+				path: '/editmenu/:id',
+				element: <ProtectedRoute element={<EditItemPage />} />,
 			},
 			{
 				path: '/foodmenu',
