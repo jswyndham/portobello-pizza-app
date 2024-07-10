@@ -1,13 +1,11 @@
 export interface FoodMenuFormProps {
-	initialData?: {
-		_id?: string;
-		menuCategory?: string;
-		pizzaType?: string;
-		name?: string;
-		imageUrl?: string;
-		ingredients?: string[];
-		price?: number;
-	} | null;
+	_id?: string;
+	menuCategory?: string;
+	pizzaType?: string;
+	name?: string;
+	imageUrl?: string;
+	ingredients?: string[];
+	price?: number;
 }
 
 export interface FoodMenuFormData {

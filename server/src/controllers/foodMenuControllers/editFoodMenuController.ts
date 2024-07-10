@@ -76,12 +76,13 @@ export const editFoodMenu = async (
 		});
 		await auditLog.save();
 
-		const page = parseInt(req.query.page as string, 10) || 1;
-		const limit = parseInt(req.query.limit as string, 10) || 10;
-
-		// Clear the cache for the food menu item
-		const cacheKey = `foodMenu_page_${page}_limit_${limit}`;
-		clearCache(cacheKey);
+		// Clear the cache for the food menu items of all pages
+		for (let page = 1; page <= 10; page++) {
+			const limit = 10;
+			const cacheKey = `foodMenu_${menuCategory}_page_${page}_limit_${limit}`;
+			clearCache(cacheKey);
+			clearCache(`foodMenu_page_${page}_limit_${limit}`);
+		}
 
 		res.status(StatusCodes.OK).json({
 			message: 'Food menu item updated successfully',

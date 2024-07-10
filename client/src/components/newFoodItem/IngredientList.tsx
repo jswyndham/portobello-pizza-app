@@ -1,14 +1,19 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { IngredientListProps } from '../../types/newFoodItemInterfaces';
 import { FaTrashAlt } from 'react-icons/fa';
 import { IoAddOutline } from 'react-icons/io5';
 
 const IngredientList: FC<IngredientListProps> = ({
-	ingredients = [], // Default to an empty array
+	ingredients = [],
 	onAddIngredient,
 	onRemoveIngredient,
 	onIngredientChange,
 }) => {
+	useEffect(() => {
+		// Debugging
+		console.log('Rendering IngredientList with ingredients:', ingredients);
+	}, [ingredients]);
+
 	return (
 		<div className="flex flex-col">
 			<label
@@ -17,6 +22,7 @@ const IngredientList: FC<IngredientListProps> = ({
 			>
 				Ingredients
 			</label>
+
 			{ingredients.map((ingredient, index) => (
 				<div key={index} className="flex items-center mb-3">
 					<input
@@ -49,4 +55,5 @@ const IngredientList: FC<IngredientListProps> = ({
 		</div>
 	);
 };
+
 export default IngredientList;

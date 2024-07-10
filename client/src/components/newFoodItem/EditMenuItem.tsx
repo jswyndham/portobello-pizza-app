@@ -1,24 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { MENU_CATEGORY, MEAT_OR_VEG } from '../../../../server/src/constants';
 import IngredientList from './IngredientList';
 import ImageUpload from './ImageUpload';
 import { FoodMenuFormData } from '../../types/newFoodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const AddMenuItem = () => {
+const EditMenuItem = () => {
+	const { id } = useParams<{ id: string }>();
 	const { state } = useAuth();
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const {
 		register,
 		handleSubmit,
+		reset,
 		getValues,
 		setValue,
 		formState: { errors, isSubmitting },
-		reset,
 	} = useForm<FoodMenuFormData>({
 		defaultValues: {
 			menuCategory: '',
@@ -29,6 +31,31 @@ const AddMenuItem = () => {
 			price: 0,
 		},
 	});
+
+	useEffect(() => {
+		const fetchFoodMenuItem = async () => {
+			if (id) {
+				const response = await fetch(
+					`http://localhost:5001/api/v1/foodMenu/${id}`
+				);
+				const data = await response.json();
+				console.log('Fetched Data:', data);
+
+				reset({
+					menuCategory: data.items.menuCategory,
+					pizzaType: data.items.pizzaType,
+					name: data.items.name,
+					imageUrl: data.items.imageUrl,
+					ingredients: data.items.ingredients,
+					price: data.items.price,
+				});
+				setImagePreview(data.items.imageUrl || null);
+				setIsLoading(false);
+			}
+		};
+
+		fetchFoodMenuItem();
+	}, [id, reset]);
 
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
@@ -42,9 +69,9 @@ const AddMenuItem = () => {
 			console.log('Submitting form with data:', formData);
 
 			const response = await fetch(
-				'http://localhost:5001/api/v1/foodMenu',
+				`http://localhost:5001/api/v1/foodMenu/${id}`,
 				{
-					method: 'POST',
+					method: 'PATCH',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${state.token}`,
@@ -75,20 +102,26 @@ const AddMenuItem = () => {
 	const handleAddIngredient = () => {
 		const ingredients = getValues('ingredients') || [];
 		setValue('ingredients', [...ingredients, '']);
-		console.log('Ingredients after adding:', [...ingredients, '']); // Debugging line
+		console.log('Ingredients after adding:', getValues('ingredients'));
 	};
 
 	const handleRemoveIngredient = (index: number) => {
 		const ingredients = getValues('ingredients') || [];
 		ingredients.splice(index, 1);
 		setValue('ingredients', ingredients);
+		console.log('Ingredients after removing:', getValues('ingredients'));
 	};
 
 	const handleIngredientChange = (index: number, value: string) => {
 		const ingredients = getValues('ingredients') || [];
 		ingredients[index] = value;
 		setValue('ingredients', ingredients);
+		console.log('Ingredients after change:', getValues('ingredients'));
 	};
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<section className="flex justify-center items-center w-screen sm:w-full h-fit">
@@ -198,4 +231,4 @@ const AddMenuItem = () => {
 	);
 };
 
-export default AddMenuItem;
+export default EditMenuItem;

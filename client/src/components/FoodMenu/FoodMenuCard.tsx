@@ -5,7 +5,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { ToastContainer, toast } from 'react-toastify';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AddMenuItem } from '../newFoodItem';
+import { EditMenuItem } from '../newFoodItem';
 import { useAuth } from '../../context/AuthContext';
 
 interface FoodMenuItem {
@@ -72,7 +72,7 @@ const FoodMenuCard: React.FC = () => {
 					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12`
 				);
 				const data = await response.json();
-				console.log('API response JSON:', data); // Log the parsed response
+				console.log('API response JSON:', data);
 
 				if (data.items && Array.isArray(data.items)) {
 					setFoodItems(data.items);
@@ -85,7 +85,7 @@ const FoodMenuCard: React.FC = () => {
 				console.error('Error fetching food items:', error);
 				setError('Error fetching food items.');
 			} finally {
-				setLoading(false); // Set loading to false after fetching
+				setLoading(false);
 			}
 		};
 
@@ -138,6 +138,7 @@ const FoodMenuCard: React.FC = () => {
 			);
 			if (response.ok) {
 				const data = await response.json();
+				console.log('Fetched Data:', data);
 				setFoodItemToEdit(data);
 				setIsEditOpen(true);
 			} else {
@@ -151,6 +152,16 @@ const FoodMenuCard: React.FC = () => {
 
 	// Handle editing
 	const handleEdit = (foodItem: FoodMenuItem) => {
+		console.log(
+			'Submit edit: ',
+			foodItem._id,
+			foodItem.name,
+			foodItem.menuCategory,
+			foodItem.pizzaType,
+			foodItem.imageUrl,
+			foodItem.ingredients,
+			foodItem.price
+		);
 		onSubmitEdit(foodItem._id);
 		navigate(`/editmenu/${foodItem._id}`);
 	};
@@ -293,9 +304,7 @@ const FoodMenuCard: React.FC = () => {
 					</AnimatePresence>
 				</motion.div>
 
-				{isEditOpen && foodItemToEdit && (
-					<AddMenuItem initialData={foodItemToEdit} />
-				)}
+				{isEditOpen && foodItemToEdit && <EditMenuItem />}
 
 				<AnimatePresence>
 					{isDeleteOpen && (
