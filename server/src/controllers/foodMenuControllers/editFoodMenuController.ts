@@ -14,8 +14,8 @@ export const editFoodMenu = async (
 		const { menuCategory, pizzaType, name, imageUrl, ingredients, price } =
 			req.body;
 
-		// ************** Define params ******************
-		const foodMenuId = req.params.id; // ID of the food menu item being updated
+		// Define params
+		const foodMenuId = req.params.id;
 
 		// Validate request body
 		if (!menuCategory || !name || !Array.isArray(ingredients) || !price) {
@@ -42,7 +42,7 @@ export const editFoodMenu = async (
 			return;
 		}
 
-		// ***** Find the existing food item *******
+		// Find the existing food item
 		const foodItem = await FoodMenu.findById(foodMenuId);
 		if (!foodItem) {
 			res.status(StatusCodes.NOT_FOUND).json({
@@ -51,12 +51,14 @@ export const editFoodMenu = async (
 			return;
 		}
 
-		// *** Update the food item ***
+		// Update the food item
 		foodItem.menuCategory = menuCategory;
 		foodItem.pizzaType = pizzaType;
 		foodItem.name = name;
 		foodItem.imageUrl = imageUrl;
-		foodItem.ingredients = ingredients;
+		foodItem.ingredients = Array.isArray(ingredients)
+			? ingredients
+			: JSON.parse(ingredients);
 		foodItem.price = price;
 
 		const updatedFoodItem = await foodItem.save();

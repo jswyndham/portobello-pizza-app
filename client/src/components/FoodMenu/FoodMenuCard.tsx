@@ -138,7 +138,6 @@ const FoodMenuCard: React.FC = () => {
 			);
 			if (response.ok) {
 				const data = await response.json();
-				// Assuming `setFoodItemToEdit` will be used to set the state and then navigate
 				setFoodItemToEdit(data);
 				setIsEditOpen(true);
 			} else {
@@ -295,12 +294,7 @@ const FoodMenuCard: React.FC = () => {
 				</motion.div>
 
 				{isEditOpen && foodItemToEdit && (
-					<AddMenuItem
-						initialData={{
-							...foodItemToEdit,
-							menuCategory: [foodItemToEdit.menuCategory], // Convert to array
-						}}
-					/>
+					<AddMenuItem initialData={foodItemToEdit} />
 				)}
 
 				<AnimatePresence>

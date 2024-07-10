@@ -13,14 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 	const { id } = useParams<{ id: string }>();
 	const { state } = useAuth();
-	const [foodMenuItem, setFoodMenuItem] = useState({
-		menuCategory: initialData?.menuCategory || '', // Ensure it's a scalar value
-		pizzaType: initialData?.pizzaType || '',
-		name: initialData?.name || '',
-		imageUrl: initialData?.imageUrl || '',
-		ingredients: initialData?.ingredients || [], // Initialize as an empty array
-		price: initialData?.price || 0,
-	});
+	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(
 		initialData?.imageUrl || null
 	);
@@ -29,10 +22,21 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		register,
 		handleSubmit,
 		reset,
+		getValues,
+		setValue,
 		formState: { errors, isSubmitting },
-	} = useForm<FoodMenuFormData>();
-	const navigate = useNavigate();
+	} = useForm<FoodMenuFormData>({
+		defaultValues: {
+			menuCategory: initialData?.menuCategory || '',
+			pizzaType: initialData?.pizzaType || '',
+			name: initialData?.name || '',
+			imageUrl: initialData?.imageUrl || '',
+			ingredients: initialData?.ingredients || [''],
+			price: initialData?.price || 0,
+		},
+	});
 
+	// Fetch the food item data if id is provided
 	useEffect(() => {
 		const fetchFoodMenuItem = async () => {
 			if (id) {
@@ -40,21 +44,18 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 					`http://localhost:5001/api/v1/foodMenu/${id}`
 				);
 				const data = await response.json();
-				setFoodMenuItem({
-					...data,
-					menuCategory: data.menuCategory || '',
-					pizzaType: data.pizzaType || '',
-					name: data.name || '',
-					imageUrl: data.imageUrl || '',
-					ingredients: data.ingredients || [],
-					price: data.price || 0,
-				});
+				setValue('menuCategory', data.menuCategory || '');
+				setValue('pizzaType', data.pizzaType || '');
+				setValue('name', data.name || '');
+				setValue('imageUrl', data.imageUrl || '');
+				setValue('ingredients', data.ingredients || []);
+				setValue('price', data.price || 0);
 				setImagePreview(data.imageUrl || null);
 			}
 		};
 
 		fetchFoodMenuItem();
-	}, [id]);
+	}, [id, setValue]);
 
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
@@ -62,9 +63,9 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 				menuCategory: data.menuCategory,
 				pizzaType: data.pizzaType || '',
 				name: data.name,
-				ingredients: foodMenuItem.ingredients,
+				ingredients: data.ingredients,
 				price: data.price,
-				imageUrl: foodMenuItem.imageUrl,
+				imageUrl: data.imageUrl,
 			};
 
 			console.log('Submitting form with data:', formData); // Debugging output
@@ -100,31 +101,25 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 		const fileUrl = file.secure_url;
 		console.log('Cloudinary URL:', fileUrl); // Debugging output
 		setImagePreview(fileUrl);
-		setFoodMenuItem((prev) => ({
-			...prev,
-			imageUrl: fileUrl,
-		}));
+		setValue('imageUrl', fileUrl);
 	};
 
 	// Handlers for ingredients array
 	const handleAddIngredient = () => {
-		setFoodMenuItem((prev) => ({
-			...prev,
-			ingredients: prev.ingredients ? [...prev.ingredients, ''] : [''],
-		}));
+		const ingredients = getValues('ingredients') || [];
+		setValue('ingredients', [...ingredients, '']);
 	};
 
 	const handleRemoveIngredient = (index: number) => {
-		setFoodMenuItem((prev) => ({
-			...prev,
-			ingredients: prev.ingredients.filter((_, i) => i !== index),
-		}));
+		const ingredients = getValues('ingredients') || [];
+		ingredients.splice(index, 1);
+		setValue('ingredients', ingredients);
 	};
 
 	const handleIngredientChange = (index: number, value: string) => {
-		const newIngredients = [...foodMenuItem.ingredients];
-		newIngredients[index] = value;
-		setFoodMenuItem((prev) => ({ ...prev, ingredients: newIngredients }));
+		const ingredients = getValues('ingredients') || [];
+		ingredients[index] = value;
+		setValue('ingredients', ingredients);
 	};
 
 	return (
@@ -142,7 +137,6 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 				<select
 					{...register('menuCategory', { required: true })}
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-					defaultValue={foodMenuItem.menuCategory}
 				>
 					<option value="" disabled>
 						-- Select --
@@ -168,7 +162,6 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 				<select
 					{...register('pizzaType')}
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-					defaultValue={foodMenuItem.pizzaType}
 				>
 					<option value="" disabled>
 						-- Select --
@@ -190,7 +183,6 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 					{...register('name', { required: true })}
 					placeholder="Enter name..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-					defaultValue={foodMenuItem.name}
 				/>
 				{errors.name && (
 					<p className="text-md text-red-500">Name is required.</p>
@@ -202,7 +194,7 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 				/>
 
 				<IngredientList
-					ingredients={foodMenuItem.ingredients}
+					ingredients={getValues('ingredients') || []}
 					onAddIngredient={handleAddIngredient}
 					onRemoveIngredient={handleRemoveIngredient}
 					onIngredientChange={handleIngredientChange}
@@ -219,7 +211,6 @@ const AddMenuItem = ({ initialData }: FoodMenuFormProps) => {
 					{...register('price', { required: true })}
 					placeholder="Enter price..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-					defaultValue={foodMenuItem.price}
 				/>
 				{errors.price && (
 					<p className="text-md text-red-500">Price is required.</p>

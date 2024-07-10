@@ -35,7 +35,10 @@ export const createFoodMenu = async (
 	}
 
 	try {
-		const parsedIngredients = JSON.parse(ingredients);
+		// Ingredients is parsed as an array to match the model
+		const parsedIngredients = Array.isArray(ingredients)
+			? ingredients
+			: JSON.parse(ingredients);
 
 		const foodItem = await FoodMenu.create({
 			menuCategory,

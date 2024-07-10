@@ -1,7 +1,7 @@
 export interface FoodMenuFormProps {
 	initialData?: {
 		_id?: string;
-		menuCategory?: string[];
+		menuCategory?: string;
 		pizzaType?: string;
 		name?: string;
 		imageUrl?: string;
