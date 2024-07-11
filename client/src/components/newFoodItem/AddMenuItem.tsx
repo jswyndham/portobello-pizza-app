@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { MENU_CATEGORY, MEAT_OR_VEG } from '../../../../server/src/constants';
 import IngredientList from './IngredientList';
@@ -11,12 +11,13 @@ const AddMenuItem = () => {
 	const { state } = useAuth();
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
+	const [ingredients, setIngredients] = useState<string[]>(['']);
 
 	const {
 		register,
 		handleSubmit,
-		getValues,
 		setValue,
+		watch,
 		formState: { errors, isSubmitting },
 		reset,
 	} = useForm<FoodMenuFormData>({
@@ -30,11 +31,19 @@ const AddMenuItem = () => {
 		},
 	});
 
+	// Watch ingredients for changes
+	const watchedIngredients = watch('ingredients', ingredients);
+
+	// Sync ingredients state with form state
+	useEffect(() => {
+		setValue('ingredients', ingredients);
+	}, [ingredients, setValue]);
+
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
 			const formData = {
 				...data,
-				ingredients: data.ingredients.filter(
+				ingredients: ingredients.filter(
 					(ingredient) => ingredient.trim() !== ''
 				),
 			};
@@ -54,6 +63,8 @@ const AddMenuItem = () => {
 			);
 
 			if (response.ok) {
+				const foodItem = await response.json();
+				setIngredients(foodItem.ingredients || []);
 				reset();
 				navigate('/foodmenu');
 			} else {
@@ -73,21 +84,21 @@ const AddMenuItem = () => {
 	};
 
 	const handleAddIngredient = () => {
-		const ingredients = getValues('ingredients') || [];
-		setValue('ingredients', [...ingredients, '']);
-		console.log('Ingredients after adding:', [...ingredients, '']); // Debugging line
+		setIngredients((prevIngredients) => [...prevIngredients, '']);
 	};
 
 	const handleRemoveIngredient = (index: number) => {
-		const ingredients = getValues('ingredients') || [];
-		ingredients.splice(index, 1);
-		setValue('ingredients', ingredients);
+		setIngredients((prevIngredients) =>
+			prevIngredients.filter((_, i) => i !== index)
+		);
 	};
 
 	const handleIngredientChange = (index: number, value: string) => {
-		const ingredients = getValues('ingredients') || [];
-		ingredients[index] = value;
-		setValue('ingredients', ingredients);
+		setIngredients((prevIngredients) =>
+			prevIngredients.map((ingredient, i) =>
+				i === index ? value : ingredient
+			)
+		);
 	};
 
 	return (
@@ -162,7 +173,7 @@ const AddMenuItem = () => {
 				/>
 
 				<IngredientList
-					ingredients={getValues('ingredients') || []}
+					ingredients={watchedIngredients}
 					onAddIngredient={handleAddIngredient}
 					onRemoveIngredient={handleRemoveIngredient}
 					onIngredientChange={handleIngredientChange}

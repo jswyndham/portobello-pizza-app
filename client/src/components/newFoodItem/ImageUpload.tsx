@@ -35,12 +35,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	return (
 		<div className="flex flex-col">
 			<button
+				type="button"
 				onClick={() => {
 					if (widgetRef.current) {
 						widgetRef.current.open();
 					}
 				}}
-				className="p-3 mb-3 bg-blue-500 text-white rounded-md"
+				className="text-lg p-3 mb-3 bg-blue-500 text-white rounded-md font-bold"
 			>
 				Upload Image
 			</button>

@@ -7,16 +7,7 @@ import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EditMenuItem } from '../newFoodItem';
 import { useAuth } from '../../context/AuthContext';
-
-interface FoodMenuItem {
-	_id: string;
-	menuCategory: string;
-	pizzaType?: string;
-	name: string;
-	imageUrl?: string;
-	ingredients: string[];
-	price: number;
-}
+import { FoodMenuItem } from '../../types/newFoodItemInterfaces';
 
 const FoodMenuCard: React.FC = () => {
 	// Card states
@@ -67,9 +58,11 @@ const FoodMenuCard: React.FC = () => {
 	// Fetch menu Items
 	useEffect(() => {
 		const fetchFoodItems = async () => {
+			setLoading(true);
 			try {
 				const response = await fetch(
-					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12`
+					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12`,
+					{ method: 'GET' }
 				);
 				const data = await response.json();
 				console.log('API response JSON:', data);
