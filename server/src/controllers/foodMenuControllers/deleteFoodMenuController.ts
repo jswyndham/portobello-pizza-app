@@ -3,8 +3,9 @@ import FoodMenu from '../../models/FoodMenuModel';
 import { StatusCodes } from 'http-status-codes';
 import hasPermission from '../../utils/hasPermission';
 import AuditLog from '../../models/AuditLogModel';
-import { clearCache } from '../../cache/cache';
 import { AuthenticatedRequest } from '../../types/request';
+import { clearAllCache } from '../../cache/cache';
+import mongoose from 'mongoose';
 
 export const deleteFoodMenu = async (
 	req: AuthenticatedRequest,
@@ -30,6 +31,13 @@ export const deleteFoodMenu = async (
 		// Get food menu item ID from request params
 		const foodMenuId = req.params.id;
 
+		if (!mongoose.Types.ObjectId.isValid(foodMenuId)) {
+			res.status(StatusCodes.BAD_REQUEST).json({
+				message: 'Invalid menu item ID',
+			});
+			return;
+		}
+
 		// Find the food menu item by ID and delete
 		const deleteFoodMenuItem = await FoodMenu.findByIdAndDelete(foodMenuId);
 		if (!deleteFoodMenuItem) {
@@ -52,12 +60,8 @@ export const deleteFoodMenu = async (
 		});
 		await auditLog.save();
 
-		const page = parseInt(req.query.page as string, 10) || 1;
-		const limit = parseInt(req.query.limit as string, 10) || 10;
-
-		// Clear the cache for the food menu item
-		const cacheKey = `foodMenu_page_${page}_limit_${limit}`;
-		clearCache(cacheKey);
+		// Clear all cache on new item creation
+		clearAllCache();
 
 		res.status(StatusCodes.OK).json({
 			msg: 'Food menu item deleted',

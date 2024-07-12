@@ -38,3 +38,7 @@ export interface ImageUploadProps {
 	imagePreview: string | null;
 	setImageUrl: (url: string) => void;
 }
+
+export interface AddMenuItemProps {
+	onAddItem: () => void;
+}

@@ -4,6 +4,7 @@ import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
 import { AuthenticatedRequest } from '../../types/request';
 import multer from 'multer';
+import { clearAllCache } from '../../cache/cache';
 
 const upload = multer(); // Multer configuration
 
@@ -57,6 +58,11 @@ export const createFoodMenu = async (
 			details: { reason: 'New food item created' },
 		});
 		await auditLog.save();
+
+		// Clear all cache on new item creation
+		clearAllCache();
+
+		console.log('Create food menu item: ', foodItem);
 
 		res.status(StatusCodes.CREATED).json({
 			msg: 'New food item created',

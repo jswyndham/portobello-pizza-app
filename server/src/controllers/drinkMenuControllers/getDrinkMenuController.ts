@@ -34,7 +34,6 @@ export const getDrinkMenu = async (
 		let drinkMenuData = getCache(cacheKey);
 
 		if (drinkMenuData) {
-			console.log('Returning cached data');
 			res.status(StatusCodes.OK).json(drinkMenuData);
 			return;
 		}

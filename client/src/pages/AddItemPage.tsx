@@ -1,15 +1,6 @@
 import { AddMenuItem } from '../components/newFoodItem';
 
 const AddItemPage = () => {
-	const initialData = {
-		menuCategory: ['PIZZA'],
-		pizzaType: 'VEG',
-		name: '',
-		imageUrl: '',
-		ingredients: [''],
-		price: 0,
-	};
-
 	return (
 		<section className="flex justify-center align-middle w-full bg-gradient-to-br from-white via-slate-200 to-secondary pt-18">
 			<article className="w-full 4xl:w-8/12 h-fit overflow-hidden">
@@ -24,7 +15,7 @@ const AddItemPage = () => {
 						</h1>
 					</div>
 				</div>
-				<AddMenuItem initialData={initialData} />
+				<AddMenuItem />
 			</article>
 		</section>
 	);

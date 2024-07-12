@@ -2,15 +2,6 @@ import AddMenuItem from '../components/newFoodItem/AddMenuItem';
 import { Outlet } from 'react-router-dom';
 
 const AddFoodMenuItem = () => {
-	const initialData = {
-		menuCategory: [''],
-		pizzaType: '',
-		name: '',
-		imageUrl: '',
-		ingredients: [],
-		price: 0,
-	};
-
 	return (
 		<section className="flex justify-center align-middle w-full bg-gradient-to-b from-white via-white to-primary pt-18">
 			<article className="w-full 4xl:w-8/12 h-fit overflow-hidden pb-24">
@@ -25,7 +16,7 @@ const AddFoodMenuItem = () => {
 						</h1>
 					</div>
 				</div>
-				<AddMenuItem initialData={initialData} />
+				<AddMenuItem />
 			</article>
 			<Outlet />
 		</section>

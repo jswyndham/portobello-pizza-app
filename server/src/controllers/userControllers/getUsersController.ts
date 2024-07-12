@@ -24,7 +24,6 @@ export const getAllUsers = async (
 		let userData = getCache(cacheKey);
 
 		if (userData) {
-			console.log('Returning cached data');
 			res.status(StatusCodes.OK).json(userData);
 			return;
 		}
