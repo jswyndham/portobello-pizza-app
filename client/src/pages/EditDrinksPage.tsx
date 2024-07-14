@@ -1,7 +1,7 @@
 import { EditMenuItem } from '../components/newFoodItem';
 import { Outlet } from 'react-router-dom';
 
-const EditItemPage = () => {
+const EditFoodPage = () => {
 	return (
 		<section className="flex justify-center align-middle w-full bg-gradient-to-b from-white via-white to-primary pt-18">
 			<article className="w-full 4xl:w-8/12 h-fit overflow-hidden pb-24">
@@ -12,7 +12,7 @@ const EditItemPage = () => {
 							edit
 						</h1>
 						<h1 className="text-forth font-roboto font-bold text-7xl tracking-widest">
-							MENU
+							DRINKS MENU
 						</h1>
 					</div>
 				</div>
@@ -23,4 +23,4 @@ const EditItemPage = () => {
 	);
 };
 
-export default EditItemPage;
+export default EditFoodPage;

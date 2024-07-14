@@ -232,7 +232,7 @@ const FoodMenuCard: React.FC = () => {
 								className="relative w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
 							>
 								{isLoggedIn && (
-									<div className="absolute w-full bg-slate-500 bg-opacity-50">
+									<div className="absolute w-full bg-slate-500 bg-opacity-50 backdrop-blur-sm">
 										<div className="flex justify-between p-2">
 											<div
 												onClick={() => handleEdit(food)}
@@ -260,7 +260,7 @@ const FoodMenuCard: React.FC = () => {
 												'/placeholder.jpg'
 											}
 											alt={food.name}
-											className="h-40 md:h-56 w-full object-cover rounded-t-md mb-4"
+											className="h-40 md:h-56 w-full object-cover rounded-t-md"
 										/>
 									) : (
 										<img
@@ -274,17 +274,17 @@ const FoodMenuCard: React.FC = () => {
 									)}
 
 									<div className="flex flex-col justify-between items-center">
-										<div className="w-full -mt-9 bg-food-menu-gradient border-y border-slate-300 text-center drop-shadow-lg">
-											<h2 className="text-xl font-bold font-dmsans text-white py-1">
+										<div className="w-full bg-food-menu-gradient border-y-2 border-yellow-500 text-center drop-shadow-lg">
+											<h2 className="text-2xl font-semibold font-cinzel text-white py-1 lg:py-2 ">
 												{food.name}
 											</h2>
 										</div>
-										<div className="h-20 flex items-center my-2">
-											<p className="text-lg text-slate-700 text-center flex-grow font-sans font-bold">
+										<div className="h-14 flex-grow items-center my-2 px-5 lg:py-2">
+											<p className="text-xl text-slate-700 text-center flex-grow font-dmsans py-1">
 												{food.ingredients.join(', ')}
 											</p>
 										</div>
-										<div className="flex flex-row text-xl text-primary flex-grow font-cinzel pb-4">
+										<div className="w-full flex flex-row text-2xl text-black bg-price-gradient flex-grow font-cinzel py-2 lg:py-3 px-4">
 											<p>฿ </p>
 											<p className="font-semibold">
 												{food.price}

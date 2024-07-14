@@ -6,7 +6,7 @@ const AboutUs = () => {
 	const headingAboutUs = 'Porto Bello - About Us';
 
 	return (
-		<article className="h-fit w-full p-1 lg:p-14 2xl:px-32 2xl:py-12 flex flex-col justify-center items-center">
+		<article className="h-fit w-full 2xl:w-9/12 p-1 lg:p-14 2xl:px-32 2xl:py-12 flex flex-col justify-center items-center">
 			{/* Heading */}
 			<HeadingTwo headingTwoText={headingAboutUs} />
 
@@ -37,7 +37,7 @@ const AboutUs = () => {
 					</p>
 				</div>
 			</div>
-			<div className="flex flex-col lg:flex-row-reverse w-full 2xl:w-11/12 3xl:w-8/12 rounded-xl mx-1 my-4">
+			<div className="flex flex-col md:flex-row-reverse w-full 2xl:w-11/12 3xl:w-8/12 rounded-xl mx-1 my-4">
 				<div className="my-2 lg:my-0 ml-4">
 					<img
 						src={pastaPic}

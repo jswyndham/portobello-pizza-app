@@ -109,20 +109,22 @@ const Home = () => {
 				/>
 
 				{/* Background image */}
+				<motion.div
+					initial="hidden"
+					animate={animationTriggered ? 'visible' : 'hidden'}
+					variants={logoBackgroundVariants}
+					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain"
+				/>
+
 				<motion.img
-					src={homeImageLarge}
+					src={homeImageSmall}
 					alt="Portobello homepage image"
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
-					className="w-full lg:hidden"
-				/>
-
-				<img
-					src={homeImageSmall}
-					alt="Portobello homepage image"
 					className="w-full hidden lg:flex -mt-1"
 				/>
+
 				<div className="bg-main-gradient">
 					<motion.div
 						initial="hidden"
@@ -137,7 +139,7 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
-						className=""
+						className="flex justify-center items-center"
 					>
 						<AboutUs />
 					</motion.div>

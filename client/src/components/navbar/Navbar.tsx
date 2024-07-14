@@ -8,7 +8,7 @@ const Navbar = () => {
 	const { isLoggedIn } = state;
 
 	return (
-		<nav className="hidden lg:flex items-center absolute z-20 w-screen h-28 bg-forth bg-opacity-70 justify-end py-14 lg:py-10 md:px-6">
+		<nav className="hidden lg:flex items-center fixed z-20 w-screen h-28 bg-forth bg-opacity-70 justify-end py-14 lg:py-10 md:px-6 backdrop-blur-sm">
 			<div className="relative w-full flex items-center justify-start ml-6">
 				<Link to="/">
 					<img

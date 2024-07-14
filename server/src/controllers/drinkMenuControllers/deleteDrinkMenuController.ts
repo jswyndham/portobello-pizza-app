@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import hasPermission from '../../utils/hasPermission';
 import AuditLog from '../../models/AuditLogModel';
-import { clearCache } from '../../cache/cache';
+import { clearAllCache, clearCache } from '../../cache/cache';
 import DrinkMenu from '../../models/DrinkMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
 
@@ -65,12 +65,8 @@ export const deleteDrinkMenu = async (
 		});
 		await auditLog.save();
 
-		const page = parseInt(req.query.page as string, 10) || 1;
-		const limit = parseInt(req.query.limit as string, 10) || 10;
-
-		// Clear the cache for the drink menu item
-		const cacheKey = `drinkMenu_page_${page}_limit_${limit}`;
-		clearCache(cacheKey);
+		// Clear all cache on new item creation
+		clearAllCache();
 
 		res.status(StatusCodes.OK).json({
 			msg: 'Drink menu item deleted',

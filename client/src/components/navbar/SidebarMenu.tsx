@@ -42,7 +42,7 @@ const SidebarMenu = () => {
 
 			{/* Close sidebar when backdrop is clicked */}
 			<motion.div
-				className="fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-70"
+				className="fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-70 backdrop-blur-sm"
 				initial="closed"
 				style={{ opacity: 1 }}
 				animate={isOpen ? 'open' : 'closed'}
@@ -51,7 +51,7 @@ const SidebarMenu = () => {
 			/>
 
 			<motion.nav
-				className="fixed z-40 top-0 right-0 bottom-0 w-9/12 sm:w-6/12 md:w-5/12 bg-forth text-white border-l-2 border-third lg:hidden"
+				className="fixed z-40 top-0 right-0 bottom-0 w-9/12 sm:w-6/12 md:w-5/12  text-white lg:hidden"
 				style={{ opacity: 1 }}
 				initial="closed"
 				animate={isOpen ? 'open' : 'closed'}
@@ -77,15 +77,15 @@ const SidebarMenu = () => {
 					transition={{ duration: 1, delay: 0.3 }} // Adding delay to ensure the sidebar animation completes
 				/>
 
-				<div className="w-60 flex font-semibold text-yellow-400 text-2xl pt-3 pl-5">
+				<div className="w-60 flex font-semibold text-yellow-400 text-2xl pt-12 pl-5">
 					Tel: +66 77 457 029
 				</div>
 
 				{/* Unordered list of links */}
-				<ul className="flex flex-col w-fit text-2xl pl-4 pt-2 font-robotoSlab">
+				<ul className="flex flex-col w-fit text-2xl pl-4 pt-10 font-robotoSlab">
 					<Link to="/">
 						<li
-							className="flex flex-row py-8 w-fit transition-all active:text-secondary hover:cursor-pointer hover:text-secondary"
+							className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
 							onClick={toggleSidebar}
 						>
 							<div className="mt-0.5 pr-4">
@@ -97,7 +97,7 @@ const SidebarMenu = () => {
 
 					<Link to="/foodmenu">
 						<li
-							className="flex flex-row w-fit py-8 relative transition-all active:text-secondary hover:cursor-pointer hover:text-secondary"
+							className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
 							onClick={toggleSidebar}
 						>
 							<div className="mt-0.5 pr-4">
@@ -109,7 +109,7 @@ const SidebarMenu = () => {
 
 					<Link to="/drinksmenu">
 						<li
-							className="flex flex-row w-fit py-8 relative transition-all active:text-secondary  hover:cursor-pointer hover:text-secondary"
+							className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
 							onClick={toggleSidebar}
 						>
 							<div className="mt-0.5 pr-4">
@@ -141,7 +141,7 @@ const SidebarMenu = () => {
 						<LogoutButton />
 					</div>
 				)}
-				<div className="h-4 pl-8 hover:text-primary active:text-secondary">
+				<div className="h-4 pt-6 pl-8 hover:text-primary active:text-secondary">
 					<SocialMediaLinks />
 				</div>
 			</motion.nav>

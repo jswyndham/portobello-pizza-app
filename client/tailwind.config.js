@@ -12,13 +12,20 @@ export default {
 		},
 		backgroundImage: {
 			'main-gradient':
-				'linear-gradient(to bottom, #E4C59E 0%, white 30%, white 70%, #991E23 100%)',
+				'linear-gradient(to bottom, #E4C59E 0%, white 30%, white 80%, #991E23 100%)',
+			'secondary-gradient':
+				'linear-gradient(to bottom, white 0%, white 80%, #991E23 100%)',
 			'food-menu-gradient':
-				'linear-gradient(to right, transparent 0%, black 30%, black 70%, transparent 100%)',
+				'linear-gradient(to right, #F5AC9F 0%, #991E23 10%, #991E23 90%, #F5AC9F 100%)',
 			'card-gradient':
-				'linear-gradient(to top, white 0%, transparent 100%)',
+				'linear-gradient(to top, #E9E8F3 0%, white 30%, white 70%, #E9E8F3 100%)',
+			'price-gradient':
+				'linear-gradient(to top, #E9E8F3 0%, white 70%, transparent 100%)',
+			'drink-price-gradient':
+				'linear-gradient(to top, #E9E8F3 0%, transparent 70%, transparent 100%)',
 			'login-gradient':
 				'linear-gradient(to bottom, #991E23 0%, white 80%, white 100%)',
+			'parallax-sm': 'url("/images/pizza-eneida-nieves-large-2.jpg")',
 		},
 		fontFamily: {
 			'noto-serif-display': ['Noto Serif Display', 'serif'],

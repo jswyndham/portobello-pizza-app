@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { MENU_CATEGORY, MEAT_OR_VEG } from '../../../../server/src/constants';
+import { useForm, SubmitHandler, FieldErrorsImpl } from 'react-hook-form';
+import {
+	MENU_CATEGORY,
+	MEAT_OR_VEG,
+	DRINK_CATEGORY,
+} from '../../../../server/src/constants';
 import IngredientList from './IngredientList';
 import ImageUpload from './ImageUpload';
-import { FoodMenuFormData } from '../../types/newFoodItemInterfaces';
+import {
+	FoodMenuFormData,
+	DrinkMenuFormData,
+	MenuFormData,
+} from '../../types/newFoodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,6 +20,7 @@ const AddMenuItem = () => {
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>(['']);
+	const [isDrink, setIsDrink] = useState(false);
 
 	const {
 		register,
@@ -20,7 +29,7 @@ const AddMenuItem = () => {
 		watch,
 		formState: { errors, isSubmitting },
 		reset,
-	} = useForm<FoodMenuFormData>({
+	} = useForm<MenuFormData>({
 		defaultValues: {
 			menuCategory: '',
 			pizzaType: '',
@@ -28,10 +37,11 @@ const AddMenuItem = () => {
 			imageUrl: '',
 			ingredients: [''],
 			price: 0,
+			drinkCategory: '', // Add drinkCategory for drinks
 		},
 	});
 
-	// Watch ingredients for changes
+	const watchedMenuCategory = watch('menuCategory', '');
 	const watchedIngredients = watch('ingredients', ingredients);
 
 	// Sync ingredients state with form state
@@ -39,7 +49,24 @@ const AddMenuItem = () => {
 		setValue('ingredients', ingredients);
 	}, [ingredients, setValue]);
 
-	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
+	// Watch for changes in the menuCategory to toggle drink options
+	useEffect(() => {
+		setIsDrink(watchedMenuCategory === MENU_CATEGORY.DRINK.value);
+	}, [watchedMenuCategory]);
+
+	const isFoodMenuFormData = (
+		data: MenuFormData
+	): data is FoodMenuFormData => {
+		return (data as FoodMenuFormData).menuCategory !== undefined;
+	};
+
+	const isDrinkMenuFormData = (
+		data: MenuFormData
+	): data is DrinkMenuFormData => {
+		return (data as DrinkMenuFormData).drinkCategory !== undefined;
+	};
+
+	const onSubmit: SubmitHandler<MenuFormData> = async (data) => {
 		try {
 			const formData = {
 				...data,
@@ -51,7 +78,9 @@ const AddMenuItem = () => {
 			console.log('Submitting form with data:', formData);
 
 			const response = await fetch(
-				'http://localhost:5001/api/v1/foodMenu',
+				isDrink
+					? 'http://localhost:5001/api/v1/drinkMenu'
+					: 'http://localhost:5001/api/v1/foodMenu',
 				{
 					method: 'POST',
 					headers: {
@@ -63,10 +92,10 @@ const AddMenuItem = () => {
 			);
 
 			if (response.ok) {
-				const foodItem = await response.json();
-				setIngredients(foodItem.ingredients || []);
+				const menuItem = await response.json();
+				setIngredients(menuItem.ingredients || []);
 				reset();
-				navigate('/foodmenu');
+				navigate(isDrink ? '/drinksmenu' : '/foodmenu');
 			} else {
 				const errorData = await response.json();
 				console.error('Failed to submit menu item:', errorData.message);
@@ -102,7 +131,7 @@ const AddMenuItem = () => {
 	};
 
 	return (
-		<section className="flex justify-center items-center w-screen sm:w-full h-fit">
+		<section className="flex justify-center items-center w-screen sm:w-full h-full py-28">
 			<form
 				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 				onSubmit={handleSubmit(onSubmit)}
@@ -126,31 +155,69 @@ const AddMenuItem = () => {
 						</option>
 					))}
 				</select>
-				{errors.menuCategory && (
+				{(errors as FieldErrorsImpl<FoodMenuFormData>).menuCategory && (
 					<p className="text-md text-red-500">
 						Menu category is required.
 					</p>
 				)}
 
-				<label
-					htmlFor="pizzaType"
-					className="font-handlee-regular text-lg p-2 font-semibold"
-				>
-					'Meat' or 'Veg'
-				</label>
-				<select
-					{...register('pizzaType')}
-					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-				>
-					<option value="" disabled>
-						-- Select --
-					</option>
-					{Object.values(MEAT_OR_VEG).map((category, index) => (
-						<option key={index} value={category.value}>
-							{category.label}
-						</option>
-					))}
-				</select>
+				{isDrink && (
+					<>
+						<label
+							htmlFor="drinkCategory"
+							className="font-handlee-regular text-lg p-2 font-semibold"
+						>
+							Drink Category
+						</label>
+						<select
+							{...register('drinkCategory', { required: true })}
+							className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
+						>
+							<option value="" disabled>
+								-- Select --
+							</option>
+							{Object.values(DRINK_CATEGORY).map(
+								(category, index) => (
+									<option key={index} value={category.value}>
+										{category.label}
+									</option>
+								)
+							)}
+						</select>
+						{(errors as FieldErrorsImpl<DrinkMenuFormData>)
+							.drinkCategory && (
+							<p className="text-md text-red-500">
+								Drink category is required.
+							</p>
+						)}
+					</>
+				)}
+
+				{!isDrink && (
+					<>
+						<label
+							htmlFor="pizzaType"
+							className="font-handlee-regular text-lg p-2 font-semibold"
+						>
+							'Meat' or 'Veg'
+						</label>
+						<select
+							{...register('pizzaType')}
+							className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
+						>
+							<option value="" disabled>
+								-- Select --
+							</option>
+							{Object.values(MEAT_OR_VEG).map(
+								(category, index) => (
+									<option key={index} value={category.value}>
+										{category.label}
+									</option>
+								)
+							)}
+						</select>
+					</>
+				)}
 
 				<label
 					htmlFor="name"
@@ -167,17 +234,21 @@ const AddMenuItem = () => {
 					<p className="text-md text-red-500">Name is required.</p>
 				)}
 
-				<ImageUpload
-					imagePreview={imagePreview}
-					setImageUrl={handleImageUrl}
-				/>
+				{!isDrink && (
+					<>
+						<ImageUpload
+							imagePreview={imagePreview}
+							setImageUrl={handleImageUrl}
+						/>
 
-				<IngredientList
-					ingredients={watchedIngredients}
-					onAddIngredient={handleAddIngredient}
-					onRemoveIngredient={handleRemoveIngredient}
-					onIngredientChange={handleIngredientChange}
-				/>
+						<IngredientList
+							ingredients={watchedIngredients}
+							onAddIngredient={handleAddIngredient}
+							onRemoveIngredient={handleRemoveIngredient}
+							onIngredientChange={handleIngredientChange}
+						/>
+					</>
+				)}
 
 				<label
 					htmlFor="price"

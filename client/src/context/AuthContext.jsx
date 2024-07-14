@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
+import { checkAuthStatus } from './authCheck'; // Import the separate auth check function
 
 const initialState = {
 	isLoggedIn: false,
@@ -27,36 +28,12 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
+	// Call the auth check function conditionally, if necessary
 	useEffect(() => {
-		const checkAuthStatus = async () => {
-			try {
-				const response = await fetch(
-					'http://localhost:5001/api/v1/auth/status',
-					{
-						method: 'GET',
-						credentials: 'include',
-					}
-				);
-
-				if (response.ok) {
-					const data = await response.json();
-					dispatch({
-						type: 'SET_AUTH',
-						payload: {
-							isLoggedIn: data.isLoggedIn,
-							token: data.token,
-						},
-					});
-				} else {
-					dispatch({ type: 'LOGOUT' });
-				}
-			} catch (error) {
-				dispatch({ type: 'LOGOUT' });
-			}
-		};
-
-		checkAuthStatus();
-	}, []);
+		if (!state.isLoggedIn) {
+			checkAuthStatus(dispatch);
+		}
+	}, [state.isLoggedIn, dispatch]);
 
 	const logout = async () => {
 		try {

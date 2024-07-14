@@ -17,10 +17,29 @@ export interface FoodMenuFormData {
 	price: number;
 }
 
+export interface DrinkMenuFormData {
+	drinkCategory: string;
+	name: string;
+	imageUrl: string;
+	ingredients: string[];
+	price: number;
+}
+
+export type MenuFormData = FoodMenuFormData | DrinkMenuFormData;
+
 export interface FoodMenuItem {
 	_id: string;
 	menuCategory: string;
 	pizzaType?: string;
+	name: string;
+	imageUrl?: string;
+	ingredients: string[];
+	price: number;
+}
+
+export interface DrinkMenuItem {
+	_id: string;
+	drinkCategory: string;
 	name: string;
 	imageUrl?: string;
 	ingredients: string[];

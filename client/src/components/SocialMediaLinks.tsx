@@ -11,6 +11,7 @@ const SocialMediaLinks = () => {
 					rel="noopener noreferrer"
 					title="Follow us on Instagram"
 					aria-label="Instagram"
+					className="hover:text-pink-400"
 				>
 					<PiInstagramLogoLight />
 				</a>
@@ -22,6 +23,7 @@ const SocialMediaLinks = () => {
 					rel="noopener noreferrer"
 					title="Follow us on Facebook"
 					aria-label="Facebook"
+					className="hover:text-blue-400"
 				>
 					<CiFacebook />
 				</a>

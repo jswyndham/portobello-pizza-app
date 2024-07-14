@@ -2,7 +2,7 @@ import { AddMenuItem } from '../components/newFoodItem';
 
 const AddItemPage = () => {
 	return (
-		<section className="flex justify-center align-middle w-full bg-gradient-to-br from-white via-slate-200 to-secondary pt-18">
+		<section className="flex justify-center align-middle w-full bg-main-gradient pt-18">
 			<article className="w-full 4xl:w-8/12 h-fit overflow-hidden">
 				<div className="relative h-36 mt-24 lg:mt-36 2xl:ml-36">
 					<div className="mt-24 w-24 h-24 m-5 pl-6 bg-forth rounded-xl drop-shadow-2xl"></div>

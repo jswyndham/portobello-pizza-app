@@ -20,16 +20,6 @@ const DrinkMenuSchema: Schema = new Schema({
 		type: String,
 		required: true,
 	},
-	imageUrl: {
-		type: String,
-		required: false, // Make this field optional
-	},
-	ingredients: [
-		{
-			type: String,
-			required: false, // Make ingredients optional initially
-		},
-	],
 	price: {
 		type: Number,
 		required: true,
@@ -38,14 +28,14 @@ const DrinkMenuSchema: Schema = new Schema({
 
 // Add custom validation middleware in a pre-save hook
 // Only require ingredients if drinkCategory is 'COCKTAIL'
-DrinkMenuSchema.pre('save', function (next) {
-	if (
-		this.drinkCategory === DRINK_CATEGORY.COCKTAIL.value &&
-		(!Array.isArray(this.ingredients) || this.ingredients.length === 0)
-	) {
-		return next(new Error('Ingredients are required for cocktails.'));
-	}
-	next();
-});
+// DrinkMenuSchema.pre('save', function (next) {
+// 	if (
+// 		this.drinkCategory === DRINK_CATEGORY.COCKTAIL.value &&
+// 		(!Array.isArray(this.ingredients) || this.ingredients.length === 0)
+// 	) {
+// 		return next(new Error('Ingredients are required for cocktails.'));
+// 	}
+// 	next();
+// });
 
 export default mongoose.model<DrinkMenu>('DrinkMenu', DrinkMenuSchema);

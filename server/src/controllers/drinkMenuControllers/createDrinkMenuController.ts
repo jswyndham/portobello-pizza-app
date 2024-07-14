@@ -3,6 +3,7 @@ import { Response } from 'express';
 import AuditLog from '../../models/AuditLogModel';
 import DrinkMenu from '../../models/DrinkMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
+import { clearAllCache } from '../../cache/cache';
 
 export const createDrinkMenu = async (
 	req: AuthenticatedRequest,
@@ -36,7 +37,7 @@ export const createDrinkMenu = async (
 		});
 
 		// Log request body for debugging
-		console.log('Menu created:', drinkItem);
+		console.log('Drink item created:', drinkItem);
 
 		// Create an audit log entry of the user's action
 		const auditLog = new AuditLog({
@@ -47,6 +48,9 @@ export const createDrinkMenu = async (
 			details: { reason: 'New drink item created' },
 		});
 		await auditLog.save();
+
+		// Clear all cache on new item creation
+		clearAllCache();
 
 		res.status(StatusCodes.CREATED).json({
 			msg: 'New drink item created',

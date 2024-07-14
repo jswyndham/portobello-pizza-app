@@ -34,7 +34,7 @@ const ImageCarousel: React.FC = () => {
 	};
 
 	return (
-		<div className="w-full lg:w-10/12 px-2 xl:my-24 flex flex-col justify-center items-center mx-auto">
+		<div className="w-full lg:w-10/12 2xl:w-9/12 px-2 xl:my-24 flex flex-col justify-center items-center mx-auto">
 			{/* Heading */}
 			<HeadingTwo headingTwoText={'Porto Bello - Image Gallery'} />
 

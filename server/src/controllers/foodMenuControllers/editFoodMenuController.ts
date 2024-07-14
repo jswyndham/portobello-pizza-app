@@ -2,7 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Response } from 'express';
 import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
-import { clearCache } from '../../cache/cache';
+import { clearAllCache, clearCache } from '../../cache/cache';
 import hasPermission from '../../utils/hasPermission';
 import { AuthenticatedRequest } from '../../types/request';
 
@@ -76,15 +76,8 @@ export const editFoodMenu = async (
 		});
 		await auditLog.save();
 
-		const page = parseInt(req.query.page as string, 10) || 1;
-		const limit = parseInt(req.query.limit as string, 10) || 10;
-
-		// Clear the cache for the food menu items of all pages
-
-		const cacheKey = `foodMenu_${menuCategory}_page_${page}_limit_${limit}`;
-		clearCache(cacheKey);
-		clearCache(`foodMenu_page_${page}_limit_${limit}`);
-		console.log(`Clearing cache for key:`, cacheKey);
+		// Clear all cache on new item creation
+		clearAllCache();
 
 		res.status(StatusCodes.OK).json({
 			message: 'Food menu item updated successfully',

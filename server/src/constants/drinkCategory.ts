@@ -3,20 +3,20 @@ export const DRINK_CATEGORY = {
 		value: 'BEER',
 		label: 'beer',
 	},
-	WINE: {
-		value: 'WINE',
-		label: 'wine',
+	RED_WINE: {
+		value: 'RED_WINE',
+		label: 'red wine',
+	},
+	WHITE_WINE: {
+		value: 'WHITE_WINE',
+		label: 'white wine',
 	},
 	COCKTAIL: {
 		value: 'COCKTAIL',
 		label: 'cocktail',
 	},
 	JUICE_SODA: {
-		value: 'JUICE_SODA',
-		label: 'juice & soda',
-	},
-	COFFEE_TEA: {
-		value: 'COFFEE_TEA',
-		label: 'coffee & tea',
+		value: 'NON_ALCOHOLIC',
+		label: 'non-alcoholic',
 	},
 } as const;

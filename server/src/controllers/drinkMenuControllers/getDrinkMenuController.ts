@@ -16,46 +16,52 @@ export const getDrinkMenu = async (
 		return;
 	}
 
-	// Validate user authentication
-	if (!req.user) {
-		res.status(StatusCodes.UNAUTHORIZED).json({
-			message: 'User not authenticated',
-		});
-		return;
-	}
-
 	try {
 		const page = parseInt(req.query.page as string, 10) || 1;
 		const limit = parseInt(req.query.limit as string, 10) || 10;
 		const skip = (page - 1) * limit;
 
-		// Set cache parameters
-		const cacheKey = `drinkMenu_page_${page}_limit_${limit}`;
-		let drinkMenuData = getCache(cacheKey);
+		const drinkCategory = req.query.drinkCategory as string;
 
-		if (drinkMenuData) {
-			res.status(StatusCodes.OK).json(drinkMenuData);
+		// Set cache parameters including drinkCategory
+		const cacheKey = `drinkMenu_page_${page}_limit_${limit}_category_${drinkCategory}`;
+		const cachedData = getCache(cacheKey);
+
+		if (cachedData) {
+			res.status(StatusCodes.OK).json(cachedData);
 			return;
 		}
 
+		// Create filter based on category
+		const filter = drinkCategory ? { drinkCategory } : {};
+
 		// Fetch from DB if not cached
-		const allDrinkMenuItems = await DrinkMenu.find({})
+		const allDrinkMenuItems = await DrinkMenu.find(filter)
 			.skip(skip)
 			.limit(limit)
 			.exec();
 
-		console.log('Get Food Menu items: ', allDrinkMenuItems);
+		const totalItems = await DrinkMenu.countDocuments(filter).exec();
+		const totalPages = Math.ceil(totalItems / limit);
+
+		const responseData = {
+			items: allDrinkMenuItems,
+			totalItems,
+			totalPages,
+		};
 
 		// Cache the fetched data
-		setCache(cacheKey, allDrinkMenuItems, 7200); // Cache for 2 hours
+		setCache(cacheKey, responseData, 7200); // Cache for 2 hours
 
-		res.status(StatusCodes.OK).json(allDrinkMenuItems);
+		console.log('Get Drink Menu Items: ', allDrinkMenuItems);
+
+		res.status(StatusCodes.OK).json(responseData);
 	} catch (error: any) {
-		console.error('Error getting food menu items:', error);
+		console.error('Error getting drink menu items:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message ||
-				'An error occurred while requesting food menu items',
+				'An error occurred while requesting drink menu items',
 		});
 	}
 };
