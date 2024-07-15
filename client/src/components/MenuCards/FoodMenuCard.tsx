@@ -156,7 +156,7 @@ const FoodMenuCard: React.FC = () => {
 			foodItem.price
 		);
 		onSubmitEdit(foodItem._id);
-		navigate(`/editmenu/${foodItem._id}`);
+		navigate(`/editfoodmenu/${foodItem._id}`);
 	};
 
 	// Handle delete functions

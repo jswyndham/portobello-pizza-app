@@ -4,7 +4,6 @@ export { default as FoodMenu } from './FoodMenu';
 export { default as DrinksMenu } from './DrinksMenu';
 export { default as Admin } from './Admin';
 export { default as Login } from './Login';
-export { default as AddFoodMenuFood } from './AddFoodMenuItem';
 export { default as AddItemPage } from './AddItemPage';
 export { default as EditFoodPage } from './EditFoodPage';
 export { default as Contact } from './Contact';

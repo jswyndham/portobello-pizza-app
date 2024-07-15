@@ -33,7 +33,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	}, [setImageUrl]);
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col my-2">
 			<button
 				type="button"
 				onClick={() => {
@@ -41,13 +41,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 						widgetRef.current.open();
 					}
 				}}
-				className="text-lg p-3 mb-3 bg-blue-500 text-white rounded-md font-bold"
+				className="text-lg p-3 my-5 bg-green-500 text-white rounded-md font-bold border border-slate-500 drop-shadow-lg hover:shadow-md hover:shadow-slate-400 hover:bg-green-600"
 			>
 				Upload Image
 			</button>
 			{imagePreview && (
 				<div className="mb-3">
-					<p>Image Preview:</p>
+					<p className="py-2 text-xl font-noto-serif-display font-semibold">
+						Image Preview:
+					</p>
 					<img
 						src={imagePreview}
 						alt="Image Preview"

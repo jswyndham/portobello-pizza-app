@@ -15,7 +15,7 @@ export const DRINK_CATEGORY = {
 		value: 'COCKTAIL',
 		label: 'cocktail',
 	},
-	JUICE_SODA: {
+	NON_ALCOHOLIC: {
 		value: 'NON_ALCOHOLIC',
 		label: 'non-alcoholic',
 	},

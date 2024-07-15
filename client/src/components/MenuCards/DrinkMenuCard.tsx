@@ -217,7 +217,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={contentFadeInVariants}
-					className="w-11/12 grid grid-cols-1 md:grid-cols-2 gap-1 justify-center items-center pb-20"
+					className="w-11/12 h-fit grid grid-cols-1 md:grid-cols-2 gap-x-2 justify-center items-center mb-20 bg-white"
 				>
 					<AnimatePresence>
 						{drinkItems.map((drink) => (
@@ -227,7 +227,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 								initial="initial"
 								exit="exit"
 								layout
-								className="relative h-fit border-y-2 border-slate-600 bg-card-gradient bg-opacity-70"
+								className="relative flex flex-row h-fit py-2 border-y-2 border-slate-600 bg-card-gradient bg-opacity-70"
 							>
 								{isLoggedIn && (
 									<div className="absolute w-full h-full flex justify-end items-start z-10 p-1">
@@ -248,13 +248,13 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 									</div>
 								)}
 
-								<div className="border-b-2 border-secondary text-left drop-shadow-lg py-1 pl-4">
+								<div className="w-full text-left drop-shadow-lg py-1 pl-4">
 									<h2 className="text-lg lg:text-xl font-semibold font-cinzel text-black">
 										{drink.name}
 									</h2>
 								</div>
 
-								<div className="w-full flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
+								<div className="flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
 									<p>฿ </p>
 									<p className="font-semibold">
 										{drink.price}

@@ -44,8 +44,8 @@ const Home = () => {
 				'Saturday',
 				'Sunday',
 			],
-			opens: '19:00',
-			closes: '05:00',
+			opens: '16:00',
+			closes: '22:30',
 		},
 	];
 

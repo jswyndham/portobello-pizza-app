@@ -18,7 +18,7 @@ const CardHeadings: FC<CardHeadingsProps> = ({
 				alt={backImageAlt}
 				className="h-28 w-11/12 md:w-9/12 lg:w-8/12 xl:max-w-2xl rounded-md drop-shadow-xl shadow-lg shadow-slate-500"
 			/>
-			<div className="absolute bg-slate-800 bg-opacity-50 w-11/12 md:w-9/12 lg:w-8/12 xl:max-w-2xl h-28 top-8 justify-center flex text-center items-center rounded-md">
+			<div className="absolute bg-slate-800 bg-opacity-80 w-11/12 md:w-9/12 lg:w-8/12 xl:max-w-2xl h-28 top-8 justify-center flex text-center items-center rounded-md">
 				<h2 className="w-11/12 text-4xl lg:text-5xl font-cinzel font-light text-white border-y border-white py-3">
 					{CardHeading}
 				</h2>
