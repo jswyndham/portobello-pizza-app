@@ -126,6 +126,7 @@ const Home = () => {
 				/>
 
 				<div className="bg-main-gradient">
+					{/* MENU CATEGORY CARDS */}
 					<motion.div
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
@@ -135,6 +136,7 @@ const Home = () => {
 						<HomeMidSection />
 					</motion.div>
 
+					{/* ABOUT US COMPONENT */}
 					<motion.div
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
@@ -144,6 +146,7 @@ const Home = () => {
 						<AboutUs />
 					</motion.div>
 
+					{/* IMAGE CAROUSEL */}
 					<div className="flex justify-center items-center">
 						<motion.div
 							initial="hidden"

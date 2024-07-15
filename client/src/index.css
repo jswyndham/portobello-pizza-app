@@ -29,3 +29,19 @@ body {
 	text-align: center;
 	font-size: 1.2em;
 }
+
+.diagonal-bg {
+	background: linear-gradient(
+		-125deg,
+		rgba(51, 65, 85, 0.78) 60%,
+		transparent 65%
+	);
+}
+
+.group:hover .group-hover\:block {
+	display: block;
+}
+
+.group-hover\:block {
+	display: none;
+}

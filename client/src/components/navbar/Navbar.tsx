@@ -1,11 +1,79 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '/images/portobello-no-background-small-2.png';
 import { useAuth } from '../../context/AuthContext';
 import LogoutButton from '../logout/LogoutButton';
+import { AnimatePresence, motion } from 'framer-motion';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 const Navbar = () => {
 	const { state } = useAuth();
 	const { isLoggedIn } = state;
+
+	const menuRef = useRef<any>(null);
+	const adminButtonRef = useRef<any>(null); // Had to add a ref for the "ADMIN" button and ensure correct management of click events. The stopPropagation method wasn't working as expected
+
+	const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
+	const [isAdminList, setIsAdminList] = useState<boolean>(false);
+
+	// Click outside the card menu to close
+	useEffect(() => {
+		const handleClickOutside = (e: any) => {
+			if (
+				menuRef.current &&
+				!menuRef.current.contains(e.target) &&
+				adminButtonRef.current &&
+				!adminButtonRef.current.contains(e.target)
+			) {
+				console.log('Click outside detected, closing dropdown');
+				setIsAdminList(false); // Handle arrow direction
+				setDropdownOpen(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [menuRef]);
+
+	const toggleDropdown = (e: any) => {
+		e.stopPropagation(); // Stop the click from propagating further
+		setIsAdminList(!isAdminList); // Handle arrow direction
+		setDropdownOpen((prevState) => !prevState);
+	};
+
+	// motion settings
+	const menuVariants = {
+		open: {
+			maxHeight: 2000,
+			opacity: 1,
+			transition: {
+				maxHeight: {
+					duration: 0.8,
+					ease: 'linear',
+				},
+				opacity: {
+					duration: 0.9,
+					ease: 'linear',
+				},
+			},
+		},
+		closed: {
+			maxHeight: 0,
+			opacity: 0,
+			transition: {
+				maxHeight: {
+					duration: 0.3,
+					ease: 'linear',
+				},
+				opacity: {
+					duration: 0.4,
+					ease: 'linear',
+				},
+			},
+		},
+	};
 
 	return (
 		<nav className="hidden lg:flex items-center fixed z-20 w-screen h-28 bg-forth bg-opacity-70 justify-end py-14 lg:py-10 md:px-6 backdrop-blur-sm">
@@ -18,7 +86,7 @@ const Navbar = () => {
 					/>
 				</Link>
 			</div>
-			<div className="flex flex-col items-end font-robotoSlab ">
+			<div className="flex flex-col items-end font-robotoSlab">
 				{isLoggedIn ? (
 					<div className="hidden">Tel: +66 77 457 029</div>
 				) : (
@@ -49,19 +117,77 @@ const Navbar = () => {
 
 						{/* Conditionally render ADMIN link if logged in */}
 						{isLoggedIn && (
-							<Link to="/addmenu">
-								<li className="flex flex-row xl:w-36 w-24 py-8 relative transition-all active:text-secondary  hover:cursor-pointer hover:text-yellow-300">
-									ADD MENU
+							<>
+								<li
+									className="relative group flex flex-row transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600 mr-6"
+									onClick={toggleDropdown}
+									ref={adminButtonRef}
+								>
+									ADMIN
+									<AnimatePresence mode="wait">
+										{isAdminList ? (
+											<motion.div
+												key="down-arrow"
+												initial={{ opacity: 0 }}
+												style={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+												transition={{ duration: 0.3 }}
+											>
+												<IoMdArrowDropdown className="text-2xl mt-1 ml-2" />
+											</motion.div>
+										) : (
+											<motion.div
+												key="up-arrow"
+												initial={{ opacity: 0 }}
+												style={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												exit={{ opacity: 0 }}
+												transition={{ duration: 0.3 }}
+											>
+												<IoMdArrowDropup className="text-2xl mt-1 ml-2" />
+											</motion.div>
+										)}
+									</AnimatePresence>
 								</li>
-							</Link>
+
+								<AnimatePresence>
+									{isDropdownOpen && (
+										<motion.div
+											className="absolute w-52 top-28 right-0 bg-forth bg-opacity-70 p-4 rounded-b-md shadow-lg"
+											ref={menuRef}
+											initial="closed"
+											style={{ opacity: 0 }}
+											animate="open"
+											exit="closed"
+											variants={menuVariants}
+										>
+											<ul className="flex flex-col py-2 justify-end items-center">
+												<Link to="/admin/addmenu">
+													<li className="px-4 py-3 text-white hover:bg-gray-600 transition-all duration-300">
+														ADD MENU
+													</li>
+												</Link>
+												<Link to="/admin/members">
+													<li className="px-4 py-3 text-white hover:bg-gray-600 transition-all duration-300">
+														MEMBERS
+													</li>
+												</Link>
+												<Link to="/private/admin/register">
+													<li className="px-4 py-3 text-white hover:bg-gray-600 transition-all duration-300">
+														REGISTER
+													</li>
+												</Link>
+											</ul>
+											<div className="my-2 mr-4">
+												<LogoutButton />
+											</div>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</>
 						)}
 					</ul>
-					{/* Conditionally render Logout button if logged in */}
-					{isLoggedIn && (
-						<div className="flex justify-items-start ml-3 mt-9 xl:mt-5">
-							<LogoutButton />
-						</div>
-					)}
 				</div>
 			</div>
 		</nav>

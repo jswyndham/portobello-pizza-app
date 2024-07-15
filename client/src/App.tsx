@@ -6,11 +6,12 @@ import {
 	FoodMenu,
 	DrinksMenu,
 	Error,
-	Admin,
+	Members,
 	AddItemPage,
 	EditFoodPage,
 	Contact,
 	Login,
+	Register,
 } from './pages';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -26,14 +27,14 @@ const router = createBrowserRouter([
 				index: true,
 				element: <Home />,
 			},
+
 			{
-				path: 'admin',
-				element: <ProtectedRoute element={<Admin />} />,
-				children: [],
+				path: '/admin/addmenu',
+				element: <ProtectedRoute element={<AddItemPage />} />,
 			},
 			{
-				path: '/addmenu',
-				element: <ProtectedRoute element={<AddItemPage />} />,
+				path: '/admin/members',
+				element: <ProtectedRoute element={<Members />} />,
 			},
 			{
 				path: '/editfoodmenu/:id',
@@ -56,8 +57,12 @@ const router = createBrowserRouter([
 				element: <Contact />,
 			},
 			{
-				path: '/login',
+				path: '/private/admin/login',
 				element: <Login />,
+			},
+			{
+				path: '/private/admin/register',
+				element: <Register />,
 			},
 		],
 	},
