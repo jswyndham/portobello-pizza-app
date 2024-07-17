@@ -33,7 +33,7 @@ const router = createBrowserRouter([
 				element: <ProtectedRoute element={<AddItemPage />} />,
 			},
 			{
-				path: '/admin/members',
+				path: '/private/admin/members',
 				element: <ProtectedRoute element={<Members />} />,
 			},
 			{

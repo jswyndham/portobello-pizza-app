@@ -8,11 +8,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { EditMenuItem } from '../newFoodItem';
 import { useAuth } from '../../context/AuthContext';
 import { FoodMenuItem } from '../../types/newFoodItemInterfaces';
+import Loading from '../Loading';
 
 const FoodMenuCard: React.FC = () => {
 	// Card states
 	const [foodItems, setFoodItems] = useState<FoodMenuItem[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	// Pagination states
@@ -58,7 +59,7 @@ const FoodMenuCard: React.FC = () => {
 	// Fetch menu Items
 	useEffect(() => {
 		const fetchFoodItems = async () => {
-			setLoading(true);
+			setIsLoading(true);
 			try {
 				const response = await fetch(
 					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12`,
@@ -78,7 +79,7 @@ const FoodMenuCard: React.FC = () => {
 				console.error('Error fetching food items:', error);
 				setError('Error fetching food items.');
 			} finally {
-				setLoading(false);
+				setIsLoading(false);
 			}
 		};
 
@@ -186,9 +187,12 @@ const FoodMenuCard: React.FC = () => {
 		}
 	};
 
-	// TODO: Build loading screen
-	if (loading) {
-		return <div>Loading...</div>;
+	if (isLoading) {
+		return (
+			<div>
+				<Loading />
+			</div>
+		);
 	}
 
 	if (error) {

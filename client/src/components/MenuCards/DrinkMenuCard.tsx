@@ -1,5 +1,3 @@
-// DrinkMenuCard.tsx
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
@@ -10,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { EditMenuItem } from '../newFoodItem';
 import { DrinkMenuItem } from '../../types/newFoodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
+import Loading from '../Loading';
 
 interface DrinkMenuCardProps {
 	category: string;
@@ -17,7 +16,7 @@ interface DrinkMenuCardProps {
 
 const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 	const [drinkItems, setDrinkItems] = useState<DrinkMenuItem[]>([]);
-	const [loading, setLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [selectedCategory, setSelectedCategory] = useState<string>(category);
 	const [page, setPage] = useState(1);
@@ -53,7 +52,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 
 	useEffect(() => {
 		const fetchDrinkItems = async () => {
-			setLoading(true);
+			setIsLoading(true);
 			try {
 				console.log(
 					`Fetching drinks from category: ${selectedCategory}`
@@ -76,7 +75,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 				console.error('Error fetching drink items:', error);
 				setError('Error fetching drink items.');
 			} finally {
-				setLoading(false);
+				setIsLoading(false);
 			}
 		};
 
@@ -173,12 +172,10 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 		}
 	};
 
-	if (loading) {
+	if (isLoading) {
 		return (
-			<div className="flex justify-center p-10">
-				<p className="text-2xl font-semibold font-montserrat text-primary underline underline-offset-4 decoration-2">
-					Loading...
-				</p>
+			<div>
+				<Loading />
 			</div>
 		);
 	}

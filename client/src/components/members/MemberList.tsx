@@ -1,15 +1,30 @@
-const MemberList = () => {
-  return (
-    <>
-      {/* Class List Menu */}
-      <article className="relative w-full h-fit my-1 border border-forth shadow-sm shadow-gray-400 rounded-sm hover:cursor-pointer hover:bg-white">
-        <div className="flex flex-col h-fit p-2">
-          <h3 className="text-md text-forth font-bold">{className}</h3>
-          <p className="text-sm text-third italic font-sans ml-1">{subject}</p>
-        </div>
-      </article>
-    </>
-  );
+import { FC } from 'react';
+import { useDataProps } from '../../types/userInterfaces';
+
+const MemberList: FC<useDataProps> = ({
+	firstName,
+	lastName,
+	userStatus,
+	lastLogin,
+}) => {
+	return (
+		<>
+			<article className="relative w-full flex justify-center mt-2">
+				<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-col md:flex-row justify-between h-fit p-4 xl:py-4 xl:px-20 text-lg md:text-xl bg-card-gradient border-b-2 border-forth">
+					<div className="flex flex-row justify-start">
+						<p>{firstName}</p>
+						<p className="ml-3">{lastName}</p>
+					</div>
+					<div className="py-2 md:py-0">
+						<p className="text-third">{userStatus}</p>
+					</div>
+					<div>
+						<p className="italic">{lastLogin}</p>
+					</div>
+				</div>
+			</article>
+		</>
+	);
 };
 
 export default MemberList;

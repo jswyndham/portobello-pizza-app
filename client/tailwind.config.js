@@ -13,6 +13,8 @@ export default {
 		backgroundImage: {
 			'main-gradient':
 				'linear-gradient(to bottom, #E4C59E 0%, white 30%, white 80%, #991E23 100%)',
+			'heading-two-gradient':
+				'linear-gradient(to right, transparent 0%, white 3%, white 97%, transparent 100%)',
 			'secondary-gradient':
 				'linear-gradient(to bottom, white 0%, white 80%, #991E23 100%)',
 			'food-menu-gradient':

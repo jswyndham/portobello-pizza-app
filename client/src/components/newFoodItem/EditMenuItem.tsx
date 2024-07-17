@@ -6,6 +6,7 @@ import ImageUpload from './ImageUpload';
 import { FoodMenuFormData } from '../../types/newFoodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loading from '../Loading';
 
 const EditMenuItem = () => {
 	const { id } = useParams<{ id: string }>();
@@ -13,7 +14,7 @@ const EditMenuItem = () => {
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	const {
 		register,
@@ -135,7 +136,11 @@ const EditMenuItem = () => {
 	}, [ingredients, setValue]);
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return (
+			<div>
+				<Loading />
+			</div>
+		);
 	}
 
 	return (

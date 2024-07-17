@@ -1,47 +1,120 @@
-import { memo, useEffect } from "react";
+import { useEffect, useState } from 'react';
+import { HeadingOne, Loading } from '../components';
+import { userData } from '../types/userInterfaces';
+import { useAuth } from '../context/AuthContext';
+import MemberList from '../components/members/MemberList';
+import { format } from 'date-fns';
 
 const Members = () => {
-  const { id } = useParams();
+	const [userMembers, setUserMembers] = useState<userData[]>([]);
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!userData) {
-      dispatch(fetchCurrentUser(id));
-    }
-  }, [dispatch, id]);
+	const { state, dispatch } = useAuth();
+	const { isLoggedIn, token } = state;
 
-  useEffect(() => {
-    dispatch(fetchClasses());
-  }, [dispatch]);
+	useEffect(() => {
+		const fetchMembers = async () => {
+			setIsLoading(true);
+			try {
+				if (!token) {
+					console.error('No token available');
+					return;
+				}
 
-  // Loading spinner
-  if (loading) {
-    return <LoadingSpinner />;
-  }
+				const response = await fetch(
+					`http://localhost:5001/api/v1/user`,
+					{
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+						credentials: 'include',
+					}
+				);
+				const data = await response.json();
+				console.log('Fetched Data:', data);
+				console.log('Loading is :', isLoading);
 
-  // NO CLASSES TO DISPLAY
-  // if (classData.length === 0) {
-  // 	return (
-  // 		<div className="h-screen w-80 flex justify-center">
-  // 			<h2 className="text-3xl font-display font-bold italic mt-44">
-  // 				No classes to display.
-  // 			</h2>
-  // 		</div>
-  // 	);
-  // }
+				if (data && Array.isArray(data)) {
+					setUserMembers(data);
+				} else {
+					console.error('API response is not an array:', data);
+					setError('Unexpected API response format.');
+				}
+			} catch (error) {
+				console.error('Error fetching food menu item:', error);
+				setIsLoading(false);
+			}
+		};
 
-  // Map list of class groups
-  return (
-    <article className="invisible md:visible md:transition-transform md:duration-300 fixed flex-shrink-0 w-64 h-screen mt-28 py-4 px-1 border-r-2 bg-zinc-200 border-third shadow-md shadow-slate-300">
-      <div className="m-2">
-        <h2 className="font-quizgate text-2xl">Class List</h2>
-      </div>
-      <div className="w-full h-fit grid grid-cols-1">
-        {classData.map((classGroup) => (
-          <MemoizedClassListCard key={classGroup._id} {...classGroup} />
-        ))}
-      </div>
-    </article>
-  );
+		fetchMembers();
+	}, []);
+
+	// Loading spinner
+	if (!isLoading) {
+		return (
+			<div>
+				<Loading />
+			</div>
+		);
+	}
+
+	// Error warning
+	if (error) {
+		return <div>{error}</div>;
+	}
+
+	// No members listed
+	if (userMembers.length === 0) {
+		return <div>No food items found.</div>;
+	}
+
+	const formatDate = (date: Date): string => {
+		return format(date, 'yyyy-MM-dd h:mm a');
+	};
+
+	return (
+		<section className="w-full h-screen bg-main-gradient">
+			<article className="w-full pt-28 px-1">
+				<div className="m-2">
+					<HeadingOne headingOneText="Members List" />
+				</div>
+				{isLoggedIn && (
+					<>
+						<div className="p-4 lg:mt-12">
+							<div className="flex justify-center">
+								<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-row justify-between h-fit p-2 xl:py-4 xl:px-20 text-sm md:text-lg lg:text-xl bg-black text-white border-b-2 border-forth font-dmsans font-bold">
+									<p>User Name</p>
+									<p className="md:-ml-12">User Status</p>
+									<p>Last Logged In</p>
+								</div>
+							</div>
+							<div className="w-full h-fit grid grid-cols-1">
+								{userMembers.map((userMember) => (
+									<MemberList
+										key={userMember._id}
+										firstName={userMember.firstName}
+										lastName={userMember.lastName}
+										userStatus={userMember.userStatus}
+										lastLogin={
+											userMember.lastLogin
+												? formatDate(
+														new Date(
+															userMember.lastLogin
+														)
+												  )
+												: 'Never'
+										}
+									/>
+								))}
+							</div>
+						</div>
+					</>
+				)}
+			</article>
+		</section>
+	);
 };
 
 export default Members;

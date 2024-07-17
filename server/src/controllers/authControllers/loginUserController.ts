@@ -33,6 +33,10 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
 		const userStatus = user.userStatus as USER_STATUS;
 
+		// Update lastLogin field
+		user.lastLogin = new Date();
+		await user.save();
+
 		// Create a JWT for the user
 		const token = createJWT({
 			userId: user._id.toString(),
@@ -80,6 +84,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 				lastName: user.lastName,
 				email: user.email,
 				userStatus: user.userStatus,
+				lastLogin: user.lastLogin,
 			},
 			token,
 		});
