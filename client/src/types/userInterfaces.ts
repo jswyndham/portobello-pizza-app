@@ -1,3 +1,4 @@
+// Members info
 export interface userData {
 	_id: string;
 	firstName: string;
@@ -11,4 +12,10 @@ export interface useDataProps {
 	lastName: string;
 	userStatus: string;
 	lastLogin: string;
+}
+
+// Login
+export interface LoginData {
+	email: string;
+	password: string;
 }

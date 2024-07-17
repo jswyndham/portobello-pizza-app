@@ -26,7 +26,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 		useState<DrinkMenuItem | null>(null);
 	const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 	const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
-	const { state, dispatch } = useAuth();
+	const { state } = useAuth();
 	const { isLoggedIn, token } = state;
 
 	const [animationTriggered, setAnimationTriggered] = useState(false);
@@ -214,7 +214,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={contentFadeInVariants}
-					className="w-11/12 h-fit grid grid-cols-1 md:grid-cols-2 gap-x-2 justify-center items-center mb-20 bg-white"
+					className="w-11/12 h-fit grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 justify-center items-center mb-20 bg-white"
 				>
 					<AnimatePresence>
 						{drinkItems.map((drink) => (
@@ -224,39 +224,56 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 								initial="initial"
 								exit="exit"
 								layout
-								className="relative flex flex-row h-fit py-2 border-y-2 border-slate-600 bg-card-gradient bg-opacity-70"
 							>
-								{isLoggedIn && (
-									<div className="absolute w-full h-full flex justify-end items-start z-10 p-1">
-										<div
-											onClick={() => handleEdit(drink)}
-											className="w-7 h-7 flex justify-center items-center bg-yellow-500 text-white rounded-full hover:cursor-pointer mx-2"
-										>
-											<FiEdit />
+								{isLoggedIn ? (
+									<div className="flex flex-col h-fit">
+										<div className="w-full h-full flex justify-end items-start z-10 p-1 bg-gray-300">
+											<div
+												onClick={() =>
+													handleEdit(drink)
+												}
+												className="w-7 h-7 flex justify-center items-center bg-yellow-500 text-white rounded-full hover:cursor-pointer mx-2"
+											>
+												<FiEdit />
+											</div>
+											<div
+												onClick={() =>
+													handleDelete(drink._id)
+												}
+												className="w-7 h-7 flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer mx-2"
+											>
+												<RxCross2 />
+											</div>
 										</div>
-										<div
-											onClick={() =>
-												handleDelete(drink._id)
-											}
-											className="w-7 h-7 flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer mx-2"
-										>
-											<RxCross2 />
+										<div className="relative flex flex-row h-fit py-2 border-y-2 border-slate-600 bg-card-gradient bg-opacity-70">
+											<div className="w-full text-left drop-shadow-lg py-1 pl-4">
+												<h2 className="text-lg lg:text-xl font-semibold font-cinzel text-black">
+													{drink.name}
+												</h2>
+											</div>
+											<div className="flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
+												<p>฿ </p>
+												<p className="font-semibold">
+													{drink.price}
+												</p>
+											</div>{' '}
 										</div>
 									</div>
+								) : (
+									<div className="relative flex flex-row h-fit py-2 border-y-2 border-slate-600 bg-card-gradient bg-opacity-70">
+										<div className="w-full text-left drop-shadow-lg py-1 pl-4">
+											<h2 className="text-lg lg:text-xl font-semibold font-cinzel text-black">
+												{drink.name}
+											</h2>
+										</div>
+										<div className="flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
+											<p>฿ </p>
+											<p className="font-semibold">
+												{drink.price}
+											</p>
+										</div>{' '}
+									</div>
 								)}
-
-								<div className="w-full text-left drop-shadow-lg py-1 pl-4">
-									<h2 className="text-lg lg:text-xl font-semibold font-cinzel text-black">
-										{drink.name}
-									</h2>
-								</div>
-
-								<div className="flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
-									<p>฿ </p>
-									<p className="font-semibold">
-										{drink.price}
-									</p>
-								</div>
 							</motion.article>
 						))}
 					</AnimatePresence>
