@@ -11,7 +11,12 @@ export const validateRegisterUser = [
 		.isString()
 		.isLength({ min: 6 })
 		.withMessage('Password must be at least 6 characters long'),
-	body('userStatus').optional().isString(),
+	body('confirmPassword').custom((value, { req }) => {
+		if (value !== req.body.password) {
+			throw new Error('Password confirmation does not match password');
+		}
+		return true;
+	}),
 ];
 
 export const validateLoginUser = [

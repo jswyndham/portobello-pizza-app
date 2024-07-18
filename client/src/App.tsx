@@ -37,6 +37,10 @@ const router = createBrowserRouter([
 				element: <ProtectedRoute element={<Members />} />,
 			},
 			{
+				path: '/private/admin/register',
+				element: <ProtectedRoute element={<Register />} />,
+			},
+			{
 				path: '/editfoodmenu/:id',
 				element: <ProtectedRoute element={<EditFoodPage />} />,
 			},

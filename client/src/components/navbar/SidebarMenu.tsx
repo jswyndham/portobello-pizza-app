@@ -42,7 +42,7 @@ const SidebarMenu = () => {
 
 			{/* Close sidebar when backdrop is clicked */}
 			<motion.div
-				className="fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-70 backdrop-blur-sm"
+				className="fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-85 backdrop-blur-sm"
 				initial="closed"
 				style={{ opacity: 1 }}
 				animate={isOpen ? 'open' : 'closed'}
@@ -51,7 +51,7 @@ const SidebarMenu = () => {
 			/>
 
 			<motion.nav
-				className="fixed z-40 top-0 right-0 bottom-0 w-9/12 sm:w-6/12 md:w-5/12  text-white lg:hidden"
+				className="fixed z-40 top-0 right-0 bottom-0 w-7/12 sm:w-6/12 md:w-5/12 pt-16 text-white lg:hidden"
 				style={{ opacity: 1 }}
 				initial="closed"
 				animate={isOpen ? 'open' : 'closed'}

@@ -20,13 +20,15 @@ export default {
 			'food-menu-gradient':
 				'linear-gradient(to right, #F5AC9F 0%, #991E23 10%, #991E23 90%, #F5AC9F 100%)',
 			'card-gradient':
-				'linear-gradient(to top, #E9E8F3 0%, white 30%, white 70%, #E9E8F3 100%)',
+				'linear-gradient(to top, #E9E8F3 0%, white 25%, white 75%, #E9E8F3 100%)',
 			'price-gradient':
 				'linear-gradient(to top, #E9E8F3 0%, white 70%, transparent 100%)',
 			'drink-price-gradient':
 				'linear-gradient(to top, #E9E8F3 0%, transparent 70%, transparent 100%)',
 			'login-gradient':
 				'linear-gradient(to bottom, #991E23 0%, white 80%, white 100%)',
+			'register-gradient':
+				'linear-gradient(to bottom, #FA9802 0%, white 80%, white 100%)',
 			'parallax-sm': 'url("/images/pizza-eneida-nieves-large-2.jpg")',
 		},
 		fontFamily: {

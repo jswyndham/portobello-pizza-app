@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { HeadingOne, Loading } from '../components';
 import { userData } from '../types/userInterfaces';
 import { useAuth } from '../context/AuthContext';
-import MemberList from '../components/members/MemberList';
+import MemberList from '../components/user/MemberList';
 import { format } from 'date-fns';
 
 const Members = () => {
@@ -10,7 +10,7 @@ const Members = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const { state, dispatch } = useAuth();
+	const { state } = useAuth();
 	const { isLoggedIn, token } = state;
 
 	useEffect(() => {
@@ -76,7 +76,7 @@ const Members = () => {
 
 	return (
 		<section className="w-full h-screen bg-main-gradient">
-			<article className="w-full pt-28 px-1">
+			<article className="w-full pt-36 lg:pt-52 px-1">
 				<div className="m-2">
 					<HeadingOne headingOneText="Members List" />
 				</div>
@@ -86,7 +86,7 @@ const Members = () => {
 							<div className="flex justify-center">
 								<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-row justify-between h-fit p-2 xl:py-4 xl:px-20 text-sm md:text-lg lg:text-xl bg-black text-white border-b-2 border-forth font-dmsans font-bold">
 									<p>User Name</p>
-									<p className="md:-ml-12">User Status</p>
+									<p className="md:ml-24">User Status</p>
 									<p>Last Logged In</p>
 								</div>
 							</div>
