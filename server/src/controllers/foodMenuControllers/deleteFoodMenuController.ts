@@ -56,7 +56,7 @@ export const deleteFoodMenu = async (
 			subjectType: 'FoodMenu',
 			subjectId: deleteFoodMenuItem._id,
 			userId,
-			details: { reason: 'Food menu item deleted' },
+			details: { reason: 'A food menu item was deleted' },
 		});
 		await auditLog.save();
 

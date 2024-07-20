@@ -11,8 +11,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { JWT_EXPIRES_IN } = process.env;
-
 // Controller for user login and setting authentication cookie
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
 	try {

@@ -12,6 +12,7 @@ import {
 	Contact,
 	Login,
 	Register,
+	AuditLog,
 } from './pages';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,46 +28,46 @@ const router = createBrowserRouter([
 				index: true,
 				element: <Home />,
 			},
-
 			{
-				path: '/admin/addmenu',
-				element: <ProtectedRoute element={<AddItemPage />} />,
+				path: 'admin',
+				children: [
+					{
+						path: 'add-menu',
+						element: <ProtectedRoute element={<AddItemPage />} />,
+					},
+					{
+						path: 'members',
+						element: <ProtectedRoute element={<Members />} />,
+					},
+					{
+						path: 'auditlog/:id',
+						element: <ProtectedRoute element={<AuditLog />} />,
+					},
+					{
+						path: 'register',
+						element: <ProtectedRoute element={<Register />} />,
+					},
+					{
+						path: 'edit-food/:id',
+						element: <ProtectedRoute element={<EditFoodPage />} />,
+					},
+					{
+						path: 'login',
+						element: <Login />,
+					},
+				],
 			},
 			{
-				path: '/private/admin/members',
-				element: <ProtectedRoute element={<Members />} />,
-			},
-			{
-				path: '/private/admin/register',
-				element: <ProtectedRoute element={<Register />} />,
-			},
-			{
-				path: '/editfoodmenu/:id',
-				element: <ProtectedRoute element={<EditFoodPage />} />,
-			},
-			// {
-			// 	path: '/editdrinkmenu/:id',
-			// 	element: <ProtectedRoute element={<EditDrinkPage />} />,
-			// },
-			{
-				path: '/foodmenu',
+				path: 'food-menu',
 				element: <FoodMenu />,
 			},
 			{
-				path: '/drinksmenu',
+				path: 'drinks-menu',
 				element: <DrinksMenu />,
 			},
 			{
-				path: '/contact',
+				path: 'contact',
 				element: <Contact />,
-			},
-			{
-				path: '/private/admin/login',
-				element: <Login />,
-			},
-			{
-				path: '/private/admin/register',
-				element: <Register />,
 			},
 		],
 	},

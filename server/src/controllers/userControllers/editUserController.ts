@@ -72,7 +72,7 @@ export const editUser = async (
 			subjectType: 'User Profile',
 			subjectId: user._id,
 			userId: req.user.userId,
-			details: { reason: 'User details were edited' },
+			details: { reason: 'A user details were edited' },
 		});
 		await auditLog.save();
 

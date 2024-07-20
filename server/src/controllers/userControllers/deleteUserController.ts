@@ -66,7 +66,7 @@ export const deleteUser = async (
 			subjectType: 'User Profile',
 			subjectId: deleteUser._id,
 			userId: req.user.userId,
-			details: { reason: 'User profile was deleted' },
+			details: { reason: 'A user profile was deleted' },
 		});
 		await auditLog.save();
 

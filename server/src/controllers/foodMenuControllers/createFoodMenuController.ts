@@ -55,7 +55,7 @@ export const createFoodMenu = async (
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
 			userId: authReq.user.userId,
-			details: { reason: 'New food item created' },
+			details: { reason: 'A new food item was created' },
 		});
 		await auditLog.save();
 

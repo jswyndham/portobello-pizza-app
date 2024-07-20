@@ -27,7 +27,7 @@ router
 	.get(getFoodMenu as express.RequestHandler);
 
 router
-	.route('/:id/')
+	.route('/:id')
 	.get(
 		// authenticateUser as express.RequestHandler,
 		getFoodMenuItem as express.RequestHandler

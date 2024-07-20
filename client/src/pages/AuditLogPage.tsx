@@ -1,33 +1,34 @@
 import { useEffect, useState } from 'react';
 import { HeadingOne, Loading } from '../components';
-import { userData } from '../types/userInterfaces';
 import { useAuth } from '../context/AuthContext';
-import MemberList from '../components/user/MemberList';
 import { format } from 'date-fns';
 import { AuditLog } from '../types/auditLogInterface';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import AuditLogList from '../components/user/AuditLogList';
 
-const Members = () => {
-	const [userMembers, setUserMembers] = useState<userData[]>([]);
+const AuditLogs = () => {
+	const { id } = useParams<{ id: string }>();
+
+	const [auditLog, setAuditLog] = useState<AuditLog[]>([]); // Initialize as empty array
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-
-	const navigate = useNavigate();
 
 	const { state } = useAuth();
 	const { isLoggedIn, token } = state;
 
 	useEffect(() => {
-		const fetchMembers = async () => {
+		const fetchAuditLogs = async () => {
 			setIsLoading(true);
 			try {
 				if (!token) {
 					console.error('No token available');
+					setError('No token available');
+					setIsLoading(false);
 					return;
 				}
 
 				const response = await fetch(
-					`http://localhost:5001/api/v1/user`,
+					`http://localhost:5001/api/v1/auditlogs/${id}`,
 					{
 						method: 'GET',
 						headers: {
@@ -36,32 +37,33 @@ const Members = () => {
 						credentials: 'include',
 					}
 				);
+
 				const data = await response.json();
 				console.log('Fetched Data:', data);
 				console.log('Loading is :', isLoading);
 
-				if (data && Array.isArray(data)) {
-					setUserMembers(data);
+				if (data && data.data && Array.isArray(data.data.auditLogs)) {
+					setAuditLog(data.data.auditLogs);
 				} else {
-					console.error('API response is not an array:', data);
+					console.error(
+						'API response is not in expected format:',
+						data
+					);
 					setError('Unexpected API response format.');
 				}
+				setIsLoading(false);
 			} catch (error) {
-				console.error('Error fetching food menu item:', error);
+				console.error('Error fetching audit logs:', error);
+				setError('Error fetching audit logs');
 				setIsLoading(false);
 			}
 		};
 
-		fetchMembers();
-	}, []);
-
-	// Handle navigate to user audit log
-	const handleAuditLog = (userId: string) => {
-		navigate(`/admin/auditlog/${userId}`);
-	};
+		fetchAuditLogs();
+	}, [id, token]);
 
 	// Loading spinner
-	if (!isLoading) {
+	if (isLoading) {
 		return (
 			<div>
 				<Loading />
@@ -74,9 +76,9 @@ const Members = () => {
 		return <div>{error}</div>;
 	}
 
-	// No members listed
-	if (userMembers.length === 0) {
-		return <div>No food items found.</div>;
+	// No audit logs found
+	if (auditLog.length === 0) {
+		return <div>No audit logs found.</div>;
 	}
 
 	const formatDate = (date: Date): string => {
@@ -84,40 +86,40 @@ const Members = () => {
 	};
 
 	return (
-		<section className="w-full h-screen bg-main-gradient">
+		<section className="w-full h-full bg-main-gradient">
 			<article className="w-full pt-36 lg:pt-52 px-1">
 				<div className="m-2">
-					<HeadingOne headingOneText="Members List" />
+					<HeadingOne headingOneText="Audit Logs" />
 				</div>
 				{isLoggedIn && (
 					<>
 						<div className="p-4 lg:mt-12">
 							<div className="flex justify-center">
 								<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-row justify-between h-fit p-2 xl:py-4 xl:px-20 text-sm md:text-lg lg:text-xl bg-black text-white border-b-2 border-forth font-dmsans font-bold">
-									<p>User Name</p>
-									<p className="md:ml-24">User Status</p>
-									<p>Last Logged In</p>
+									<p>Created At</p>
+									<p className="md:ml-24">Action</p>
+									<p>Subject Type</p>
 								</div>
 							</div>
 							<div className="w-full h-fit grid grid-cols-1">
-								{userMembers.map((userMember) => (
-									<MemberList
-										key={userMember._id}
-										firstName={userMember.firstName}
-										lastName={userMember.lastName}
-										userStatus={userMember.userStatus}
-										lastLogin={
-											userMember.lastLogin
+								{auditLog.map((auditLogs) => (
+									<AuditLogList
+										key={auditLogs._id.toString()}
+										_id={auditLogs._id.toString()}
+										createdAt={
+											auditLogs.createdAt
 												? formatDate(
 														new Date(
-															userMember.lastLogin
+															auditLogs.createdAt
 														)
 												  )
 												: 'Never'
 										}
-										onClick={() =>
-											handleAuditLog(userMember._id)
-										}
+										action={auditLogs.action}
+										subjectType={auditLogs.subjectType}
+										details={JSON.stringify(
+											auditLogs.details
+										)}
 									/>
 								))}
 							</div>
@@ -129,4 +131,4 @@ const Members = () => {
 	);
 };
 
-export default Members;
+export default AuditLogs;

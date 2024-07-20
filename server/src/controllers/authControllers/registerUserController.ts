@@ -65,7 +65,7 @@ export const registerUser = async (
 			subjectType: 'User',
 			subjectId: user._id,
 			userId: user._id,
-			details: { reason: 'User registered' },
+			details: { reason: 'A new user registered' },
 		});
 		await auditLog.save();
 

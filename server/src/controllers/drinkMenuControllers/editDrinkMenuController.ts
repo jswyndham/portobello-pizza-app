@@ -68,7 +68,7 @@ export const editDrinkMenu = async (
 			subjectType: 'DrinkMenu',
 			subjectId: drinkItem._id,
 			userId: req.user.userId,
-			details: { reason: 'Drink item was edited' },
+			details: { reason: 'A drink item was edited' },
 		});
 		await auditLog.save();
 

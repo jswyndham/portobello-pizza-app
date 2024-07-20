@@ -72,7 +72,7 @@ export const editFoodMenu = async (
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
 			userId: req.user.userId,
-			details: { reason: 'Food item was edited' },
+			details: { reason: 'A food menu item was edited' },
 		});
 		await auditLog.save();
 

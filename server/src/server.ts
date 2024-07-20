@@ -1,12 +1,16 @@
 import express, { Request, Response } from 'express';
-import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
-import foodMenuRoutes from './routes/foodMenuRoutes';
-import drinkMenuRoutes from './routes/drinkMenuRoutes';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import './jobs/clearOldAuditLogs';
+import {
+	auditLogRoutes,
+	authRoutes,
+	drinkMenuRoutes,
+	foodMenuRoutes,
+	userRoutes,
+} from './routes';
 
 dotenv.config(); // Load environment variables
 
@@ -31,6 +35,7 @@ app.use(
 // ROUTER
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/auditlogs', auditLogRoutes);
 app.use('/api/v1/foodMenu', foodMenuRoutes);
 app.use('/api/v1/drinkMenu', drinkMenuRoutes);
 

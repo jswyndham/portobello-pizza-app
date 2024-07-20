@@ -176,7 +176,7 @@ const Navbar = () => {
 														ADD MENU
 													</li>
 												</Link>
-												<Link to="/private/admin/members">
+												<Link to="/admin/members">
 													<li
 														onClick={menuItemClick}
 														className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -184,7 +184,7 @@ const Navbar = () => {
 														MEMBERS
 													</li>
 												</Link>
-												<Link to="/private/admin/register">
+												<Link to="/admin/register">
 													<li
 														onClick={menuItemClick}
 														className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"

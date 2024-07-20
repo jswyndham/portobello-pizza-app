@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface AuditLog extends Document {
+	_id: mongoose.Types.ObjectId;
+	createdAt: Date;
 	action: string;
 	subjectType: string;
 	subjectId: mongoose.Types.ObjectId;
