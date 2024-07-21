@@ -21,7 +21,7 @@ const AuditLogSchema: Schema = new Schema(
 			refPath: 'subjectType',
 		},
 		userId: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
-		details: { type: Map, of: String, required: true },
+		details: { type: Schema.Types.Mixed, required: true }, // Allow any type for details
 		menuType: { type: String }, // Make menuType optional
 	},
 	{ timestamps: true }

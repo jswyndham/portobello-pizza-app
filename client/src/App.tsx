@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 				path: 'admin',
 				children: [
 					{
-						path: 'add-menu',
+						path: 'addmenu',
 						element: <ProtectedRoute element={<AddItemPage />} />,
 					},
 					{
@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 						element: <ProtectedRoute element={<Register />} />,
 					},
 					{
-						path: 'edit-food/:id',
+						path: 'editfood/:id',
 						element: <ProtectedRoute element={<EditFoodPage />} />,
 					},
 					{
@@ -58,11 +58,11 @@ const router = createBrowserRouter([
 				],
 			},
 			{
-				path: 'food-menu',
+				path: 'foodmenu',
 				element: <FoodMenu />,
 			},
 			{
-				path: 'drinks-menu',
+				path: 'drinksmenu',
 				element: <DrinksMenu />,
 			},
 			{

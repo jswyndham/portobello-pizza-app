@@ -3,10 +3,8 @@ import { Response } from 'express';
 import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
 import { AuthenticatedRequest } from '../../types/request';
-import multer from 'multer';
 import { clearAllCache } from '../../cache/cache';
-
-const upload = multer(); // Multer configuration
+import hasPermission from '../../utils/hasPermission';
 
 export const createFoodMenu = async (
 	req: AuthenticatedRequest,
@@ -28,9 +26,17 @@ export const createFoodMenu = async (
 
 	const authReq = req as AuthenticatedRequest;
 
-	if (!authReq.user) {
+	if (!req.user) {
 		res.status(StatusCodes.UNAUTHORIZED).json({
 			message: 'User not authenticated',
+		});
+		return;
+	}
+
+	const { userId, userStatus } = req.user;
+	if (!hasPermission(userStatus, 'CREATE_FOOD_ITEM')) {
+		res.status(StatusCodes.FORBIDDEN).json({
+			message: 'Forbidden: You do not have permission for this action',
 		});
 		return;
 	}
@@ -54,8 +60,18 @@ export const createFoodMenu = async (
 			action: 'CREATE_FOOD_ITEM',
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
-			userId: authReq.user.userId,
-			details: { reason: 'A new food item was created' },
+			userId: authReq.user!.userId,
+			details: {
+				reason: 'A new food item was created',
+				foodItem: {
+					menuCategory,
+					pizzaType,
+					name,
+					ingredients: parsedIngredients,
+					price,
+					imageUrl,
+				},
+			},
 		});
 		await auditLog.save();
 

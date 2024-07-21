@@ -15,8 +15,8 @@ export const getAllUsers = async (
 		return;
 	}
 	try {
-		const page = parseInt(req.query.page as string, 10) || 1;
-		const limit = parseInt(req.query.limit as string, 10) || 10;
+		const page = parseInt(req.query.page as string, 30) || 1;
+		const limit = parseInt(req.query.limit as string, 30) || 30;
 		const skip = (page - 1) * limit;
 
 		// Set cache parameters

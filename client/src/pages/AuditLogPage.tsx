@@ -94,13 +94,6 @@ const AuditLogs = () => {
 				{isLoggedIn && (
 					<>
 						<div className="p-4 lg:mt-12">
-							<div className="flex justify-center">
-								<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-row justify-between h-fit p-2 xl:py-4 xl:px-20 text-sm md:text-lg lg:text-xl bg-black text-white border-b-2 border-forth font-dmsans font-bold">
-									<p>Created At</p>
-									<p className="md:ml-24">Action</p>
-									<p>Subject Type</p>
-								</div>
-							</div>
 							<div className="w-full h-fit grid grid-cols-1">
 								{auditLog.map((auditLogs) => (
 									<AuditLogList
@@ -115,11 +108,8 @@ const AuditLogs = () => {
 												  )
 												: 'Never'
 										}
-										action={auditLogs.action}
 										subjectType={auditLogs.subjectType}
-										details={JSON.stringify(
-											auditLogs.details
-										)}
+										details={auditLogs.details}
 									/>
 								))}
 							</div>

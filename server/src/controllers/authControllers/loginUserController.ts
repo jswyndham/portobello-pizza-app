@@ -64,7 +64,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		// Audit log for user login
 		const auditLog = new AuditLog({
 			action: 'LOGIN',
-			subjectType: 'User',
+			subjectType: 'User login',
 			subjectId: user._id,
 			userId: user._id,
 			details: { reason: 'User logged in' },

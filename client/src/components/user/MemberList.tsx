@@ -12,7 +12,7 @@ const MemberList: FC<useDataProps> = ({
 		<>
 			<article
 				onClick={onClick}
-				className="relative w-full flex justify-center mt-2"
+				className="relative w-full flex justify-center mt-2 hover:cursor-pointer"
 			>
 				<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-col md:flex-row justify-between h-fit p-4 xl:py-4 xl:px-20 text-lg md:text-xl bg-card-gradient border-b-2 border-forth">
 					<div className="w-64 flex flex-row justify-start">

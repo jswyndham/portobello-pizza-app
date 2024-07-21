@@ -4,7 +4,6 @@ import { userData } from '../types/userInterfaces';
 import { useAuth } from '../context/AuthContext';
 import MemberList from '../components/user/MemberList';
 import { format } from 'date-fns';
-import { AuditLog } from '../types/auditLogInterface';
 import { useNavigate } from 'react-router-dom';
 
 const Members = () => {

@@ -2,48 +2,40 @@ import { StatusCodes } from 'http-status-codes';
 import { Response } from 'express';
 import FoodMenu from '../../models/FoodMenuModel';
 import AuditLog from '../../models/AuditLogModel';
-import { clearAllCache, clearCache } from '../../cache/cache';
-import hasPermission from '../../utils/hasPermission';
 import { AuthenticatedRequest } from '../../types/request';
+import { clearAllCache } from '../../cache/cache';
+import { FoodMenu as FoodMenuInterface } from '../../models/FoodMenuModel'; // Import the FoodMenu interface
+
+type FoodMenuKeys = keyof FoodMenuInterface;
 
 export const editFoodMenu = async (
 	req: AuthenticatedRequest,
 	res: Response
 ): Promise<void> => {
+	const { id } = req.params;
+	const { menuCategory, pizzaType, name, ingredients, price, imageUrl } =
+		req.body;
+
+	if (!menuCategory || !name || !ingredients || !price) {
+		res.status(StatusCodes.BAD_REQUEST).json({
+			message:
+				'Invalid request body. Required fields: menuCategory, name, ingredients, price.',
+		});
+		return;
+	}
+
+	const authReq = req as AuthenticatedRequest;
+
+	if (!authReq.user) {
+		res.status(StatusCodes.UNAUTHORIZED).json({
+			message: 'User not authenticated',
+		});
+		return;
+	}
+
 	try {
-		const { menuCategory, pizzaType, name, imageUrl, ingredients, price } =
-			req.body;
+		const foodItem = await FoodMenu.findById(id);
 
-		// Define params
-		const foodMenuId = req.params.id;
-
-		// Validate request body
-		if (!menuCategory || !name || !Array.isArray(ingredients) || !price) {
-			res.status(StatusCodes.BAD_REQUEST).json({
-				message:
-					'Invalid request body. Required fields: menuCategory, name, ingredients, price.',
-			});
-			return;
-		}
-
-		if (!req.user) {
-			res.status(StatusCodes.UNAUTHORIZED).json({
-				message: 'User not authenticated',
-			});
-			return;
-		}
-
-		const { userId, userStatus } = req.user;
-		if (!hasPermission(userStatus, 'EDIT_FOOD_ITEM')) {
-			res.status(StatusCodes.FORBIDDEN).json({
-				message:
-					'Forbidden: You do not have permission for this action',
-			});
-			return;
-		}
-
-		// Find the existing food item
-		const foodItem = await FoodMenu.findById(foodMenuId);
 		if (!foodItem) {
 			res.status(StatusCodes.NOT_FOUND).json({
 				message: 'Food item not found',
@@ -51,44 +43,66 @@ export const editFoodMenu = async (
 			return;
 		}
 
+		// Store old values for comparison
+		const oldValues: Partial<FoodMenuInterface> = {
+			menuCategory: foodItem.menuCategory,
+			pizzaType: foodItem.pizzaType,
+			name: foodItem.name,
+			ingredients: foodItem.ingredients,
+			price: foodItem.price,
+			imageUrl: foodItem.imageUrl,
+		};
+
 		// Update the food item
 		foodItem.menuCategory = menuCategory;
 		foodItem.pizzaType = pizzaType;
 		foodItem.name = name;
-		foodItem.imageUrl = imageUrl;
 		foodItem.ingredients = Array.isArray(ingredients)
 			? ingredients
 			: JSON.parse(ingredients);
 		foodItem.price = price;
+		foodItem.imageUrl = imageUrl;
 
-		const updatedFoodItem = await foodItem.save();
+		await foodItem.save();
 
-		// Log request body for debugging
-		console.log('Menu edited:', updatedFoodItem);
+		// Create details object with changes
+		const details: Record<string, any> = {
+			reason: 'Food item was edited',
+		};
 
-		// Create an audit log entry of the user's action
+		(Object.keys(oldValues) as FoodMenuKeys[]).forEach((key) => {
+			if (oldValues[key] !== foodItem[key]) {
+				details[key] = {
+					old: oldValues[key],
+					new: foodItem[key],
+				};
+			}
+		});
+
 		const auditLog = new AuditLog({
 			action: 'EDIT_FOOD_ITEM',
 			subjectType: 'FoodMenu',
 			subjectId: foodItem._id,
-			userId: req.user.userId,
-			details: { reason: 'A food menu item was edited' },
+			userId: authReq.user.userId,
+			details,
 		});
 		await auditLog.save();
 
-		// Clear all cache on new item creation
+		// Clear all cache on item edit
 		clearAllCache();
 
+		console.log('Edited food menu item: ', foodItem);
+
 		res.status(StatusCodes.OK).json({
-			message: 'Food menu item updated successfully',
-			foodItem: updatedFoodItem,
+			msg: 'Food item edited',
+			foodItem,
 		});
-	} catch (error: any) {
+	} catch (error) {
 		console.error('Error editing food item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
-				error.message ||
-				'An error occurred while editing a food menu item',
+				(error as Error).message ||
+				'An error occurred while editing the food menu item',
 		});
 	}
 };

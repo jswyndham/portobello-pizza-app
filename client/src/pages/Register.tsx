@@ -1,6 +1,5 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { FC } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +13,6 @@ const Register: FC = () => {
 		setError,
 	} = useForm<RegisterData>();
 	const navigate = useNavigate();
-	const { dispatch } = useAuth();
 
 	const onSubmit: SubmitHandler<RegisterData> = async (data) => {
 		try {
@@ -31,19 +29,21 @@ const Register: FC = () => {
 			);
 
 			if (response.ok) {
-				const { user, token } = await response.json(); // Assuming the token is returned with the user data
+				const { user } = await response.json();
 				console.log('User registered:', user);
-				// Success modal
 				toast.success(`You have successfully registered a new user!`);
-				// Dispatch global login state
-				dispatch({ type: 'LOGIN', payload: { token } }); // Include token in payload
-				// Reset the form
+
 				reset();
-				// Navigate to home page
-				navigate('/private/admin/members');
+				navigate('/admin/members');
 			} else {
 				const result = await response.json();
-				if (result.errors) {
+				if (result.message === 'User with this email already exists') {
+					setError('email', {
+						type: 'server',
+						message: 'User with this email already exists',
+					});
+					toast.error('User with this email already exists');
+				} else if (result.errors) {
 					result.errors.forEach(
 						(error: { param: string; msg: string }) => {
 							setError(error.param as keyof RegisterData, {

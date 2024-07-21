@@ -119,6 +119,7 @@ const FoodMenuCard: React.FC = () => {
 
 	// Submit menu item to edit
 	const onSubmitEdit = async (id: string) => {
+		setIsLoading(true);
 		try {
 			const response = await fetch(
 				`http://localhost:5001/api/v1/foodMenu/${id}`,
@@ -157,7 +158,7 @@ const FoodMenuCard: React.FC = () => {
 			foodItem.price
 		);
 		onSubmitEdit(foodItem._id);
-		navigate(`/editfoodmenu/${foodItem._id}`);
+		navigate(`/admin/editfood/${foodItem._id}`);
 	};
 
 	// Handle delete functions

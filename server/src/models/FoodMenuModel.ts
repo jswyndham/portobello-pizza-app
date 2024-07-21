@@ -6,7 +6,7 @@ import {
 	MeatOrVeg,
 } from '../constants';
 
-interface FoodMenu extends Document {
+export interface FoodMenu extends Document {
 	_id: Types.ObjectId;
 	menuCategory: MenuCategory['value'];
 	pizzaType?: MeatOrVeg['value'];

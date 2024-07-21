@@ -30,7 +30,7 @@ export const logoutUser = async (
 		// Create an audit log entry of the user's action
 		const auditLog = new AuditLog({
 			action: 'LOGOUT',
-			subjectType: 'Logout user',
+			subjectType: 'User Logout',
 			subjectId: userId,
 			userId: userId,
 			details: { reason: 'User logged out' },
