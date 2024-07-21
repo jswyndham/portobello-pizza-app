@@ -15,6 +15,7 @@ const AboutUs = () => {
 					<img
 						src={italianRestaurant}
 						alt="Welcome to Portobello"
+						loading="lazy"
 						className="rounded-md"
 					/>
 				</div>
@@ -42,6 +43,7 @@ const AboutUs = () => {
 					<img
 						src={pastaPic}
 						alt="Italian Cuisine on the Thai Island of Koh Toa"
+						loading="lazy"
 						className="rounded-md w-96"
 					/>
 				</div>

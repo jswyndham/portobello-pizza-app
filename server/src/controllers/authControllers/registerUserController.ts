@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import User from '../../models/UserModel';
 import AuditLog from '../../models/AuditLogModel';
 import { USER_STATUS } from '../../constants';
 import { hashPassword } from '../../utils/passwordUtils';
-import { validationResult } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import { clearAllCache } from '../../cache/cache';
 import { AuthenticatedRequest } from '../../types/request';
 
@@ -13,6 +13,16 @@ export const registerUser = async (
 	res: Response
 ): Promise<void> => {
 	console.log('Request Body:', req.body);
+
+	// Define validation rules
+	await body('password')
+		.matches(
+			/^(?=.*[A-Z])(?=.*\d{2,})(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+		)
+		.withMessage(
+			'Password must include a capital letter, two numbers, and a symbol.'
+		)
+		.run(req);
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {

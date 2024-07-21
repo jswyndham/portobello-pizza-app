@@ -14,6 +14,7 @@ function MenuCards() {
 						<img
 							src={category.imageUrl}
 							alt={category.title}
+							loading="lazy"
 							className="relative w-full h-full object-cover rounded-lg transition-transform duration-300 ease-in-out hover:scale-110 hover:rotate-1"
 						/>
 

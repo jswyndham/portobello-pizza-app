@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { RxCross2 } from 'react-icons/rx';
@@ -9,8 +9,13 @@ import { EditFoodItem } from '../menuItems';
 import { useAuth } from '../../context/AuthContext';
 import { FoodMenuItem } from '../../types/foodItemInterfaces';
 import Loading from '../Loading';
+import ItemNotFound from '../itemNotFound/ItemNotFound';
 
-const FoodMenuCard: React.FC = () => {
+interface FoodMenuCardProps {
+	category: string;
+}
+
+const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	// Card states
 	const [foodItems, setFoodItems] = useState<FoodMenuItem[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,6 +24,7 @@ const FoodMenuCard: React.FC = () => {
 	// Pagination states
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(1);
+	const [selectedCategory, setSelectedCategory] = useState<string>(category);
 
 	// Edit state
 	const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
@@ -61,8 +67,9 @@ const FoodMenuCard: React.FC = () => {
 		const fetchFoodItems = async () => {
 			setIsLoading(true);
 			try {
+				console.log(`Fetching food from category: ${selectedCategory}`);
 				const response = await fetch(
-					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12`,
+					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12&menuCategory=${selectedCategory}`,
 					{ method: 'GET' }
 				);
 				const data = await response.json();
@@ -84,7 +91,7 @@ const FoodMenuCard: React.FC = () => {
 		};
 
 		fetchFoodItems();
-	}, [page]);
+	}, [page, selectedCategory]);
 
 	// Submit menu item deletion
 	const onSubmitDelete = async (id: string) => {
@@ -176,17 +183,17 @@ const FoodMenuCard: React.FC = () => {
 	};
 
 	// Handle pagination
-	const handleNextPage = () => {
-		if (page < totalPages) {
-			setPage(page + 1);
-		}
-	};
+	// const handleNextPage = () => {
+	// 	if (page < totalPages) {
+	// 		setPage(page + 1);
+	// 	}
+	// };
 
-	const handlePrevPage = () => {
-		if (page > 1) {
-			setPage(page - 1);
-		}
-	};
+	// const handlePrevPage = () => {
+	// 	if (page > 1) {
+	// 		setPage(page - 1);
+	// 	}
+	// };
 
 	if (isLoading) {
 		return (
@@ -201,7 +208,7 @@ const FoodMenuCard: React.FC = () => {
 	}
 
 	if (foodItems.length === 0) {
-		return <div>No food items found.</div>;
+		return <ItemNotFound item="food menu item" />;
 	}
 
 	return (
@@ -224,7 +231,7 @@ const FoodMenuCard: React.FC = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={contentFadeInVariants}
-					className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 2xl:gap-14 justify-center items-center"
+					className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 2xl:gap-14 mx-auto justify-center items-center"
 				>
 					<AnimatePresence>
 						{foodItems.map((food) => (
@@ -237,7 +244,7 @@ const FoodMenuCard: React.FC = () => {
 								className="relative w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
 							>
 								{isLoggedIn && (
-									<div className="absolute w-full bg-slate-500 bg-opacity-50 backdrop-blur-sm">
+									<article className="absolute w-full bg-slate-500 bg-opacity-50 backdrop-blur-sm">
 										<div className="flex justify-between p-2">
 											<div
 												onClick={() => handleEdit(food)}
@@ -254,10 +261,10 @@ const FoodMenuCard: React.FC = () => {
 												<RxCross2 />
 											</div>
 										</div>
-									</div>
+									</article>
 								)}
 
-								<div className="w-full h-full flex flex-col">
+								<article className="w-full h-full flex flex-col">
 									{food.imageUrl ? (
 										<img
 											src={
@@ -265,6 +272,7 @@ const FoodMenuCard: React.FC = () => {
 												'/placeholder.jpg'
 											}
 											alt={food.name}
+											loading="lazy"
 											className="h-40 md:h-56 w-full object-cover rounded-t-md"
 										/>
 									) : (
@@ -274,11 +282,12 @@ const FoodMenuCard: React.FC = () => {
 												'/placeholder.jpg'
 											}
 											alt="No image available"
+											loading="lazy"
 											className="h-28 md:h-56 w-full object-cover flex bg-white items-center justify-center rounded-t-md text-xl font-cinzel mb-4"
 										/>
 									)}
 
-									<div className="flex flex-col justify-between items-center">
+									<article className="flex flex-col justify-between items-center">
 										<div className="w-full bg-food-menu-gradient border-y-2 border-yellow-500 text-center drop-shadow-lg">
 											<h2 className="text-2xl font-semibold font-cinzel text-white py-1 lg:py-2 ">
 												{food.name}
@@ -295,8 +304,8 @@ const FoodMenuCard: React.FC = () => {
 												{food.price}
 											</p>
 										</div>
-									</div>
-								</div>
+									</article>
+								</article>
 							</motion.article>
 						))}
 					</AnimatePresence>
@@ -314,7 +323,7 @@ const FoodMenuCard: React.FC = () => {
 					)}
 				</AnimatePresence>
 
-				<div className="flex justify-between pt-10 pb-16 px-4 text-xl font-semibold text-yellow-400">
+				{/* <div className="flex justify-between pt-10 pb-16 px-4 text-xl font-semibold text-yellow-400">
 					<button
 						type="button"
 						disabled={page === 1}
@@ -331,7 +340,7 @@ const FoodMenuCard: React.FC = () => {
 					>
 						Next
 					</button>
-				</div>
+				</div> */}
 			</section>
 		</>
 	);

@@ -94,15 +94,26 @@ const RegisterForm: FC<RegisterFormProps> = ({ onSubmit, isSubmitting }) => {
 
 			{/* PASSWORD */}
 			<div className="flex flex-col mt-4">
-				<label
-					htmlFor="password"
-					className="font-montserrat text-lg px-1 py-3 font-semibold"
-				>
-					password
-				</label>
+				<div className="flex flex-col">
+					<label
+						htmlFor="password"
+						className="font-montserrat text-lg px-1 pt-3 font-semibold"
+					>
+						password
+					</label>
+					<p className="text-red-500 pb-1">
+						* include a capital letter, at least two numbers, and a
+						symbol
+					</p>
+				</div>
 				<input
 					{...register('password', {
 						required: 'A password is required',
+						pattern: {
+							value: /^(?=.*[A-Z])(?=.*\d{2,})(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+							message:
+								'Password must include a capital letter, at leat two numbers, and a symbol.',
+						},
 					})}
 					type="password"
 					name="password"

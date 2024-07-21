@@ -21,8 +21,10 @@ export const getFoodMenu = async (
 		const limit = parseInt(req.query.limit as string, 10) || 10;
 		const skip = (page - 1) * limit;
 
+		const menuCategory = req.query.menuCategory as string;
+
 		// Set cache parameters
-		const cacheKey = `foodMenu_page_${page}_limit_${limit}`;
+		const cacheKey = `foodMenu_page_${page}_limit_${limit}_category_${menuCategory}`;
 		const cachedData = getCache(cacheKey);
 
 		if (cachedData) {
@@ -30,13 +32,16 @@ export const getFoodMenu = async (
 			return;
 		}
 
+		// Create filter based on category
+		const filter = menuCategory ? { menuCategory } : {};
+
 		// Fetch all items or handle pagination
-		const allFoodMenuItems = await FoodMenu.find({})
+		const allFoodMenuItems = await FoodMenu.find(filter)
 			.skip(skip)
 			.limit(limit)
 			.exec();
 
-		const totalItems = await FoodMenu.countDocuments({}).exec();
+		const totalItems = await FoodMenu.countDocuments(filter).exec();
 		const totalPages = Math.ceil(totalItems / limit);
 
 		const responseData = {

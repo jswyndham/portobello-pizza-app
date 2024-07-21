@@ -16,7 +16,7 @@ function DrinkMenu() {
 				<HeadingOne headingOneText={'Drinks Menu'} />
 
 				{/* WHITE WINE */}
-				<div className="w-full flex flex-col justify-center items-center">
+				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center">
 						<CardHeadings
 							CardHeading={'WHITE WINE'}
@@ -27,10 +27,10 @@ function DrinkMenu() {
 					<div className="w-full xl:w-11/12 2xl:max-w-6xl mt-12">
 						<DrinkMenuCard category="WHITE_WINE" />
 					</div>
-				</div>
+				</article>
 
 				{/* RED WINE */}
-				<div className="w-full flex flex-col justify-center items-center">
+				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center">
 						<CardHeadings
 							CardHeading={'RED WINE'}
@@ -41,10 +41,10 @@ function DrinkMenu() {
 					<div className="w-full xl:w-11/12 2xl:max-w-6xl mt-12">
 						<DrinkMenuCard category="RED_WINE" />
 					</div>
-				</div>
+				</article>
 
 				{/* BEER */}
-				<div className="w-full flex flex-col justify-center items-center">
+				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center">
 						<CardHeadings
 							CardHeading={'BEER'}
@@ -55,10 +55,10 @@ function DrinkMenu() {
 					<div className="w-full xl:w-11/12 2xl:max-w-6xl mt-12">
 						<DrinkMenuCard category="BEER" />
 					</div>
-				</div>
+				</article>
 
 				{/* COCKTAIL */}
-				<div className="w-full flex flex-col justify-center items-center">
+				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center">
 						<CardHeadings
 							CardHeading={'COCKTAIL'}
@@ -69,10 +69,10 @@ function DrinkMenu() {
 					<div className="w-full xl:w-11/12 2xl:max-w-6xl mt-12">
 						<DrinkMenuCard category="COCKTAIL" />
 					</div>
-				</div>
+				</article>
 
 				{/* NON-ALCOHOLIC */}
-				<div className="w-full flex flex-col justify-center items-center">
+				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center">
 						<CardHeadings
 							CardHeading={'NON-ALCOHOLIC'}
@@ -83,7 +83,7 @@ function DrinkMenu() {
 					<div className="w-full xl:w-11/12 2xl:max-w-6xl mt-12">
 						<DrinkMenuCard category="NON_ALCOHOLIC" />
 					</div>
-				</div>
+				</article>
 			</article>
 		</section>
 	);

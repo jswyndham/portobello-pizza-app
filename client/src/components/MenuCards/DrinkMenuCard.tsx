@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { RxCross2 } from 'react-icons/rx';
@@ -9,12 +9,13 @@ import { EditFoodItem } from '../menuItems';
 import { DrinkMenuItem } from '../../types/drinkItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import Loading from '../Loading';
+import ItemNotFound from '../itemNotFound/ItemNotFound';
 
 interface DrinkMenuCardProps {
 	category: string;
 }
 
-const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
+const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	const [drinkItems, setDrinkItems] = useState<DrinkMenuItem[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -185,13 +186,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 	}
 
 	if (drinkItems.length === 0) {
-		return (
-			<div className="flex justify-center p-10">
-				<p className="text-2xl font-semibold font-montserrat underline underline-offset-4 decoration-2">
-					No drink items found.
-				</p>
-			</div>
-		);
+		return <ItemNotFound item="drink menu item" />;
 	}
 
 	return (
