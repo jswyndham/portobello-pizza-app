@@ -39,6 +39,33 @@ export default {
 			cinzel: ['Cinzel', 'serif'],
 			dmsans: ['DM Sans', 'sans-serif'],
 		},
+		screens: {
+			sm: '640px',
+			// => @media (min-width: 640px) { ... }
+
+			smx: '500px',
+			// => @media (min-width: 640px) { ... }
+
+			md: '710px',
+			// => @media (min-width: 768px) { ... }
+
+			smd: '830px',
+
+			lg: '985px',
+			// => @media (min-width: 1024px) { ... }
+
+			xl: '1150px',
+			// => @media (min-width: 1280px) { ... }
+
+			'2xl': '1500px',
+			// => @media (min-width: 1536px) { ... }
+
+			'3xl': '1800px',
+
+			'4xl': '1900px',
+
+			'5xl': '2100px',
+		},
 	},
 	plugins: [],
 };

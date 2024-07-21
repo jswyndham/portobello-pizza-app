@@ -51,10 +51,10 @@ const AuditLogs = () => {
 					);
 					setError('Unexpected API response format.');
 				}
-				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching audit logs:', error);
 				setError('Error fetching audit logs');
+			} finally {
 				setIsLoading(false);
 			}
 		};

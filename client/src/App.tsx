@@ -16,6 +16,7 @@ import {
 } from './pages';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import { CacheProvider } from './context/cacheContext';
 
 const router = createBrowserRouter([
 	{
@@ -77,7 +78,9 @@ function App() {
 	console.log('App rendering');
 	return (
 		<AuthProvider>
-			<RouterProvider router={router} />
+			<CacheProvider>
+				<RouterProvider router={router} />
+			</CacheProvider>
 		</AuthProvider>
 	);
 }

@@ -54,18 +54,6 @@ const AddMenuItem = () => {
 		setIsDrink(watchedMenuCategory === MENU_CATEGORY.DRINK.value);
 	}, [watchedMenuCategory]);
 
-	const isFoodMenuFormData = (
-		data: MenuFormData
-	): data is FoodMenuFormData => {
-		return (data as FoodMenuFormData).menuCategory !== undefined;
-	};
-
-	const isDrinkMenuFormData = (
-		data: MenuFormData
-	): data is DrinkMenuFormData => {
-		return (data as DrinkMenuFormData).drinkCategory !== undefined;
-	};
-
 	const onSubmit: SubmitHandler<MenuFormData> = async (data) => {
 		try {
 			const formData = {

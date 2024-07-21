@@ -47,6 +47,7 @@ const Members = () => {
 				}
 			} catch (error) {
 				console.error('Error fetching food menu item:', error);
+			} finally {
 				setIsLoading(false);
 			}
 		};

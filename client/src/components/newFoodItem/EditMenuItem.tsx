@@ -7,6 +7,7 @@ import { FoodMenuFormData } from '../../types/newFoodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Loading';
+import { useCache } from '../../context/cacheContext';
 
 const EditMenuItem = () => {
 	const { id } = useParams<{ id: string }>();
@@ -15,6 +16,7 @@ const EditMenuItem = () => {
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const { cache, setCache } = useCache();
 
 	const {
 		register,
@@ -33,44 +35,69 @@ const EditMenuItem = () => {
 		},
 	});
 
+	// ********* useEffect hooks *************
+
+	// fetch the food item object and set cache in the browser
 	useEffect(() => {
 		const fetchFoodMenuItem = async () => {
 			if (id) {
-				try {
-					const response = await fetch(
-						`http://localhost:5001/api/v1/foodMenu/${id}`
-					);
-					const data = await response.json();
-					console.log('Fetched Data:', data);
-
-					if (data.items) {
-						const item = data.items;
-
-						reset({
-							menuCategory: item.menuCategory || '',
-							pizzaType: item.pizzaType || '',
-							name: item.name || '',
-							imageUrl: item.imageUrl || '',
-							ingredients: item.ingredients || [],
-							price: item.price || 0,
-						});
-						setImagePreview(item.imageUrl || null);
-						setIngredients(item.ingredients || []);
-						setIsLoading(false);
-					} else {
-						console.error('Food menu item not found:', data);
+				const cacheKey = `foodMenuItem-${id}`;
+				if (cache[cacheKey]) {
+					const item = cache[cacheKey];
+					reset({
+						menuCategory: item.menuCategory || '',
+						pizzaType: item.pizzaType || '',
+						name: item.name || '',
+						imageUrl: item.imageUrl || '',
+						ingredients: item.ingredients || [],
+						price: item.price || 0,
+					});
+					setImagePreview(item.imageUrl || null);
+					setIngredients(item.ingredients || []);
+					setIsLoading(false);
+				} else {
+					try {
+						setIsLoading(true);
+						const response = await fetch(
+							`http://localhost:5001/api/v1/foodMenu/${id}`
+						);
+						const data = await response.json();
+						if (data.foodMenuItem) {
+							const item = data.foodMenuItem;
+							reset({
+								menuCategory: item.menuCategory || '',
+								pizzaType: item.pizzaType || '',
+								name: item.name || '',
+								imageUrl: item.imageUrl || '',
+								ingredients: item.ingredients || [],
+								price: item.price || 0,
+							});
+							setImagePreview(item.imageUrl || null);
+							setIngredients(item.ingredients || []);
+							setCache(cacheKey, item); // Cache the fetched item
+						} else {
+							console.error('Food menu item not found:', data);
+						}
+					} catch (error) {
+						console.error('Error fetching food menu item:', error);
+					} finally {
 						setIsLoading(false);
 					}
-				} catch (error) {
-					console.error('Error fetching food menu item:', error);
-					setIsLoading(false);
 				}
 			}
 		};
 
 		fetchFoodMenuItem();
-	}, [id, reset]);
+	}, [id, reset, cache, setCache]);
 
+	// set ingredient values
+	useEffect(() => {
+		setValue('ingredients', ingredients);
+	}, [ingredients, setValue]);
+
+	// ************ submit handler ************
+
+	// submit new values for the existing food menu item
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
 			const formData = {
@@ -79,8 +106,6 @@ const EditMenuItem = () => {
 					(ingredient) => ingredient.trim() !== ''
 				),
 			};
-
-			console.log('Submitting form with data:', formData);
 
 			const response = await fetch(
 				`http://localhost:5001/api/v1/foodMenu/${id}`,
@@ -106,9 +131,10 @@ const EditMenuItem = () => {
 		}
 	};
 
+	// *********** Handlers ************
+
 	const handleImageUrl = (file: any) => {
 		const fileUrl = file.secure_url;
-		console.log('Cloudinary URL:', fileUrl);
 		setImagePreview(fileUrl);
 		setValue('imageUrl', fileUrl);
 	};
@@ -131,10 +157,7 @@ const EditMenuItem = () => {
 		);
 	};
 
-	useEffect(() => {
-		setValue('ingredients', ingredients);
-	}, [ingredients, setValue]);
-
+	// Loading...
 	if (isLoading) {
 		return (
 			<div>
@@ -144,7 +167,7 @@ const EditMenuItem = () => {
 	}
 
 	return (
-		<section className="flex justify-center items-center w-screen sm:w-full h-fit">
+		<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 2xl:pt-0">
 			<form
 				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 				onSubmit={handleSubmit(onSubmit)}
