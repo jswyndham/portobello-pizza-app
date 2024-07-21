@@ -102,17 +102,17 @@ const RegisterForm: FC<RegisterFormProps> = ({ onSubmit, isSubmitting }) => {
 						password
 					</label>
 					<p className="text-red-500 pb-1">
-						* include a capital letter, at least two numbers, and a
-						symbol
+						* must include a minimum of 6 characters, a capital
+						letter, at least two numbers, and a symbol
 					</p>
 				</div>
 				<input
 					{...register('password', {
 						required: 'A password is required',
 						pattern: {
-							value: /^(?=.*[A-Z])(?=.*\d{2,})(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+							value: /^(?=.*[A-Z])(?=.*\d{2,})(?=.*[@$!%*?&<>])[A-Za-z\d@$!%*?&<>]{8,}$/,
 							message:
-								'Password must include a capital letter, at leat two numbers, and a symbol.',
+								'Password must include a minimum of 6 characters, a capital letter, at least two numbers, and a symbol.',
 						},
 					})}
 					type="password"

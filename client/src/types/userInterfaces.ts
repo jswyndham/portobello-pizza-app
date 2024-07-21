@@ -12,6 +12,7 @@ export interface useDataProps {
 	lastName: string;
 	userStatus: string;
 	lastLogin: string;
+	userId: string;
 	onClick: () => void;
 }
 

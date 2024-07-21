@@ -17,7 +17,7 @@ export const registerUser = async (
 	// Define validation rules
 	await body('password')
 		.matches(
-			/^(?=.*[A-Z])(?=.*\d{2,})(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+			/^(?=.*[A-Z])(?=.*\d{2,})(?=.*[@$!%*?&<>])[A-Za-z\d@$!%*?&<>]{8,}$/
 		)
 		.withMessage(
 			'Password must include a capital letter, two numbers, and a symbol.'

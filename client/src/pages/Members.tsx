@@ -9,22 +9,23 @@ import { useNavigate } from 'react-router-dom';
 const Members = () => {
 	const [userMembers, setUserMembers] = useState<userData[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(true); // Start with true since we're fetching data
 
 	const navigate = useNavigate();
-
 	const { state } = useAuth();
 	const { isLoggedIn, token } = state;
 
 	useEffect(() => {
 		const fetchMembers = async () => {
-			setIsLoading(true);
 			try {
 				if (!token) {
 					console.error('No token available');
+					setError('Token not available.');
+					setIsLoading(false);
 					return;
 				}
 
+				console.log('Using token:', token);
 				const response = await fetch(
 					`http://localhost:5001/api/v1/user`,
 					{
@@ -35,33 +36,60 @@ const Members = () => {
 						credentials: 'include',
 					}
 				);
+
+				if (!response.ok) {
+					const contentType = response.headers.get('Content-Type');
+					if (
+						contentType &&
+						contentType.includes('application/json')
+					) {
+						const errorData = await response.json();
+						throw new Error(
+							errorData.message ||
+								`HTTP error! status: ${response.status}`
+						);
+					} else {
+						throw new Error(
+							`HTTP error! status: ${response.status}`
+						);
+					}
+				}
+
 				const data = await response.json();
 				console.log('Fetched Data:', data);
-				console.log('Loading is :', isLoading);
 
-				if (data && Array.isArray(data)) {
+				if (Array.isArray(data)) {
 					setUserMembers(data);
 				} else {
 					console.error('API response is not an array:', data);
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				console.error('Error fetching food menu item:', error);
+				console.error('Error fetching members:', error);
+				// Assert error type as Error
+				if (error instanceof Error) {
+					setError(`Error: ${error.message}`);
+				} else {
+					setError('An unknown error occurred.');
+				}
 			} finally {
 				setIsLoading(false);
 			}
 		};
 
 		fetchMembers();
-	}, []);
+	}, [token]);
 
 	// Handle navigate to user audit log
 	const handleAuditLog = (userId: string) => {
 		navigate(`/admin/auditlog/${userId}`);
 	};
 
-	// Loading spinner
-	if (!isLoading) {
+	const formatDate = (date: Date): string => {
+		return format(date, 'yyyy-MM-dd h:mm a');
+	};
+
+	if (isLoading) {
 		return (
 			<div>
 				<Loading />
@@ -69,19 +97,13 @@ const Members = () => {
 		);
 	}
 
-	// Error warning
 	if (error) {
 		return <div>{error}</div>;
 	}
 
-	// No members listed
 	if (userMembers.length === 0) {
-		return <div>No food items found.</div>;
+		return <div>No members found.</div>;
 	}
-
-	const formatDate = (date: Date): string => {
-		return format(date, 'yyyy-MM-dd h:mm a');
-	};
 
 	return (
 		<section className="w-full h-screen bg-main-gradient">
@@ -115,6 +137,7 @@ const Members = () => {
 												  )
 												: 'Never'
 										}
+										userId={userMember._id}
 										onClick={() =>
 											handleAuditLog(userMember._id)
 										}

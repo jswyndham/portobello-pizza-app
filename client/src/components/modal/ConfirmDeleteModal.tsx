@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 
 interface ConfirmDeleteProps {
 	message: string;
-	onConfirm: () => void;
-	onCancel: () => void;
+	onConfirm: (event: React.MouseEvent) => void;
+	onCancel: (event: React.MouseEvent) => void;
 }
 
 const ConfirmDeleteModal: FC<ConfirmDeleteProps> = ({

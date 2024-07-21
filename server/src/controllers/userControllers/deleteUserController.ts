@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import hasPermission from '../../utils/hasPermission';
 import AuditLog from '../../models/AuditLogModel';
-import { clearCache } from '../../cache/cache';
+import { clearAllCache, clearCache } from '../../cache/cache';
 import User from '../../models/UserModel';
 import { AuthenticatedRequest } from '../../types/request';
 
@@ -35,7 +35,7 @@ export const deleteUser = async (
 		const user = await User.findById(userIdToDelete);
 		if (!user) {
 			res.status(StatusCodes.NOT_FOUND).json({
-				msg: 'User not found',
+				message: 'User not found',
 			});
 			return;
 		}
@@ -49,34 +49,33 @@ export const deleteUser = async (
 		}
 
 		// Find the user by ID and delete
-		const deleteUser = await User.findByIdAndDelete(userIdToDelete);
-		if (!deleteUser) {
+		const deletedUser = await User.findByIdAndDelete(userIdToDelete);
+		if (!deletedUser) {
 			res.status(StatusCodes.NOT_FOUND).json({
-				msg: 'User not found',
+				message: 'User not found',
 			});
 			return;
 		}
 
 		// Log the deletion for debugging
-		console.log('User deleted:', deleteUser);
+		console.log('User deleted:', deletedUser);
 
 		// Audit log and cache clearing
 		const auditLog = new AuditLog({
 			action: 'DELETE_USER',
 			subjectType: 'User Profile',
-			subjectId: deleteUser._id,
+			subjectId: deletedUser._id,
 			userId: req.user.userId,
 			details: { reason: 'A user profile was deleted' },
 		});
 		await auditLog.save();
 
 		// Clear the cache for the user data
-		const cacheKey = 'all_users';
-		clearCache(cacheKey);
+		clearAllCache();
 
 		res.status(StatusCodes.OK).json({
-			msg: 'User deleted',
-			userId: deleteUser._id,
+			message: 'User deleted successfully',
+			userId: deletedUser._id,
 		});
 	} catch (error: any) {
 		console.error('Error deleting user:', error);

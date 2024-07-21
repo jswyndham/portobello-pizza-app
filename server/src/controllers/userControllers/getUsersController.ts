@@ -3,6 +3,7 @@ import User from '../../models/UserModel';
 import { StatusCodes } from 'http-status-codes';
 import { getCache, setCache } from '../../cache/cache';
 import { validationResult } from 'express-validator';
+import { log } from 'console';
 
 export const getAllUsers = async (
 	req: Request,
@@ -39,6 +40,7 @@ export const getAllUsers = async (
 
 		// Cache the fetched data
 		setCache(cacheKey, allUsers, 7200); // Cache for 2 hours
+		console.log('get all member users: ', allUsers);
 
 		res.status(StatusCodes.OK).json(allUsers);
 	} catch (error: any) {
