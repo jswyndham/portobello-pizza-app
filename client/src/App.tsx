@@ -13,6 +13,7 @@ import {
 	Login,
 	Register,
 	AuditLog,
+	EditDrinksPage,
 } from './pages';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -51,6 +52,12 @@ const router = createBrowserRouter([
 					{
 						path: 'editfood/:id',
 						element: <ProtectedRoute element={<EditFoodPage />} />,
+					},
+					{
+						path: 'editdrink/:id',
+						element: (
+							<ProtectedRoute element={<EditDrinksPage />} />
+						),
 					},
 					{
 						path: 'login',

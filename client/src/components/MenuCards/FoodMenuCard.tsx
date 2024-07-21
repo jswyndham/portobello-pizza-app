@@ -5,9 +5,9 @@ import { RxCross2 } from 'react-icons/rx';
 import { ToastContainer, toast } from 'react-toastify';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 import { motion, AnimatePresence } from 'framer-motion';
-import { EditMenuItem } from '../newFoodItem';
+import { EditFoodItem } from '../menuItems';
 import { useAuth } from '../../context/AuthContext';
-import { FoodMenuItem } from '../../types/newFoodItemInterfaces';
+import { FoodMenuItem } from '../../types/foodItemInterfaces';
 import Loading from '../Loading';
 
 const FoodMenuCard: React.FC = () => {
@@ -302,7 +302,7 @@ const FoodMenuCard: React.FC = () => {
 					</AnimatePresence>
 				</motion.div>
 
-				{isEditOpen && foodItemToEdit && <EditMenuItem />}
+				{isEditOpen && foodItemToEdit && <EditFoodItem />}
 
 				<AnimatePresence>
 					{isDeleteOpen && (

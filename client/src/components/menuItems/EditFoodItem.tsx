@@ -1,60 +1,104 @@
 import { useEffect, useState } from 'react';
-import { useForm, SubmitHandler, FieldErrorsImpl } from 'react-hook-form';
-import {
-	MENU_CATEGORY,
-	MEAT_OR_VEG,
-	DRINK_CATEGORY,
-} from '../../../../server/src/constants';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { MENU_CATEGORY, MEAT_OR_VEG } from '../../../../server/src/constants';
 import IngredientList from './IngredientList';
 import ImageUpload from './ImageUpload';
-import {
-	FoodMenuFormData,
-	DrinkMenuFormData,
-	MenuFormData,
-} from '../../types/newFoodItemInterfaces';
+import { FoodMenuFormData } from '../../types/foodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Loading from '../Loading';
+import { useCache } from '../../context/cacheContext';
 
-const AddMenuItem = () => {
+const EditFoodItem = () => {
+	const { id } = useParams<{ id: string }>();
 	const { state } = useAuth();
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
-	const [ingredients, setIngredients] = useState<string[]>(['']);
-	const [isDrink, setIsDrink] = useState(false);
+	const [ingredients, setIngredients] = useState<string[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const { cache, setCache } = useCache();
 
 	const {
 		register,
 		handleSubmit,
-		setValue,
-		watch,
-		formState: { errors, isSubmitting },
 		reset,
-	} = useForm<MenuFormData>({
+		setValue,
+		formState: { errors, isSubmitting },
+	} = useForm<FoodMenuFormData>({
 		defaultValues: {
 			menuCategory: '',
 			pizzaType: '',
 			name: '',
 			imageUrl: '',
-			ingredients: [''],
+			ingredients: [],
 			price: 0,
-			drinkCategory: '', // Add drinkCategory for drinks
 		},
 	});
 
-	const watchedMenuCategory = watch('menuCategory', '');
-	const watchedIngredients = watch('ingredients', ingredients);
+	// ********* useEffect hooks *************
 
-	// Sync ingredients state with form state
+	// fetch the food item object and set cache in the browser
+	useEffect(() => {
+		const fetchFoodMenuItem = async () => {
+			if (id) {
+				const cacheKey = `foodMenuItem-${id}`;
+				if (cache[cacheKey]) {
+					const item = cache[cacheKey];
+					reset({
+						menuCategory: item.menuCategory || '',
+						pizzaType: item.pizzaType || '',
+						name: item.name || '',
+						imageUrl: item.imageUrl || '',
+						ingredients: item.ingredients || [],
+						price: item.price || 0,
+					});
+					setImagePreview(item.imageUrl || null);
+					setIngredients(item.ingredients || []);
+					setIsLoading(false);
+				} else {
+					try {
+						setIsLoading(true);
+						const response = await fetch(
+							`http://localhost:5001/api/v1/foodMenu/${id}`
+						);
+						const data = await response.json();
+						if (data.foodMenuItem) {
+							const item = data.foodMenuItem;
+							reset({
+								menuCategory: item.menuCategory || '',
+								pizzaType: item.pizzaType || '',
+								name: item.name || '',
+								imageUrl: item.imageUrl || '',
+								ingredients: item.ingredients || [],
+								price: item.price || 0,
+							});
+							setImagePreview(item.imageUrl || null);
+							setIngredients(item.ingredients || []);
+							setCache(cacheKey, item); // Cache the fetched item
+						} else {
+							console.error('Food menu item not found:', data);
+						}
+					} catch (error) {
+						console.error('Error fetching food menu item:', error);
+					} finally {
+						setIsLoading(false);
+					}
+				}
+			}
+		};
+
+		fetchFoodMenuItem();
+	}, [id, reset, cache, setCache]);
+
+	// set ingredient values
 	useEffect(() => {
 		setValue('ingredients', ingredients);
 	}, [ingredients, setValue]);
 
-	// Watch for changes in the menuCategory to toggle drink options
-	useEffect(() => {
-		setIsDrink(watchedMenuCategory === MENU_CATEGORY.DRINK.value);
-	}, [watchedMenuCategory]);
+	// ************ submit handler ************
 
-	const onSubmit: SubmitHandler<MenuFormData> = async (data) => {
+	// submit new values for the existing food menu item
+	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
 			const formData = {
 				...data,
@@ -63,14 +107,10 @@ const AddMenuItem = () => {
 				),
 			};
 
-			console.log('Submitting form with data:', formData);
-
 			const response = await fetch(
-				isDrink
-					? 'http://localhost:5001/api/v1/drinkMenu'
-					: 'http://localhost:5001/api/v1/foodMenu',
+				`http://localhost:5001/api/v1/foodMenu/${id}`,
 				{
-					method: 'POST',
+					method: 'PATCH',
 					headers: {
 						'Content-Type': 'application/json',
 						Authorization: `Bearer ${state.token}`,
@@ -80,10 +120,8 @@ const AddMenuItem = () => {
 			);
 
 			if (response.ok) {
-				const menuItem = await response.json();
-				setIngredients(menuItem.ingredients || []);
 				reset();
-				navigate(isDrink ? '/drinksmenu' : '/foodmenu');
+				navigate('/foodmenu');
 			} else {
 				const errorData = await response.json();
 				console.error('Failed to submit menu item:', errorData.message);
@@ -93,9 +131,10 @@ const AddMenuItem = () => {
 		}
 	};
 
+	// *********** Handlers ************
+
 	const handleImageUrl = (file: any) => {
 		const fileUrl = file.secure_url;
-		console.log('Cloudinary URL:', fileUrl);
 		setImagePreview(fileUrl);
 		setValue('imageUrl', fileUrl);
 	};
@@ -118,8 +157,17 @@ const AddMenuItem = () => {
 		);
 	};
 
+	// Loading...
+	if (isLoading) {
+		return (
+			<div>
+				<Loading />
+			</div>
+		);
+	}
+
 	return (
-		<section className="flex justify-center items-center w-screen sm:w-full h-full py-28">
+		<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 2xl:pt-0">
 			<form
 				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 				onSubmit={handleSubmit(onSubmit)}
@@ -143,69 +191,31 @@ const AddMenuItem = () => {
 						</option>
 					))}
 				</select>
-				{(errors as FieldErrorsImpl<FoodMenuFormData>).menuCategory && (
+				{errors.menuCategory && (
 					<p className="text-md text-red-500">
 						Menu category is required.
 					</p>
 				)}
 
-				{isDrink && (
-					<>
-						<label
-							htmlFor="drinkCategory"
-							className="font-handlee-regular text-lg p-2 font-semibold"
-						>
-							Drink Category
-						</label>
-						<select
-							{...register('drinkCategory', { required: true })}
-							className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-						>
-							<option value="" disabled>
-								-- Select --
-							</option>
-							{Object.values(DRINK_CATEGORY).map(
-								(category, index) => (
-									<option key={index} value={category.value}>
-										{category.label}
-									</option>
-								)
-							)}
-						</select>
-						{(errors as FieldErrorsImpl<DrinkMenuFormData>)
-							.drinkCategory && (
-							<p className="text-md text-red-500">
-								Drink category is required.
-							</p>
-						)}
-					</>
-				)}
-
-				{!isDrink && (
-					<>
-						<label
-							htmlFor="pizzaType"
-							className="font-handlee-regular text-lg p-2 font-semibold"
-						>
-							'Meat' or 'Veg'
-						</label>
-						<select
-							{...register('pizzaType')}
-							className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-						>
-							<option value="" disabled>
-								-- Select --
-							</option>
-							{Object.values(MEAT_OR_VEG).map(
-								(category, index) => (
-									<option key={index} value={category.value}>
-										{category.label}
-									</option>
-								)
-							)}
-						</select>
-					</>
-				)}
+				<label
+					htmlFor="pizzaType"
+					className="font-handlee-regular text-lg p-2 font-semibold"
+				>
+					'Meat' or 'Veg'
+				</label>
+				<select
+					{...register('pizzaType')}
+					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
+				>
+					<option value="" disabled>
+						-- Select --
+					</option>
+					{Object.values(MEAT_OR_VEG).map((category, index) => (
+						<option key={index} value={category.value}>
+							{category.label}
+						</option>
+					))}
+				</select>
 
 				<label
 					htmlFor="name"
@@ -222,21 +232,17 @@ const AddMenuItem = () => {
 					<p className="text-md text-red-500">Name is required.</p>
 				)}
 
-				{!isDrink && (
-					<>
-						<ImageUpload
-							imagePreview={imagePreview}
-							setImageUrl={handleImageUrl}
-						/>
+				<ImageUpload
+					imagePreview={imagePreview}
+					setImageUrl={handleImageUrl}
+				/>
 
-						<IngredientList
-							ingredients={watchedIngredients}
-							onAddIngredient={handleAddIngredient}
-							onRemoveIngredient={handleRemoveIngredient}
-							onIngredientChange={handleIngredientChange}
-						/>
-					</>
-				)}
+				<IngredientList
+					ingredients={ingredients}
+					onAddIngredient={handleAddIngredient}
+					onRemoveIngredient={handleRemoveIngredient}
+					onIngredientChange={handleIngredientChange}
+				/>
 
 				<label
 					htmlFor="price"
@@ -268,4 +274,4 @@ const AddMenuItem = () => {
 	);
 };
 
-export default AddMenuItem;
+export default EditFoodItem;

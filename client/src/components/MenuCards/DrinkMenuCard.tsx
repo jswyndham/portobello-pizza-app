@@ -5,8 +5,8 @@ import { RxCross2 } from 'react-icons/rx';
 import { ToastContainer, toast } from 'react-toastify';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 import { motion, AnimatePresence } from 'framer-motion';
-import { EditMenuItem } from '../newFoodItem';
-import { DrinkMenuItem } from '../../types/newFoodItemInterfaces';
+import { EditFoodItem } from '../menuItems';
+import { DrinkMenuItem } from '../../types/drinkItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import Loading from '../Loading';
 
@@ -90,7 +90,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/foodMenu/${id}`,
+				`http://localhost:5001/api/v1/drinkMenu/${id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -122,7 +122,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/foodMenu/${id}`,
+				`http://localhost:5001/api/v1/drinkMenu/${id}`,
 				{
 					method: 'GET',
 					headers: {
@@ -156,7 +156,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 			drinkItem.price
 		);
 		onSubmitEdit(drinkItem._id);
-		navigate(`/editmenu/${drinkItem._id}`);
+		navigate(`/admin/editdrink/${drinkItem._id}`);
 	};
 
 	const handleDelete = (id: string) => {
@@ -279,7 +279,7 @@ const DrinkMenuCard: React.FC<DrinkMenuCardProps> = ({ category }) => {
 					</AnimatePresence>
 				</motion.div>
 
-				{isEditOpen && drinkItemToEdit && <EditMenuItem />}
+				{isEditOpen && drinkItemToEdit && <EditFoodItem />}
 
 				<AnimatePresence>
 					{isDeleteOpen && (

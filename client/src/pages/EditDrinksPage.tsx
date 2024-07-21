@@ -1,9 +1,9 @@
-import { EditMenuItem } from '../components/newFoodItem';
 import { Outlet } from 'react-router-dom';
+import { EditDrinkItem } from '../components/menuItems';
 
-const EditFoodPage = () => {
+const EditDrinkPage = () => {
 	return (
-		<section className="flex justify-center align-middle w-full bg-gradient-to-b from-white via-white to-primary pt-18">
+		<section className="flex justify-center align-middle w-full h-screen bg-gradient-to-b from-white via-white to-primary pt-18">
 			<article className="w-full 4xl:w-8/12 h-fit overflow-hidden pb-24">
 				<div className="relative h-36 mt-12 lg:mt-36 2xl:ml-36">
 					<div className="mt-12 w-24 h-24 m-5 pl-6 bg-forth rounded-xl drop-shadow-2xl"></div>
@@ -16,11 +16,11 @@ const EditFoodPage = () => {
 						</h1>
 					</div>
 				</div>
-				<EditMenuItem />
+				<EditDrinkItem />
 			</article>
 			<Outlet />
 		</section>
 	);
 };
 
-export default EditFoodPage;
+export default EditDrinkPage;

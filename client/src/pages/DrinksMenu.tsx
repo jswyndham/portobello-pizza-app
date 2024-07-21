@@ -12,7 +12,7 @@ import nonAlcoholicBanner from '/images/non-alcoholi-aleksandr-slobodianyk.jpg';
 function DrinkMenu() {
 	return (
 		<section className="w-screen h-full bg-main-gradient">
-			<article className="w-full pt-12 px-2 lg:p-32 flex flex-col justify-center items-center">
+			<article className="w-full pt-12 px-2 lg:p-24 flex flex-col justify-center items-center">
 				<HeadingOne headingOneText={'Drinks Menu'} />
 
 				{/* WHITE WINE */}

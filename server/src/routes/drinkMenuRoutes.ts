@@ -4,6 +4,7 @@ import {
 	editDrinkMenu,
 	getDrinkMenu,
 	deleteDrinkMenu,
+	getDrinkMenuItem,
 } from '../controllers/drinkMenuControllers';
 import { authenticateUser } from '../middleware/authMiddleware';
 import { validateDrinkMenu } from '../validators/drinkMenuValidator';
@@ -27,6 +28,7 @@ router
 
 router
 	.route('/:id/')
+	.get(getDrinkMenuItem as express.RequestHandler)
 	.patch(
 		authenticateUser,
 		validateDrinkMenu,

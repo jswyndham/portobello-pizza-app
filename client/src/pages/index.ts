@@ -8,5 +8,6 @@ export { default as Login } from './Login';
 export { default as Register } from './Register';
 export { default as AddItemPage } from './AddItemPage';
 export { default as EditFoodPage } from './EditFoodPage';
+export { default as EditDrinksPage } from './EditDrinksPage';
 export { default as Contact } from './Contact';
 export { default as Error } from './Error';

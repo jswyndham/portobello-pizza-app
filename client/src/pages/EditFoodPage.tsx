@@ -1,4 +1,4 @@
-import { EditMenuItem } from '../components/newFoodItem';
+import { EditFoodItem } from '../components/menuItems';
 import { Outlet } from 'react-router-dom';
 
 const EditFoodPage = () => {
@@ -17,7 +17,7 @@ const EditFoodPage = () => {
 					</div>
 				</div>
 
-				<EditMenuItem />
+				<EditFoodItem />
 			</article>
 			<Outlet />
 		</section>

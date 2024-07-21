@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 import hasPermission from '../../utils/hasPermission';
 import AuditLog from '../../models/AuditLogModel';
-import { clearAllCache, clearCache } from '../../cache/cache';
+import { clearAllCache } from '../../cache/cache';
 import DrinkMenu from '../../models/DrinkMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
 
