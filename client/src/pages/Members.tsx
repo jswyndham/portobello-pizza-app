@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import MemberList from '../components/user/MemberList';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Members = () => {
 	const [userMembers, setUserMembers] = useState<userData[]>([]);
@@ -89,6 +90,12 @@ const Members = () => {
 		return format(date, 'yyyy-MM-dd h:mm a');
 	};
 
+	const handleRemoveUser = (userId: string) => {
+		setUserMembers((prevMembers) =>
+			prevMembers.filter((member) => member._id !== userId)
+		);
+	};
+
 	if (isLoading) {
 		return (
 			<div>
@@ -122,27 +129,45 @@ const Members = () => {
 								</div>
 							</div>
 							<div className="w-full h-fit grid grid-cols-1">
-								{userMembers.map((userMember) => (
-									<MemberList
-										key={userMember._id}
-										firstName={userMember.firstName}
-										lastName={userMember.lastName}
-										userStatus={userMember.userStatus}
-										lastLogin={
-											userMember.lastLogin
-												? formatDate(
-														new Date(
-															userMember.lastLogin
-														)
-												  )
-												: 'Never'
-										}
-										userId={userMember._id}
-										onClick={() =>
-											handleAuditLog(userMember._id)
-										}
-									/>
-								))}
+								<AnimatePresence>
+									{userMembers.map((userMember) => (
+										<motion.div
+											key={userMember._id}
+											initial={{ opacity: 0, y: 20 }}
+											animate={{ opacity: 1, y: 0 }}
+											exit={{ opacity: 0, y: -20 }}
+											transition={{ duration: 0.3 }}
+										>
+											<MemberList
+												firstName={userMember.firstName}
+												lastName={userMember.lastName}
+												userStatus={
+													userMember.userStatus
+												}
+												lastLogin={
+													userMember.lastLogin
+														? formatDate(
+																new Date(
+																	userMember.lastLogin
+																)
+														  )
+														: 'Never'
+												}
+												userId={userMember._id}
+												onClick={() =>
+													handleAuditLog(
+														userMember._id
+													)
+												}
+												onDelete={() =>
+													handleRemoveUser(
+														userMember._id
+													)
+												}
+											/>
+										</motion.div>
+									))}
+								</AnimatePresence>
 							</div>
 						</div>
 					</>

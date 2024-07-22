@@ -3,16 +3,21 @@ import { useDataProps } from '../../types/userInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { RxCross2 } from 'react-icons/rx';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 
-const MemberList: FC<useDataProps> = ({
+interface MemberListProps extends useDataProps {
+	onDelete: () => void;
+}
+
+const MemberList: FC<MemberListProps> = ({
 	firstName,
 	lastName,
 	userStatus,
 	lastLogin,
 	userId,
 	onClick,
+	onDelete,
 }) => {
 	const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 	const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
@@ -39,6 +44,7 @@ const MemberList: FC<useDataProps> = ({
 			);
 			if (response.ok) {
 				toast.success('You have successfully deleted a user profile');
+				onDelete(); // Call the onDelete function to update the state
 			} else {
 				const errorData = await response.json();
 				toast.error(
@@ -89,7 +95,7 @@ const MemberList: FC<useDataProps> = ({
 				onClick={onClick}
 				className="relative w-full flex justify-center mt-2 hover:cursor-pointer"
 			>
-				<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-col md:flex-row justify-between h-fit p-4 xl:py-4 xl:px-20 text-lg md:text-xl bg-card-gradient border-b-2 border-forth">
+				<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-col lg:flex-row justify-between h-fit p-4 xl:py-4 xl:px-20 text-lg md:text-xl bg-card-gradient border-b-2 border-forth">
 					{userStatus === 'MANAGER' && (
 						<div className="w-full lg:hidden flex justify-end -ml-14">
 							<div
@@ -116,16 +122,18 @@ const MemberList: FC<useDataProps> = ({
 					<div>
 						<p className="italic">{lastLogin}</p>
 					</div>
-					{userStatus === 'MANAGER' && (
+					{userStatus === 'MANAGER' ? (
 						<div
 							onClick={(e) => {
 								e.stopPropagation();
 								handleDelete(userId, e);
 							}}
-							className="hidden w-7 h-7 lg:flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer -mr-14"
+							className="hidden w-7 h-7 lg:flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer xl:-mr-14"
 						>
 							<RxCross2 />
 						</div>
+					) : (
+						<div className="mr-7 xl:-mr-10"></div>
 					)}
 				</div>
 				<AnimatePresence>
