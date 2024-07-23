@@ -107,7 +107,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 				);
 			} else {
 				const errorData = await response.json();
-				toast.error(`Menu item was not deleted`);
+				toast.error(`Failed to delete menu item: ${errorData.message}`);
 				console.error('Failed to delete menu item:', errorData.message);
 			}
 		} catch (error) {

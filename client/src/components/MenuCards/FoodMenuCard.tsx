@@ -116,7 +116,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			} else {
 				const errorData = await response.json();
 				// Error modal
-				toast.error(`Menu item was not deleted`);
+				toast.error(`Failed to delete menu item: ${errorData.message}`);
 				console.error('Failed to delete menu item:', errorData.message);
 			}
 		} catch (error) {

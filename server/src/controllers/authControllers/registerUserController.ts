@@ -2,11 +2,12 @@ import { Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import User from '../../models/UserModel';
 import AuditLog from '../../models/AuditLogModel';
-import { USER_STATUS } from '../../constants';
+import { USER_STATUS, UserStatus } from '../../constants';
 import { hashPassword } from '../../utils/passwordUtils';
 import { body, validationResult } from 'express-validator';
 import { clearAllCache } from '../../cache/cache';
 import { AuthenticatedRequest } from '../../types/request';
+import hasPermission from '../../utils/hasPermission';
 
 export const registerUser = async (
 	req: AuthenticatedRequest,
@@ -34,12 +35,28 @@ export const registerUser = async (
 		const { firstName, lastName, email, password, userStatus } = req.body;
 		const hashedPassword = await hashPassword(password);
 		const isFirstAccount = (await User.countDocuments()) === 0;
-		let role = userStatus || USER_STATUS.MANAGER;
+		let role: UserStatus = userStatus || USER_STATUS.MANAGER;
 
 		if (isFirstAccount) {
 			role = USER_STATUS.ADMIN;
-		} else {
-			role = USER_STATUS.MANAGER;
+		}
+
+		// Check user authorization
+		if (!req.user) {
+			res.status(StatusCodes.UNAUTHORIZED).json({
+				message: 'User not authenticated',
+			});
+			return;
+		}
+
+		// Check for permissions
+		if (
+			!hasPermission(req.user.userStatus as UserStatus, 'AUTH_REGISTER')
+		) {
+			res.status(StatusCodes.FORBIDDEN).json({
+				message: 'You do not have permission to register a new user',
+			});
+			return;
 		}
 
 		const existingUser = await User.findOne({ email });

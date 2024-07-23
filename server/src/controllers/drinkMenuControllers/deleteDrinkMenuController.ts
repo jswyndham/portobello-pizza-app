@@ -22,8 +22,7 @@ export const deleteDrinkMenu = async (
 		const { userId, userStatus } = req.user;
 		if (!hasPermission(userStatus, 'DELETE_DRINK_ITEM')) {
 			res.status(StatusCodes.FORBIDDEN).json({
-				message:
-					'Forbidden: You do not have permission for this action',
+				message: 'You do not have permission to delete menu items',
 			});
 			return;
 		}
