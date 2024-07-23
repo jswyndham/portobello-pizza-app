@@ -23,14 +23,6 @@ export const getAuditLogs = async (
 
 		const { userStatus } = req.user;
 
-		// Check user authorization
-		if (!req.user) {
-			res.status(StatusCodes.UNAUTHORIZED).json({
-				message: 'User not authenticated',
-			});
-			return;
-		}
-
 		// Check for permissions
 		if (!hasPermission(userStatus as USER_STATUS, 'GET_AUDITLOGS')) {
 			res.status(StatusCodes.FORBIDDEN).json({

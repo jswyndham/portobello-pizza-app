@@ -3,7 +3,7 @@ import { useDataProps } from '../../types/userInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import { RxCross2 } from 'react-icons/rx';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 
 interface MemberListProps extends useDataProps {
@@ -23,7 +23,7 @@ const MemberList: FC<MemberListProps> = ({
 	const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
 
 	const { state } = useAuth();
-	const { isLoggedIn, token } = state;
+	const { token } = state;
 
 	const onSubmitDelete = async (id: string) => {
 		try {
@@ -103,7 +103,7 @@ const MemberList: FC<MemberListProps> = ({
 									e.stopPropagation();
 									handleDelete(userId, e);
 								}}
-								className="w-5 h-5 bg-red-500 text-white rounded-full text-xl hover:cursor-pointer -mr-14"
+								className="w-5 h-5 bg-red-500 text-white rounded-full text-xl hover:cursor-pointer hover:bg-red-600 -mr-14 hover:shadow-md hover:shadow-slate-400"
 							>
 								<RxCross2 />
 							</div>
@@ -128,7 +128,7 @@ const MemberList: FC<MemberListProps> = ({
 								e.stopPropagation();
 								handleDelete(userId, e);
 							}}
-							className="hidden w-7 h-7 lg:flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer xl:-mr-14"
+							className="hidden w-7 h-7 lg:flex justify-center items-center bg-red-500 text-white rounded-full text-xl hover:cursor-pointer hover:bg-red-700 xl:-mr-14 hover:shadow-md hover:shadow-slate-400"
 						>
 							<RxCross2 />
 						</div>

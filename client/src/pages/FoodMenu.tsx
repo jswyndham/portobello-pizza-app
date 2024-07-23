@@ -1,7 +1,20 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { HeadingOne, HeadingTwo } from '../components';
 import FoodMenuCard from '../components/MenuCards/FoodMenuCard';
 
 function FoodMenu() {
+	const { hash } = useLocation();
+
+	useEffect(() => {
+		if (hash) {
+			const element = document.querySelector(hash);
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth' });
+			}
+		}
+	}, [hash]);
+
 	return (
 		<section className="w-screen h-full bg-main-gradient">
 			<article className="pt-12 px-2 lg:p-24 flex flex-col justify-center items-center">
@@ -10,7 +23,7 @@ function FoodMenu() {
 				{/* PIZZA */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center">
-						<HeadingTwo headingTwoText="PIZZA" />
+						<HeadingTwo headingTwoText="PIZZA" id="pizza" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="PIZZA" />
@@ -20,7 +33,7 @@ function FoodMenu() {
 				{/* PASTA */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="PASTA" />
+						<HeadingTwo headingTwoText="PASTA" id="pasta" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="PASTA" />
@@ -30,7 +43,7 @@ function FoodMenu() {
 				{/* CALZONE */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="CALZONE" />
+						<HeadingTwo headingTwoText="CALZONE" id="calzone" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="CALZONE" />
@@ -40,7 +53,7 @@ function FoodMenu() {
 				{/* STARTER */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="STARTER" />
+						<HeadingTwo headingTwoText="STARTER" id="starters" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="STARTER" />
@@ -50,7 +63,7 @@ function FoodMenu() {
 				{/* MAIN */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="MAIN" />
+						<HeadingTwo headingTwoText="MAIN" id="mains" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="MAIN" />
@@ -60,7 +73,7 @@ function FoodMenu() {
 				{/* SIDES */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="SIDES" />
+						<HeadingTwo headingTwoText="SIDES" id="sides" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="SIDES" />
@@ -70,7 +83,7 @@ function FoodMenu() {
 				{/* SALAD */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="SALAD" />
+						<HeadingTwo headingTwoText="SALAD" id="salad" />
 					</div>
 					<div className="w-full flex justify-center items-center">
 						<FoodMenuCard category="SALAD" />
@@ -80,7 +93,7 @@ function FoodMenu() {
 				{/* DESSERT */}
 				<article className="w-full flex flex-col justify-center items-center">
 					<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
-						<HeadingTwo headingTwoText="DESSERT" />
+						<HeadingTwo headingTwoText="DESSERT" id="dessert" />
 					</div>
 					<div className="w-full xl:w-11/12 2xl:max-w-6xl flex justify-center items-center">
 						<FoodMenuCard category="DESSERT" />

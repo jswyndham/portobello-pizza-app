@@ -105,7 +105,11 @@ const Members = () => {
 	}
 
 	if (error) {
-		return <div>{error}</div>;
+		return (
+			<div className="h-screen flex justify-center">
+				<div>{error}</div>
+			</div>
+		);
 	}
 
 	if (userMembers.length === 0) {

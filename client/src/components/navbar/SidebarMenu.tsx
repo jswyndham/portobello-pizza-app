@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import MenuToggle from './MenuToogle';
+import { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { Link } from 'react-router-dom';
 import { IoHomeOutline } from 'react-icons/io5';
 import { CiPizza } from 'react-icons/ci';
 import { LiaCocktailSolid } from 'react-icons/lia';
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import SocialMediaLinks from '../SocialMediaLinks';
 import logo from '/images/portobello-no-background-small-2.png';
 import LogoutButton from '../logout/LogoutButton';
 import { useAuth } from '../../context/AuthContext';
+import MenuToggle from './MenuToogle';
 
 const sidebarVariants = {
 	open: { x: 0 },
@@ -21,10 +23,21 @@ const backdropVariants = {
 	closed: { opacity: 0, transitionEnd: { display: 'none' } },
 };
 
+const menuVariants = {
+	open: { opacity: 1, y: 0, display: 'block' },
+	closed: { opacity: 0, y: -20, transitionEnd: { display: 'none' } },
+};
+
 const SidebarMenu = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { state } = useAuth();
 	const { isLoggedIn } = state;
+
+	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+	const [isAdminList, setIsAdminList] = useState<boolean>(false);
+
+	const adminButtonRef = useRef<HTMLLIElement>(null);
+	const menuRef = useRef<HTMLDivElement>(null);
 
 	const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -33,6 +46,16 @@ const SidebarMenu = () => {
 			setIsOpen(false);
 		}
 	}, [isLoggedIn]);
+
+	const toggleDropdown = () => {
+		setIsAdminList(!isAdminList); // Handle arrow direction
+		setIsDropdownOpen((prevState) => !prevState);
+	};
+
+	const menuItemClick = () => {
+		setIsAdminList(!isAdminList); // Handle arrow direction
+		setIsDropdownOpen((prevState) => !prevState);
+	};
 
 	return (
 		<>
@@ -65,7 +88,6 @@ const SidebarMenu = () => {
 				}}
 			>
 				{/* Logo */}
-
 				<motion.img
 					src={logo}
 					alt="Main Logo"
@@ -121,29 +143,98 @@ const SidebarMenu = () => {
 
 					{/* Conditionally render ADMIN link if logged in */}
 					{isLoggedIn && (
-						<Link to="/addmenu">
+						<>
 							<li
-								className="flex flex-row w-fit py-8 relative transition-all active:text-secondary  hover:cursor-pointer hover:text-secondary"
-								onClick={toggleSidebar}
+								className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
+								onClick={toggleDropdown}
+								ref={adminButtonRef}
 							>
 								<div className="mt-0.5 pr-4">
 									<MdOutlineAdminPanelSettings />
 								</div>
-								ADD MENU
+								ADMIN
+								<AnimatePresence mode="wait">
+									{isAdminList ? (
+										<motion.div
+											key="down-arrow"
+											initial={{ opacity: 0 }}
+											style={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0 }}
+											transition={{ duration: 0.3 }}
+										>
+											<IoMdArrowDropdown className="text-2xl mt-1 ml-2" />
+										</motion.div>
+									) : (
+										<motion.div
+											key="up-arrow"
+											initial={{ opacity: 0 }}
+											style={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0 }}
+											transition={{ duration: 0.3 }}
+										>
+											<IoMdArrowDropup className="text-2xl mt-1 ml-2" />
+										</motion.div>
+									)}
+								</AnimatePresence>
 							</li>
-						</Link>
+
+							<AnimatePresence>
+								{isDropdownOpen && (
+									<motion.div
+										className="w-60"
+										ref={menuRef}
+										initial="closed"
+										style={{ opacity: 0 }}
+										animate="open"
+										exit="closed"
+										variants={menuVariants}
+									>
+										<ul className="w-52 flex flex-col py-4 justify-start">
+											<Link to="/admin/addmenu">
+												<li
+													onClick={menuItemClick}
+													className="px-6 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													ADD MENU
+												</li>
+											</Link>
+											<Link to="/admin/members">
+												<li
+													onClick={menuItemClick}
+													className="px-6 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													MEMBERS
+												</li>
+											</Link>
+											<Link to="/admin/register">
+												<li
+													onClick={menuItemClick}
+													className="px-6 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													REGISTER
+												</li>
+											</Link>
+										</ul>
+										<div className="w-full flex justify-start ml-4 pt-4">
+											<LogoutButton />
+										</div>
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</>
 					)}
 				</ul>
 
-				{/* Conditionally render Logout button if logged in */}
-				{isLoggedIn && (
-					<div className="flex justify-items-start mb-6 ml-6">
-						<LogoutButton />
-					</div>
-				)}
-				<div className="h-4 pt-6 pl-8 hover:text-primary active:text-secondary">
+				<motion.div
+					initial={{ y: 0 }}
+					animate={{ y: isDropdownOpen ? 80 : 0 }}
+					transition={{ type: 'spring', stiffness: 350, damping: 15 }}
+					className="h-4 pt-6 pl-8 hover:text-primary active:text-secondary"
+				>
 					<SocialMediaLinks />
-				</div>
+				</motion.div>
 			</motion.nav>
 		</>
 	);

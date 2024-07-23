@@ -66,11 +66,11 @@ const router = createBrowserRouter([
 				],
 			},
 			{
-				path: 'foodmenu',
+				path: 'food-menu',
 				element: <FoodMenu />,
 			},
 			{
-				path: 'drinksmenu',
+				path: 'drinks-menu',
 				element: <DrinksMenu />,
 			},
 			{
