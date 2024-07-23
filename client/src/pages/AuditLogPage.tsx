@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HeadingOne, Loading } from '../components';
+import { ErrorMessage, HeadingOne, Loading } from '../components';
 import { useAuth } from '../context/AuthContext';
 import { format } from 'date-fns';
 import { AuditLog } from '../types/auditLogInterface';
@@ -73,7 +73,7 @@ const AuditLogs = () => {
 
 	// Error warning
 	if (error) {
-		return <div>{error}</div>;
+		return <ErrorMessage errorMessage={error} />;
 	}
 
 	// No audit logs found
