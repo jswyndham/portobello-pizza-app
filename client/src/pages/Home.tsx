@@ -78,18 +78,17 @@ const Home = () => {
           />
         </Helmet>
 
-        {/* !!!!EDIT LATER!!!! */}
-        {/* <HomeJSONLD
-					name="Portobello, Koh Tao"
-					address={{
-						streetAddress:
-							'Sai Ree Road, Ban Koh Tao, Thailand, Surat Thani',
-						imagePath: '/images/portobello-logo-round-black.png',
-					}}
-					telephone="+66 77 457 029"
-					url="https://www.portobello.com/"
-					openingHours={openingHours}
-				/> */}
+        {/* JSONLD - SEO */}
+        <HomeJSONLD
+          name="Portobello, Koh Tao"
+          address={{
+            streetAddress: "Sai Ree Road, Ban Koh Tao, Thailand, Surat Thani",
+            imagePath: "/images/portobello-logo-round-black.png",
+          }}
+          telephone="+66 77 457 029"
+          url="https://www.portobello.com/"
+          openingHours={openingHours}
+        />
 
         {/* LOGO */}
         <motion.img
