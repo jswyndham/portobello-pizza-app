@@ -31,7 +31,7 @@ const Login: FC = () => {
 
 			if (response.ok) {
 				const { user, token } = await response.json(); // Assuming the token is returned with the user data
-				console.log('User logged in:', user);
+
 				// Success modal
 				toast.success(
 					`You have successfully logged in, ${user.firstName}!`

@@ -53,8 +53,6 @@ export const getDrinkMenu = async (
 		// Cache the fetched data
 		setCache(cacheKey, responseData, 7200); // Cache for 2 hours
 
-		console.log('Get Drink Menu Items: ', allDrinkMenuItems);
-
 		res.status(StatusCodes.OK).json(responseData);
 	} catch (error: any) {
 		console.error('Error getting drink menu items:', error);

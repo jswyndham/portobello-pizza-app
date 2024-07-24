@@ -29,7 +29,6 @@ export const deleteDrinkMenu = async (
 
 		// Get food menu item ID from request params
 		const drinkMenuId = req.params.id;
-		console.log(`Drink menu ID received: ${drinkMenuId}`);
 
 		// Validate the ID format
 		if (!mongoose.Types.ObjectId.isValid(drinkMenuId)) {
@@ -44,15 +43,11 @@ export const deleteDrinkMenu = async (
 			drinkMenuId
 		);
 		if (!deleteDrinkMenuItem) {
-			console.log(`Drink item not found for ID: ${drinkMenuId}`);
 			res.status(StatusCodes.NOT_FOUND).json({
 				msg: 'Drink item not found',
 			});
 			return;
 		}
-
-		// Log request body for debugging
-		console.log('Drink deleted:', deleteDrinkMenuItem);
 
 		// Audit log and cache clearing
 		const auditLog = new AuditLog({

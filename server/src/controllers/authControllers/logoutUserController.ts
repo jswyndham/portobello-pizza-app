@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { clearCache } from '../../cache/cache';
+import { Response } from 'express';
+import { clearAllCache } from '../../cache/cache';
 import AuditLog from '../../models/AuditLogModel';
 import { StatusCodes } from 'http-status-codes';
 import { AuthenticatedRequest } from '../../types/request';
@@ -37,12 +37,7 @@ export const logoutUser = async (
 		});
 		await auditLog.save();
 
-		clearCache(`user_${userId}`);
-		clearCache(`quiz_${userId}`);
-		clearCache(`class_${userId}`);
-		clearCache(`membership_${userId}`);
-
-		console.log('User logged out:', user);
+		clearAllCache();
 
 		res.status(StatusCodes.OK).json({
 			msg: 'User logged out',

@@ -63,9 +63,6 @@ export const editUser = async (
 		}
 		const updatedUser = await user.save();
 
-		// Log request body for debugging
-		console.log('User details edited:', updatedUser);
-
 		// Create an audit log entry of the user's action
 		const auditLog = new AuditLog({
 			action: 'EDIT_USER',

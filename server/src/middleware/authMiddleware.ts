@@ -14,9 +14,6 @@ export const authenticateUser = (
 	const token =
 		req.cookies?.token || (authHeader ? authHeader.split(' ')[1] : null);
 
-	// Log the extracted token for debugging
-	console.log('Extracted Token:', token);
-
 	if (!token) {
 		console.error('Authentication token missing');
 		res.status(401).json({ message: 'Authentication invalid - token' });
@@ -26,7 +23,6 @@ export const authenticateUser = (
 	try {
 		// Verify the token and log the payload
 		const payload = verifyJWT(token);
-		console.log('Token payload:', payload);
 
 		if (!payload) {
 			console.error('Invalid token');
@@ -42,7 +38,6 @@ export const authenticateUser = (
 			userStatus: payload.userStatus as USER_STATUS,
 		};
 
-		console.log('Authenticated user:', (req as AuthenticatedRequest).user);
 		next();
 	} catch (error: any) {
 		console.error('Error during authentication:', error);

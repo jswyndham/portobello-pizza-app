@@ -10,6 +10,7 @@ import { DrinkMenuItem } from '../../types/drinkItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import Loading from '../Loading';
 import ItemNotFound from '../itemNotFound/ItemNotFound';
+import ErrorMessage from '../ErrorMessage';
 
 interface DrinkMenuCardProps {
 	category: string;
@@ -55,15 +56,11 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 		const fetchDrinkItems = async () => {
 			setIsLoading(true);
 			try {
-				console.log(
-					`Fetching drinks from category: ${selectedCategory}`
-				);
 				const response = await fetch(
 					`http://localhost:5001/api/v1/drinkMenu?page=${page}&limit=12&drinkCategory=${selectedCategory}`,
 					{ method: 'GET' }
 				);
 				const data = await response.json();
-				console.log('API response JSON:', data);
 
 				if (data.items && Array.isArray(data.items)) {
 					setDrinkItems(data.items);
@@ -134,12 +131,12 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 			);
 			if (response.ok) {
 				const data = await response.json();
-				console.log('Fetched Data:', data);
+
 				setDrinkItemToEdit(data);
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-				console.error('Failed to get menu item:', errorData.message);
+				toast.error('Failed to get menu item:', errorData.message);
 			}
 		} catch (error) {
 			console.error('Error finding menu item:', error);
@@ -147,15 +144,6 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	};
 
 	const handleEdit = (drinkItem: DrinkMenuItem) => {
-		console.log(
-			'Submit edit: ',
-			drinkItem._id,
-			drinkItem.name,
-			drinkItem.drinkCategory,
-			drinkItem.imageUrl,
-			drinkItem.ingredients,
-			drinkItem.price
-		);
 		onSubmitEdit(drinkItem._id);
 		navigate(`/admin/editdrink/${drinkItem._id}`);
 	};
@@ -182,7 +170,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	}
 
 	if (error) {
-		return <div>{error}</div>;
+		return <ErrorMessage errorMessage={error} />;
 	}
 
 	if (drinkItems.length === 0) {

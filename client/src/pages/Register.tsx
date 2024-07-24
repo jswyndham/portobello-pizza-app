@@ -31,8 +31,6 @@ const Register: FC = () => {
 			const result = await response.json();
 
 			if (response.ok) {
-				const { user } = result;
-				console.log('User registered:', user);
 				toast.success(`You have successfully registered a new user!`);
 
 				reset();

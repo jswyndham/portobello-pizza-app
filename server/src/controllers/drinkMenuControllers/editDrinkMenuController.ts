@@ -59,9 +59,6 @@ export const editDrinkMenu = async (
 
 		const updatedDrinkItem = await drinkItem.save();
 
-		// Log request body for debugging
-		console.log('Menu edited:', updatedDrinkItem);
-
 		// Create an audit log entry of the user's action
 		const auditLog = new AuditLog({
 			action: 'EDIT_DRINK_ITEM',

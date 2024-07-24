@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: FC<ProtectedRouteProps> = ({ element }) => {
 	const { state } = useAuth();
 	const { isLoggedIn } = state;
-	console.log('ProtectedRoute isLoggedIn:', isLoggedIn);
+
 	return isLoggedIn ? element : <Login />;
 };
 

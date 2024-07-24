@@ -25,7 +25,6 @@ const Navbar = () => {
 				adminButtonRef.current &&
 				!adminButtonRef.current.contains(e.target)
 			) {
-				console.log('Click outside detected, closing dropdown');
 				setIsAdminList(false); // Handle arrow direction
 				setIsDropdownOpen(false);
 			}

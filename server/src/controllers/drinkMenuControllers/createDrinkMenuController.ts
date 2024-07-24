@@ -50,9 +50,6 @@ export const createDrinkMenu = async (
 			price,
 		});
 
-		// Log request body for debugging
-		console.log('Drink item created:', drinkItem);
-
 		// Create an audit log entry of the user's action
 		const auditLog = new AuditLog({
 			action: 'CREATE_DRINK_ITEM',

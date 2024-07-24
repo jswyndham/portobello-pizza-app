@@ -7,13 +7,10 @@ import {
 } from '../../../../server/src/constants';
 import IngredientList from './IngredientList';
 import ImageUpload from './ImageUpload';
-import {
-	FoodMenuFormData,
-	DrinkMenuFormData,
-	MenuFormData,
-} from '../../types/foodItemInterfaces';
+import { FoodMenuFormData, MenuFormData } from '../../types/foodItemInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { DrinkMenuFormData } from '../../types/drinkItemInterfaces';
 
 const AddMenuItem = () => {
 	const { state } = useAuth();
@@ -63,8 +60,6 @@ const AddMenuItem = () => {
 				),
 			};
 
-			console.log('Submitting form with data:', formData);
-
 			const response = await fetch(
 				isDrink
 					? 'http://localhost:5001/api/v1/drinkMenu'
@@ -95,7 +90,7 @@ const AddMenuItem = () => {
 
 	const handleImageUrl = (file: any) => {
 		const fileUrl = file.secure_url;
-		console.log('Cloudinary URL:', fileUrl);
+
 		setImagePreview(fileUrl);
 		setValue('imageUrl', fileUrl);
 	};

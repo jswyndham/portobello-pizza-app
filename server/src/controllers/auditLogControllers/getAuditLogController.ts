@@ -12,8 +12,6 @@ export const getAuditLogs = async (
 	try {
 		const { userId } = req.params;
 
-		console.log('userId: ', userId); // Debug log to check userId
-
 		if (!req.user) {
 			res.status(StatusCodes.UNAUTHORIZED).json({
 				message: 'User not authenticated',
@@ -35,8 +33,6 @@ export const getAuditLogs = async (
 		const auditLogs = await AuditLog.find({ userId }).sort({
 			createdAt: 1,
 		});
-
-		console.log('auditLogs: ', auditLogs); // Debug log to check auditLogs
 
 		res.status(StatusCodes.OK).json({
 			status: 'success',

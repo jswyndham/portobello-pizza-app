@@ -13,8 +13,6 @@ export const registerUser = async (
 	req: AuthenticatedRequest,
 	res: Response
 ): Promise<void> => {
-	console.log('Request Body:', req.body);
-
 	// Define validation rules
 	await body('password')
 		.matches(

@@ -10,6 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FoodMenuItem } from '../../types/foodItemInterfaces';
 import Loading from '../Loading';
 import ItemNotFound from '../itemNotFound/ItemNotFound';
+import ErrorMessage from '../ErrorMessage';
 
 interface FoodMenuCardProps {
 	category: string;
@@ -67,13 +68,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		const fetchFoodItems = async () => {
 			setIsLoading(true);
 			try {
-				console.log(`Fetching food from category: ${selectedCategory}`);
 				const response = await fetch(
 					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12&menuCategory=${selectedCategory}`,
 					{ method: 'GET' }
 				);
 				const data = await response.json();
-				console.log('API response JSON:', data);
 
 				if (data.items && Array.isArray(data.items)) {
 					setFoodItems(data.items);
@@ -140,12 +139,12 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			);
 			if (response.ok) {
 				const data = await response.json();
-				console.log('Fetched Data:', data);
+
 				setFoodItemToEdit(data);
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-				console.error('Failed to get menu item:', errorData.message);
+				toast.error('Failed to get menu item:', errorData.message);
 			}
 		} catch (error) {
 			console.error('Error finding menu item:', error);
@@ -154,16 +153,6 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 
 	// Handle editing
 	const handleEdit = (foodItem: FoodMenuItem) => {
-		console.log(
-			'Submit edit: ',
-			foodItem._id,
-			foodItem.name,
-			foodItem.menuCategory,
-			foodItem.pizzaType,
-			foodItem.imageUrl,
-			foodItem.ingredients,
-			foodItem.price
-		);
 		onSubmitEdit(foodItem._id);
 		navigate(`/admin/editfood/${foodItem._id}`);
 	};
@@ -204,7 +193,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	}
 
 	if (error) {
-		return <div>{error}</div>;
+		return <ErrorMessage errorMessage={error} />;
 	}
 
 	if (foodItems.length === 0) {

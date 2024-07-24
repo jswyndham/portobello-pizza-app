@@ -62,7 +62,6 @@ export const getAllUsers = async (
 
 		// Cache the fetched data
 		setCache(cacheKey, allUsers, 7200); // Cache for 2 hours
-		console.log('get all member users: ', allUsers);
 
 		res.status(StatusCodes.OK).json(allUsers);
 	} catch (error: any) {

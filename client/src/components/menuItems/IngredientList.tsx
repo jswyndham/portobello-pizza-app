@@ -9,10 +9,7 @@ const IngredientList: FC<IngredientListProps> = ({
 	onRemoveIngredient,
 	onIngredientChange,
 }) => {
-	useEffect(() => {
-		// Debugging
-		console.log('Rendering IngredientList with ingredients:', ingredients);
-	}, [ingredients]);
+	useEffect(() => {}, [ingredients]);
 
 	return (
 		<div className="flex flex-col">

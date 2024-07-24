@@ -7,8 +7,6 @@ const clearOldAuditLogs = async (): Promise<void> => {
 		threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
 		await AuditLog.deleteMany({ createdAt: { $lt: threeMonthsAgo } });
-
-		console.log('Old audit logs cleared');
 	} catch (error) {
 		console.error('Error clearing old audit logs:', error);
 	}

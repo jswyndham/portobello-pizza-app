@@ -10,8 +10,6 @@ export const createFoodMenu = async (
 	req: AuthenticatedRequest,
 	res: Response
 ): Promise<void> => {
-	console.log('Received request body:', req.body);
-
 	const { menuCategory, pizzaType, name, ingredients, price, imageUrl } =
 		req.body;
 
@@ -20,7 +18,7 @@ export const createFoodMenu = async (
 			message:
 				'Invalid request body. Required fields: menuCategory, name, ingredients, price.',
 		});
-		console.log('Request body:', req.body);
+
 		return;
 	}
 
@@ -77,8 +75,6 @@ export const createFoodMenu = async (
 
 		// Clear all cache on new item creation
 		clearAllCache();
-
-		console.log('Create food menu item: ', foodItem);
 
 		res.status(StatusCodes.CREATED).json({
 			msg: 'New food item created',

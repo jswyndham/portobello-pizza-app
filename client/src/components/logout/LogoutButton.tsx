@@ -23,17 +23,12 @@ const LogoutButton: React.FC = () => {
 			if (response.ok) {
 				// Logout of AuthContext
 				await logout();
-				console.log(
-					'user is logged out using the logout method: ',
-					response
-				);
 
 				// Dispatch the global 'logout' state
 				dispatch({ type: 'LOGOUT' });
 				toast.success('Logout successful');
 				// Navigate to the home page upon logout
 				navigate('/');
-				console.log('Logged out user: ', response);
 			} else {
 				const errorData = await response.json();
 				console.error('Logout failed:', errorData.message);

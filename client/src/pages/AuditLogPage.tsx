@@ -39,8 +39,6 @@ const AuditLogs = () => {
 				);
 
 				const data = await response.json();
-				console.log('Fetched Data:', data);
-				console.log('Loading is :', isLoading);
 
 				if (data && data.data && Array.isArray(data.data.auditLogs)) {
 					setAuditLog(data.data.auditLogs);

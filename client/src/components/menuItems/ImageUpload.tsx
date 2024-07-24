@@ -18,10 +18,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 				},
 				(error: any, result: any) => {
 					if (!error && result && result.event === 'success') {
-						console.log(
-							'Done! Here is the image info: ',
-							result.info
-						);
 						const file = result.info; // Assuming this is the file object
 						setImageUrl(file);
 					} else if (error) {

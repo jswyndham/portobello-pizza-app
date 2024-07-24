@@ -91,8 +91,6 @@ export const editFoodMenu = async (
 		// Clear all cache on item edit
 		clearAllCache();
 
-		console.log('Edited food menu item: ', foodItem);
-
 		res.status(StatusCodes.OK).json({
 			msg: 'Food item edited',
 			foodItem,

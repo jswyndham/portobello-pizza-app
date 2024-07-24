@@ -82,7 +82,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	console.log('App rendering');
 	return (
 		<AuthProvider>
 			<CacheProvider>

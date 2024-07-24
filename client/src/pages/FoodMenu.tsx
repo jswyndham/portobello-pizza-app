@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ErrorMessage, HeadingOne, HeadingTwo } from '../components';
 import FoodMenuCard from '../components/MenuCards/FoodMenuCard';
@@ -14,19 +14,13 @@ function FoodMenu() {
 	const [menuItems, setMenuItems] = useState<MenuSection[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (hash) {
-			const element = document.querySelector(hash);
-			if (element) {
-				element.scrollIntoView({ behavior: 'smooth' });
-			}
-		}
-	}, [hash]);
+	const isHashHandled = useRef(false);
 
 	useEffect(() => {
 		const fetchMenuItems = async () => {
 			try {
+				setIsLoading(true);
+
 				const response = await fetch(
 					'http://localhost:5001/api/v1/foodMenu'
 				);
@@ -81,6 +75,18 @@ function FoodMenu() {
 
 		fetchMenuItems();
 	}, []);
+
+	useEffect(() => {
+		if (!isLoading && hash && !isHashHandled.current) {
+			setTimeout(() => {
+				const element = document.querySelector(hash);
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth' });
+					isHashHandled.current = true;
+				}
+			}, 100); // Adding a slight delay to ensure the content is rendered. This was the only way to give the page time to fully load, so then it could navigate to the hash id for the h2
+		}
+	}, [isLoading, hash]);
 
 	if (isLoading) {
 		return <Loading />;

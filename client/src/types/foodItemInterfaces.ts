@@ -27,6 +27,16 @@ export interface FoodMenuItem {
 	price: number;
 }
 
+export interface MenuFormData {
+	menuCategory: string;
+	pizzaType: string;
+	name: string;
+	imageUrl: string;
+	ingredients: string[];
+	price: number;
+	drinkCategory: string;
+}
+
 export interface IngredientListProps {
 	ingredients: string[];
 	onAddIngredient: () => void;

@@ -53,8 +53,6 @@ export const getFoodMenu = async (
 		// Cache the fetched data
 		setCache(cacheKey, responseData, 7200); // Cache for 2 hours
 
-		console.log('Get Food Menu Items: ', allFoodMenuItems);
-
 		res.status(StatusCodes.OK).json(responseData);
 	} catch (error: any) {
 		console.error('Error getting food menu items:', error);

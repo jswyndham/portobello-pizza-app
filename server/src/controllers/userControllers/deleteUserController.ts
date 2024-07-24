@@ -57,9 +57,6 @@ export const deleteUser = async (
 			return;
 		}
 
-		// Log the deletion for debugging
-		console.log('User deleted:', deletedUser);
-
 		// Audit log and cache clearing
 		const auditLog = new AuditLog({
 			action: 'DELETE_USER',

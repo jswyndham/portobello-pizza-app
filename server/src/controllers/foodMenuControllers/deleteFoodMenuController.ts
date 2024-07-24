@@ -59,9 +59,6 @@ export const deleteFoodMenu = async (
 		// Delete the food menu item
 		await foodMenuItem.deleteOne();
 
-		// Log request body for debugging
-		console.log('Menu deleted:', itemDetails);
-
 		// Audit log and cache clearing
 		const auditLog = new AuditLog({
 			action: 'DELETE_FOOD_ITEM',

@@ -17,12 +17,12 @@ export const menuCategories = [
 	{
 		title: 'Starters',
 		imageUrl: '/images/sides-meats.jpg',
-		link: '#starters',
+		link: '#starter',
 	},
 	{
 		title: 'Mains',
 		imageUrl: '/images/mains.jpg',
-		link: '#mains',
+		link: '#main',
 	},
 	{
 		title: 'Sides',
