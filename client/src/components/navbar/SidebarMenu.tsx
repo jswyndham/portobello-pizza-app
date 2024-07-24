@@ -59,12 +59,12 @@ const SidebarMenu = () => {
 
 	return (
 		<>
-			<div className="fixed z-50 top-0 right-0">
+			<article className="fixed z-50 top-0 right-0">
 				<MenuToggle toggle={toggleSidebar} isOpen={isOpen} />
-			</div>
+			</article>
 
 			{/* Close sidebar when backdrop is clicked */}
-			<motion.div
+			<motion.article
 				className="fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-85 backdrop-blur-sm"
 				initial="closed"
 				style={{ opacity: 1 }}

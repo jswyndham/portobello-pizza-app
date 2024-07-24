@@ -1,39 +1,35 @@
 import { FC } from 'react';
+import { AccessJSONLDProps } from '../../types/seoInterface';
 
-export interface AccessJSONLDProps {
-	name: string;
-	address: {
-		streetAddress: string;
-		imagePath: string;
-	};
-	telephone: string;
-	url: string;
-	geoCoordinates: string;
-}
-
-const AccessJSONLD: : FC<AccessJSONLDProps> = ({ 
-	name, address, telephone, url, geoCoordinates 
+const AccessJSONLD: FC<AccessJSONLDProps> = ({
+	name,
+	address,
+	telephone,
+	url,
+	latitude,
+	longitude,
 }) => {
 	const structuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'Place',
-		name: 'Rock Bar ING Kyoto',
+		name: name,
 		address: {
 			'@type': 'PostalAddress',
-			streetAddress:
-				'京都府京都市中京区西木屋町通蛸薬師上る南車屋町京都ロイヤルビル２階',
-			addressLocality: 'Kyoto',
-			addressRegion: 'Kyoto',
-			postalCode: '288-201',
-			addressCountry: 'JP',
+			streetAddress: address.streetAddress,
+			addressLocality: 'Ban Koh Tao',
+			addressRegion: 'Surat Thani',
+			postalCode: '84360',
+			addressCountry: 'TH',
 		},
 		geo: {
 			'@type': 'GeoCoordinates',
-			latitude: '35.0062951',
-			longitude: '135.7673418',
+			// !! Replace values
+			latitude: latitude,
+			longitude: longitude,
 		},
-		telephone: '075-255-5087',
+		telephone: telephone,
 		url: url,
+		image: address.imagePath,
 	};
 
 	return (
@@ -42,6 +38,6 @@ const AccessJSONLD: : FC<AccessJSONLDProps> = ({
 			dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 		/>
 	);
-}
+};
 
 export default AccessJSONLD;
