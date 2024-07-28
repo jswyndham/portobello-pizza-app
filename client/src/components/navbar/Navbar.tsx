@@ -80,7 +80,7 @@ const Navbar = () => {
 	};
 
 	return (
-		<nav className="hidden lg:flex items-center fixed z-20 w-screen h-28 bg-forth bg-opacity-75 justify-end py-14 lg:py-10 md:px-6 backdrop-blur-sm">
+		<nav className="hidden xl:flex items-center fixed z-20 w-screen h-28 bg-forth bg-opacity-75 justify-end py-14 lg:py-10 md:px-6 backdrop-blur-sm">
 			<div className="relative w-full flex items-center justify-start ml-6">
 				<Link to="/">
 					<img
@@ -116,6 +116,12 @@ const Navbar = () => {
 						<Link to="/drinksmenu">
 							<li className="li-hover relative inline-block transition-all xl:w-36 w-28 duration-500 hover:text-yellow-300 hover:cursor-pointer mr-3 active:text-yellow-600">
 								DRINKS MENU
+							</li>
+						</Link>
+
+						<Link to="/contact">
+							<li className="xl:w-36 w-28 li-hover relative inline-block transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600">
+								CONTACT
 							</li>
 						</Link>
 

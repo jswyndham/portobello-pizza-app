@@ -125,7 +125,7 @@ function FoodMenu() {
 						key={section.sectionName}
 						className="w-full flex flex-col justify-center items-center"
 					>
-						<div className="w-full flex justify-center items-center mt-12 lg:mt-20">
+						<div className="w-full flex justify-center items-center lg:mt-12">
 							<HeadingTwo
 								headingTwoText={section.sectionName}
 								id={section.sectionName.toLowerCase()}

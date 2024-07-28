@@ -61,7 +61,7 @@ function Layout() {
 				<div ref={sidebarRef}>
 					<SidebarMenu />
 				</div>
-				<section className="z-0 w-screen h-full overflow-hidden">
+				<section className="z-0 w-screen overflow-hidden">
 					<Outlet />
 				</section>
 				<Footer />

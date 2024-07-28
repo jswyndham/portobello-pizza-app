@@ -30,12 +30,10 @@ const Map: React.FC<MapProps> = ({ src }) => {
 	}, []);
 
 	return (
-		<div className="w-11/12 flex justify-center">
-			<figure className="p-4 bg-black rounded-xl overflow-hidden">
+		<div className="w-full flex justify-center h-full">
+			<figure className="p-4 bg-black rounded-xl overflow-hidden w-full h-full">
 				<iframe
-					width="900px"
-					height="600px"
-					className="map-iframe"
+					className="w-full h-full rounded-lg"
 					allowFullScreen
 					aria-hidden="false"
 					tabIndex={0}

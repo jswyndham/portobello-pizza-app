@@ -69,16 +69,16 @@ const Login: FC = () => {
 				className="toast-container"
 				toastClassName="toast"
 			/>
-			<section className="bg-[url('/images/pasta-fresh-2.jpg')] bg-cover align-middle h-screen w-screen px-2">
-				<article className="w-full h-full backdrop-blur-md pt-48 flex justify-center lg:items-center">
-					<article className="flex flex-col justify-start bg-login-gradient align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">
+			<section className="bg-[url('/images/pasta-fresh-2.jpg')] bg-cover align-middle w-screen min-h-screen">
+				<article className="w-full h-screen backdrop-blur-md flex justify-center lg:items-center">
+					<article className="mx-2 mt-28 md:mt-56 flex flex-col justify-start bg-login-gradient align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">
 						<div className="mx-auto h-12 w-9/12 md:w-8/12 pt-6">
 							<img
 								src="/images/portobello-no-background-small-2.png"
 								alt="Portobello logo"
 							/>
 						</div>
-						<div className="flex justify-center items-center align-middle h-fit pt-16 lg:pt-24">
+						<div className="flex justify-center items-center align-middle h-fit pt-8 lg:pt-24">
 							<LoginForm
 								onSubmit={onSubmit}
 								isSubmitting={isSubmitting}

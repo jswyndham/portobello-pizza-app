@@ -7,6 +7,7 @@ import { CiPizza } from 'react-icons/ci';
 import { LiaCocktailSolid } from 'react-icons/lia';
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { LuMapPin } from 'react-icons/lu';
 import SocialMediaLinks from '../SocialMediaLinks';
 import logo from '/images/portobello-no-background-small-2.png';
 import LogoutButton from '../logout/LogoutButton';
@@ -74,7 +75,7 @@ const SidebarMenu = () => {
 			/>
 
 			<motion.nav
-				className="fixed z-40 top-0 right-0 bottom-0 w-8/12 sm:w-6/12 md:w-5/12 pt-6 text-white lg:hidden overflow-y-auto"
+				className="fixed z-40 top-0 right-0 bottom-0 w-8/12 sm:w-6/12 md:w-5/12 pt-6 text-white xl:hidden overflow-y-auto"
 				style={{ opacity: 1 }}
 				initial="closed"
 				animate={isOpen ? 'open' : 'closed'}
@@ -138,6 +139,18 @@ const SidebarMenu = () => {
 								<LiaCocktailSolid />
 							</div>
 							DRINKS MENU
+						</li>
+					</Link>
+
+					<Link to="/contact">
+						<li
+							className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
+							onClick={toggleSidebar}
+						>
+							<div className="mt-0.5 pr-4">
+								<LuMapPin />
+							</div>
+							CONTACT
 						</li>
 					</Link>
 
