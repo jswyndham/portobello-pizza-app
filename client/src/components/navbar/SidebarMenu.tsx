@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
 import { Link } from 'react-router-dom';
 import { IoHomeOutline } from 'react-icons/io5';
 import { CiPizza } from 'react-icons/ci';
@@ -34,11 +33,12 @@ const SidebarMenu = () => {
 	const { state } = useAuth();
 	const { isLoggedIn } = state;
 
-	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+	const [isFoodMenuOpen, setIsFoodMenuOpen] = useState<boolean>(false);
 	const [isAdminList, setIsAdminList] = useState<boolean>(false);
 
 	const adminButtonRef = useRef<HTMLLIElement>(null);
-	const menuRef = useRef<HTMLDivElement>(null);
+	const foodMenuButtonRef = useRef<HTMLLIElement>(null);
+	const sidebarRef = useRef<HTMLDivElement>(null);
 
 	const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -48,14 +48,40 @@ const SidebarMenu = () => {
 		}
 	}, [isLoggedIn]);
 
-	const toggleDropdown = () => {
-		setIsAdminList(!isAdminList); // Handle arrow direction
-		setIsDropdownOpen((prevState) => !prevState);
+	useEffect(() => {
+		const handleClickOutside = (e: any) => {
+			if (
+				!foodMenuButtonRef.current?.contains(e.target) &&
+				!adminButtonRef.current?.contains(e.target) &&
+				!sidebarRef.current?.contains(e.target)
+			) {
+				setIsFoodMenuOpen(false);
+				setIsAdminList(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
+
+	const handleFoodMenuToggle = (e: any) => {
+		e.stopPropagation();
+		setIsFoodMenuOpen((prev) => !prev);
+		setIsAdminList(false);
 	};
 
-	const menuItemClick = () => {
-		setIsAdminList(!isAdminList); // Handle arrow direction
-		setIsDropdownOpen((prevState) => !prevState);
+	const handleAdminMenuToggle = (e: any) => {
+		e.stopPropagation();
+		setIsAdminList((prev) => !prev);
+		setIsFoodMenuOpen(false);
+	};
+
+	const handleMenuItemClick = () => {
+		setIsFoodMenuOpen(false);
+		setIsAdminList(false);
+		setIsOpen(false);
 	};
 
 	return (
@@ -75,6 +101,7 @@ const SidebarMenu = () => {
 			/>
 
 			<motion.nav
+				ref={sidebarRef}
 				className="fixed z-40 top-0 right-0 bottom-0 w-8/12 sm:w-6/12 md:w-5/12 pt-6 text-white xl:hidden overflow-y-auto"
 				style={{ opacity: 1 }}
 				initial="closed"
@@ -97,7 +124,7 @@ const SidebarMenu = () => {
 					animate={{ opacity: isOpen ? 1 : 0 }}
 					exit={{ opacity: 0 }}
 					className="h-9 w-32 m-5"
-					transition={{ duration: 1, delay: 0.3 }} // Adding delay to ensure the sidebar animation completes
+					transition={{ duration: 1, delay: 0.3 }}
 				/>
 
 				<div className="w-60 flex font-semibold text-yellow-400 text-2xl pt-12 pl-5">
@@ -118,17 +145,124 @@ const SidebarMenu = () => {
 						</li>
 					</Link>
 
-					<Link to="/foodmenu">
+					<>
 						<li
-							className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
-							onClick={toggleSidebar}
+							className="relative group w-52 py-4 flex flex-row transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600"
+							onClick={handleFoodMenuToggle}
+							ref={foodMenuButtonRef}
 						>
 							<div className="mt-0.5 pr-4">
 								<CiPizza />
 							</div>
-							FOOD MENU
+							<div className="mr-2">FOOD MENU</div>
+
+							<AnimatePresence mode="wait">
+								{isFoodMenuOpen ? (
+									<motion.div
+										key="down-arrow"
+										initial={{ opacity: 0 }}
+										style={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										exit={{ opacity: 0 }}
+										transition={{ duration: 0.3 }}
+									>
+										<IoMdArrowDropdown className="text-2xl mt-1 ml-2" />
+									</motion.div>
+								) : (
+									<motion.div
+										key="up-arrow"
+										initial={{ opacity: 0 }}
+										style={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										exit={{ opacity: 0 }}
+										transition={{ duration: 0.3 }}
+									>
+										<IoMdArrowDropup className="text-2xl mt-1 ml-2" />
+									</motion.div>
+								)}
+							</AnimatePresence>
 						</li>
-					</Link>
+
+						<AnimatePresence>
+							{isFoodMenuOpen && (
+								<motion.div
+									className="w-48 mt-2 bg-forth bg-opacity-40 rounded-b-md shadow-lg"
+									initial="closed"
+									style={{ opacity: 0 }}
+									animate="open"
+									exit="closed"
+									variants={menuVariants}
+								>
+									<ul className="w-full flex flex-col py-4 justify-end items-center">
+										<Link to="/pizzamenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Pizza
+											</li>
+										</Link>
+										<Link to="/pastamenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Pasta
+											</li>
+										</Link>
+										<Link to="/calzonemenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Calzone
+											</li>
+										</Link>
+										<Link to="/startermenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Starters
+											</li>
+										</Link>
+										<Link to="/mainsmenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Mains
+											</li>
+										</Link>
+										<Link to="/sidesmenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Sides
+											</li>
+										</Link>
+										<Link to="/saladmenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Salad
+											</li>
+										</Link>
+										<Link to="/dessertmenu">
+											<li
+												onClick={handleMenuItemClick}
+												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+											>
+												Dessert
+											</li>
+										</Link>
+									</ul>
+								</motion.div>
+							)}
+						</AnimatePresence>
+					</>
 
 					<Link to="/drinksmenu">
 						<li
@@ -159,7 +293,7 @@ const SidebarMenu = () => {
 						<>
 							<li
 								className="flex flex-row py-8 w-fit transition-all active:text-yellow-500 active:ml-0 hover:cursor-pointer hover:text-yellow-400 hover:-ml-3"
-								onClick={toggleDropdown}
+								onClick={handleAdminMenuToggle}
 								ref={adminButtonRef}
 							>
 								<div className="mt-0.5 pr-4">
@@ -194,10 +328,9 @@ const SidebarMenu = () => {
 							</li>
 
 							<AnimatePresence>
-								{isDropdownOpen && (
+								{isAdminList && (
 									<motion.div
 										className="w-60"
-										ref={menuRef}
 										initial="closed"
 										style={{ opacity: 0 }}
 										animate="open"
@@ -242,7 +375,7 @@ const SidebarMenu = () => {
 
 				<motion.div
 					initial={{ y: 0 }}
-					animate={{ y: isDropdownOpen ? 80 : 0 }}
+					animate={{ y: isAdminList ? 80 : 0 }}
 					transition={{ type: 'spring', stiffness: 350, damping: 15 }}
 					className="h-4 pt-6 pl-8 hover:text-primary active:text-secondary"
 				>

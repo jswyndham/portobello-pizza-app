@@ -3,7 +3,6 @@ import './App.css';
 import {
 	Layout,
 	Home,
-	FoodMenu,
 	DrinksMenu,
 	Error,
 	Members,
@@ -18,6 +17,14 @@ import {
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { CacheProvider } from './context/cacheContext';
+import PizzaMenu from './pages/PizzaMenu';
+import PastaMenu from './pages/PastaMenu';
+import CalzoneMenu from './pages/CalzoneMenu';
+import StarterMenu from './pages/StartersMenu';
+import MainMenu from './pages/MainMenu';
+import SidesMenu from './pages/SidesMenu';
+import SaladMenu from './pages/SaladMenu';
+import DessertMenu from './pages/DessertMenu';
 
 const router = createBrowserRouter([
 	{
@@ -66,8 +73,36 @@ const router = createBrowserRouter([
 				],
 			},
 			{
-				path: 'foodmenu',
-				element: <FoodMenu />,
+				path: 'pizzamenu',
+				element: <PizzaMenu />,
+			},
+			{
+				path: 'pastamenu',
+				element: <PastaMenu />,
+			},
+			{
+				path: 'calzonemenu',
+				element: <CalzoneMenu />,
+			},
+			{
+				path: 'startermenu',
+				element: <StarterMenu />,
+			},
+			{
+				path: 'mainsmenu',
+				element: <MainMenu />,
+			},
+			{
+				path: 'sidesmenu',
+				element: <SidesMenu />,
+			},
+			{
+				path: 'saladmenu',
+				element: <SaladMenu />,
+			},
+			{
+				path: 'dessertmenu',
+				element: <DessertMenu />,
 			},
 			{
 				path: 'drinksmenu',

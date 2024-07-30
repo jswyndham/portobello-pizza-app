@@ -6,7 +6,7 @@ function MenuCards() {
 		<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 justify-center">
 			{menuCategories.map((category) => (
 				<Link
-					to={`/foodmenu${category.link}`}
+					to={category.link}
 					key={category.title}
 					className="block w-full"
 				>

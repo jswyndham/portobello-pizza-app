@@ -62,12 +62,12 @@ const Contact = () => {
 					imagePath: '/images/portobello-logo-round-black.png',
 				}}
 				telephone="+66 77 457 029"
-				url="https://www.portobello.com/"
+				url="https://www.portobellokohtao.com/"
 				latitude="10.099187716862039"
 				longitude="99.82905053111142"
 			/>
 
-			<article className="bg-main-gradient-two min-h-screen">
+			<article className="bg-main-gradient min-h-screen">
 				<article className="flex justify-center flex-col h-full pt-16 xl:pt-28">
 					<div className=" relative w-full flex flex-col">
 						<HeadingOne headingOneText="Contact Us" />

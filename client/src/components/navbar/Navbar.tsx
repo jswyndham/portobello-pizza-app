@@ -10,23 +10,32 @@ const Navbar = () => {
 	const { state } = useAuth();
 	const { isLoggedIn } = state;
 
-	const menuRef = useRef<any>(null);
-	const adminButtonRef = useRef<any>(null); // Had to add a ref for the "ADMIN" button and ensure correct management of click events. The stopPropagation method wasn't working as expected
+	const foodMenuRef = useRef<any>(null);
+	const adminMenuRef = useRef<any>(null);
+	const foodMenuButtonRef = useRef<any>(null);
+	const adminButtonRef = useRef<any>(null);
 
-	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-	const [isAdminList, setIsAdminList] = useState<boolean>(false);
+	const [isFoodMenuOpen, setIsFoodMenuOpen] = useState<boolean>(false);
+	const [isAdminMenuOpen, setIsAdminMenuOpen] = useState<boolean>(false);
 
 	// Click outside the card menu to close
 	useEffect(() => {
 		const handleClickOutside = (e: any) => {
 			if (
-				menuRef.current &&
-				!menuRef.current.contains(e.target) &&
+				foodMenuRef.current &&
+				!foodMenuRef.current.contains(e.target) &&
+				foodMenuButtonRef.current &&
+				!foodMenuButtonRef.current.contains(e.target)
+			) {
+				setIsFoodMenuOpen(false);
+			}
+			if (
+				adminMenuRef.current &&
+				!adminMenuRef.current.contains(e.target) &&
 				adminButtonRef.current &&
 				!adminButtonRef.current.contains(e.target)
 			) {
-				setIsAdminList(false); // Handle arrow direction
-				setIsDropdownOpen(false);
+				setIsAdminMenuOpen(false);
 			}
 		};
 
@@ -34,17 +43,23 @@ const Navbar = () => {
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [menuRef]);
+	}, []);
 
-	const toggleDropdown = (e: any) => {
-		e.stopPropagation(); // Stop the click from propagating further
-		setIsAdminList(!isAdminList); // Handle arrow direction
-		setIsDropdownOpen((prevState) => !prevState);
+	const handleFoodMenuToggle = (e: any) => {
+		e.stopPropagation();
+		setIsFoodMenuOpen((prev) => !prev);
+		setIsAdminMenuOpen(false); // Close the admin menu if open
 	};
 
-	const menuItemClick = () => {
-		setIsAdminList(!isAdminList); // Handle arrow direction
-		setIsDropdownOpen((prevState) => !prevState);
+	const handleAdminMenuToggle = (e: any) => {
+		e.stopPropagation();
+		setIsAdminMenuOpen((prev) => !prev);
+		setIsFoodMenuOpen(false); // Close the food menu if open
+	};
+
+	const handleMenuItemClick = () => {
+		setIsFoodMenuOpen(false);
+		setIsAdminMenuOpen(false);
 	};
 
 	// motion settings
@@ -100,18 +115,144 @@ const Navbar = () => {
 				)}
 
 				<div className="flex flex-row">
-					<ul className="w-fit text-white flex flex-row gap-8 xl:gap-20 justify-around md:justify-between items-center md:text-lg lg:text-xl">
+					<ul className="w-fit text-white flex flex-row gap-8 2xl:gap-24 justify-around md:justify-between items-center md:text-lg lg:text-xl">
 						<Link to="/">
 							<li className="w-20 li-hover relative inline-block transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600">
 								HOME
 							</li>
 						</Link>
 
-						<Link to="/foodmenu">
-							<li className="xl:w-36 w-28 li-hover relative inline-block transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600">
+						<>
+							<li
+								className="relative group w-40 flex flex-row transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600"
+								onClick={handleFoodMenuToggle}
+								ref={foodMenuButtonRef}
+							>
 								FOOD MENU
+								<AnimatePresence mode="wait">
+									{isFoodMenuOpen ? (
+										<motion.div
+											key="down-arrow"
+											initial={{ opacity: 0 }}
+											style={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0 }}
+											transition={{ duration: 0.3 }}
+										>
+											<IoMdArrowDropdown className="text-2xl mt-1 ml-2" />
+										</motion.div>
+									) : (
+										<motion.div
+											key="up-arrow"
+											initial={{ opacity: 0 }}
+											style={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0 }}
+											transition={{ duration: 0.3 }}
+										>
+											<IoMdArrowDropup className="text-2xl mt-1 ml-2" />
+										</motion.div>
+									)}
+								</AnimatePresence>
 							</li>
-						</Link>
+
+							<AnimatePresence>
+								{isFoodMenuOpen && (
+									<motion.div
+										className="absolute w-52 top-28 right-96 -mr-6 2xl:mr-32 bg-forth bg-opacity-75 rounded-b-md shadow-lg backdrop-blur-sm"
+										ref={foodMenuRef}
+										initial="closed"
+										style={{ opacity: 0 }}
+										animate="open"
+										exit="closed"
+										variants={menuVariants}
+									>
+										<ul className="w-full flex flex-col py-4 justify-end items-center">
+											<Link to="/pizzamenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Pizza
+												</li>
+											</Link>
+											<Link to="/pastamenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Pasta
+												</li>
+											</Link>
+											<Link to="/calzonemenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Calzone
+												</li>
+											</Link>
+											<Link to="/startermenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Starters
+												</li>
+											</Link>
+											<Link to="/mainsmenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Mains
+												</li>
+											</Link>
+											<Link to="/sidesmenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Sides
+												</li>
+											</Link>
+											<Link to="/saladmenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Salad
+												</li>
+											</Link>
+											<Link to="/dessertmenu">
+												<li
+													onClick={
+														handleMenuItemClick
+													}
+													className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
+												>
+													Dessert
+												</li>
+											</Link>
+										</ul>
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</>
 
 						<Link to="/drinksmenu">
 							<li className="li-hover relative inline-block transition-all xl:w-36 w-28 duration-500 hover:text-yellow-300 hover:cursor-pointer mr-3 active:text-yellow-600">
@@ -130,12 +271,12 @@ const Navbar = () => {
 							<>
 								<li
 									className="relative group flex flex-row transition-all duration-500 hover:text-yellow-300 hover:cursor-pointer active:text-yellow-600 mr-6"
-									onClick={toggleDropdown}
+									onClick={handleAdminMenuToggle}
 									ref={adminButtonRef}
 								>
 									ADMIN
 									<AnimatePresence mode="wait">
-										{isAdminList ? (
+										{isAdminMenuOpen ? (
 											<motion.div
 												key="down-arrow"
 												initial={{ opacity: 0 }}
@@ -162,10 +303,10 @@ const Navbar = () => {
 								</li>
 
 								<AnimatePresence>
-									{isDropdownOpen && (
+									{isAdminMenuOpen && (
 										<motion.div
-											className="absolute w-60 top-28 right-0 bg-forth bg-opacity-75 rounded-b-md shadow-lg"
-											ref={menuRef}
+											className="absolute w-60 top-28 right-0 bg-forth bg-opacity-75 backdrop-blur-sm rounded-b-md shadow-lg"
+											ref={adminMenuRef}
 											initial="closed"
 											style={{ opacity: 0 }}
 											animate="open"
@@ -175,7 +316,9 @@ const Navbar = () => {
 											<ul className="w-full flex flex-col py-4 justify-end items-center">
 												<Link to="/admin/addmenu">
 													<li
-														onClick={menuItemClick}
+														onClick={
+															handleMenuItemClick
+														}
 														className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
 													>
 														ADD MENU
@@ -183,7 +326,9 @@ const Navbar = () => {
 												</Link>
 												<Link to="/admin/members">
 													<li
-														onClick={menuItemClick}
+														onClick={
+															handleMenuItemClick
+														}
 														className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
 													>
 														MEMBERS
@@ -191,7 +336,9 @@ const Navbar = () => {
 												</Link>
 												<Link to="/admin/register">
 													<li
-														onClick={menuItemClick}
+														onClick={
+															handleMenuItemClick
+														}
 														className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
 													>
 														REGISTER

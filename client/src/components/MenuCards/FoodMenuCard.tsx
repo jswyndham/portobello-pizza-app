@@ -282,12 +282,12 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 												{food.name}
 											</h2>
 										</div>
-										<div className="h-14 flex-grow items-center my-2 px-5 lg:py-2">
+										<div className="h-16 flex-grow items-center my-2 px-5 lg:py-1">
 											<p className="text-xl text-slate-700 text-center flex-grow font-dmsans py-1">
 												{food.ingredients.join(', ')}
 											</p>
 										</div>
-										<div className="w-full flex flex-row text-2xl text-black bg-price-gradient flex-grow font-cinzel py-2 lg:py-3 px-4">
+										<div className="w-full flex flex-row text-2xl text-black bg-slate-200 flex-grow font-cinzel py-2 px-4">
 											<p>฿ </p>
 											<p className="font-semibold">
 												{food.price}
@@ -311,25 +311,6 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 						/>
 					)}
 				</AnimatePresence>
-
-				{/* <div className="flex justify-between pt-10 pb-16 px-4 text-xl font-semibold text-yellow-400">
-					<button
-						type="button"
-						disabled={page === 1}
-						onClick={handlePrevPage}
-						className="underline underline-offset-4 hover:cursor-pointer hover:text-yellow-600 active:text-blue-600"
-					>
-						Previous
-					</button>
-					<button
-						type="button"
-						disabled={page === totalPages}
-						onClick={handleNextPage}
-						className="underline underline-offset-4 hover:cursor-pointer hover:text-yellow-600 active:text-blue-600"
-					>
-						Next
-					</button>
-				</div> */}
 			</section>
 		</>
 	);

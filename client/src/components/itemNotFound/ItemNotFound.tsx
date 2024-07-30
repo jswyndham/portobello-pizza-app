@@ -6,9 +6,9 @@ interface itemNotFoundProp {
 
 const ItemNotFound: FC<itemNotFoundProp> = ({ item }) => {
 	return (
-		<article className="h-24 w-11/12 bg-slate-600 flex justify-center items-center rounded-md drop-shadow-xl border border-yellow-200">
-			<div>
-				<p className="text-xl font-montserrat italic font-semibold text-white">
+		<article className="h-full bg-main-gradient flex justify-center items-center min-h-screen">
+			<div className="w-4/12 p-6 bg-slate-600 text-center drop-shadow-xl border-2 border-red-500 shadow-lg shadow-slate-500">
+				<p className="text-lg lg:text-2xl font-montserrat italic font-semibold text-white">
 					No {item} found
 				</p>
 			</div>
