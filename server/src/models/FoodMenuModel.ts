@@ -1,10 +1,5 @@
 import mongoose, { Document, Types, Schema } from 'mongoose';
-import {
-	MEAT_OR_VEG,
-	MENU_CATEGORY,
-	MenuCategory,
-	MeatOrVeg,
-} from '../constants';
+import { MENU_CATEGORY, MenuCategory, MeatOrVeg } from '../constants';
 
 export interface FoodMenu extends Document {
 	_id: Types.ObjectId;

@@ -1,13 +1,12 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FC } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginForm from '../components/user/LoginForm';
 import { LoginData } from '../types/userInterfaces';
 
-const Login: FC = () => {
+const Login = () => {
 	const {
 		reset,
 		formState: { isSubmitting },

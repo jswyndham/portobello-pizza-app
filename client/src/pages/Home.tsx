@@ -7,7 +7,6 @@ import { HomeMidSection } from '../components/homePage';
 import AboutUs from '../components/homePage/AboutUs';
 import ImageCarousel from '../components/homePage/ImageCarousel';
 import homeImageSmall from '/images/pizza-eneida-nieves.jpg';
-import homeImageLarge from '/images/pizza-eneida-nieves-large-2.jpg';
 
 const Home = () => {
 	const ref = useRef(null);
@@ -133,7 +132,6 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
-						className=""
 					>
 						<HomeMidSection />
 					</motion.div>

@@ -52,7 +52,10 @@ const Register: FC = () => {
 						}
 					);
 				} else {
-					toast.error(`Failed to register user: ${result.message}`);
+					const errorData = await response.json();
+					toast.error(
+						`Failed to register user: ${errorData.message}`
+					);
 					console.error('Failed to register new user');
 				}
 			}

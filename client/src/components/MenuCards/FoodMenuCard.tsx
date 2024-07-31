@@ -23,9 +23,8 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	const [error, setError] = useState<string | null>(null);
 
 	// Pagination states
-	const [page, setPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(1);
-	const [selectedCategory, setSelectedCategory] = useState<string>(category);
+	const [page] = useState(1);
+	const [selectedCategory] = useState<string>(category);
 
 	// Edit state
 	const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
@@ -76,7 +75,6 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 
 				if (data.items && Array.isArray(data.items)) {
 					setFoodItems(data.items);
-					setTotalPages(data.totalPages);
 				} else {
 					console.error('API response is not an array:', data);
 					setError('Unexpected API response format.');

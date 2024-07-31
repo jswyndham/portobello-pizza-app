@@ -20,9 +20,8 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	const [drinkItems, setDrinkItems] = useState<DrinkMenuItem[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [selectedCategory, setSelectedCategory] = useState<string>(category);
-	const [page, setPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(1);
+	const [selectedCategory] = useState<string>(category);
+	const [page] = useState(1);
 	const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
 	const [drinkItemToEdit, setDrinkItemToEdit] =
 		useState<DrinkMenuItem | null>(null);
@@ -64,7 +63,6 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 
 				if (data.items && Array.isArray(data.items)) {
 					setDrinkItems(data.items);
-					setTotalPages(data.totalPages);
 				} else {
 					console.error('API response is not an array:', data);
 					setError('Unexpected API response format.');
