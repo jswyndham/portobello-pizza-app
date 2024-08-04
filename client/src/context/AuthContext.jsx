@@ -28,12 +28,9 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
-	// Call the auth check function conditionally, if necessary
 	useEffect(() => {
-		if (!state.isLoggedIn) {
-			checkAuthStatus(dispatch);
-		}
-	}, [state.isLoggedIn, dispatch]);
+		checkAuthStatus(dispatch);
+	}, [dispatch]);
 
 	const logout = async () => {
 		try {

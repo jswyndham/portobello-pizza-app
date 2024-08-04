@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import { useCache } from '../../context/cacheContext';
+import ErrorMessage from '../ErrorMessage';
 
 const EditFoodItem = () => {
 	const { id } = useParams<{ id: string }>();
@@ -15,7 +16,8 @@ const EditFoodItem = () => {
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
 	const { cache, setCache } = useCache();
 
 	const {
@@ -37,7 +39,7 @@ const EditFoodItem = () => {
 
 	// ********* useEffect hooks *************
 
-	// fetch the food item object and set cache in the browser
+	// Fetch the food item object and set cache in the browser
 	useEffect(() => {
 		const fetchFoodMenuItem = async () => {
 			if (id) {
@@ -57,6 +59,15 @@ const EditFoodItem = () => {
 					setIsLoading(false);
 				} else {
 					try {
+						// Retrieve the token from local storage
+						const token = localStorage.getItem('authToken');
+						if (!token) {
+							setError(
+								'You are not authorized to access this page'
+							);
+							setIsLoading(false);
+							return;
+						}
 						setIsLoading(true);
 						const response = await fetch(
 							`http://localhost:5001/api/v1/foodMenu/${id}`
@@ -90,14 +101,14 @@ const EditFoodItem = () => {
 		fetchFoodMenuItem();
 	}, [id, reset, cache, setCache]);
 
-	// set ingredient values
+	// Set ingredient values
 	useEffect(() => {
 		setValue('ingredients', ingredients);
 	}, [ingredients, setValue]);
 
 	// ************ submit handler ************
 
-	// submit new values for the existing food menu item
+	// Submit new values for the existing food menu item
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
 			const formData = {
@@ -133,22 +144,26 @@ const EditFoodItem = () => {
 
 	// *********** Handlers ************
 
+	// Handle image upload
 	const handleImageUrl = (file: any) => {
 		const fileUrl = file.secure_url;
 		setImagePreview(fileUrl);
 		setValue('imageUrl', fileUrl);
 	};
 
+	// Add a new ingredient
 	const handleAddIngredient = () => {
 		setIngredients((prevIngredients) => [...prevIngredients, '']);
 	};
 
+	// Remove an ingredient by index
 	const handleRemoveIngredient = (index: number) => {
 		setIngredients((prevIngredients) =>
 			prevIngredients.filter((_, i) => i !== index)
 		);
 	};
 
+	// Change an ingredient value by index
 	const handleIngredientChange = (index: number, value: string) => {
 		setIngredients((prevIngredients) =>
 			prevIngredients.map((ingredient, i) =>
@@ -157,7 +172,7 @@ const EditFoodItem = () => {
 		);
 	};
 
-	// Loading...
+	// Loading Screen
 	if (isLoading) {
 		return (
 			<div>
@@ -166,12 +181,18 @@ const EditFoodItem = () => {
 		);
 	}
 
+	// Error screen
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
+
 	return (
 		<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 2xl:pt-0">
 			<form
 				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 				onSubmit={handleSubmit(onSubmit)}
 			>
+				{/* Menu Category Label and Select Dropdown */}
 				<label
 					htmlFor="menuCategory"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -191,12 +212,14 @@ const EditFoodItem = () => {
 						</option>
 					))}
 				</select>
+				{/* Error message for menu category */}
 				{errors.menuCategory && (
 					<p className="text-md text-red-500">
 						Menu category is required.
 					</p>
 				)}
 
+				{/* Meat or Veg Section */}
 				<label
 					htmlFor="pizzaType"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -217,6 +240,7 @@ const EditFoodItem = () => {
 					))}
 				</select>
 
+				{/* Menu Item Name Section */}
 				<label
 					htmlFor="name"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -228,15 +252,18 @@ const EditFoodItem = () => {
 					placeholder="Enter name..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
 				/>
+				{/* Error message for item name */}
 				{errors.name && (
 					<p className="text-md text-red-500">Name is required.</p>
 				)}
 
+				{/* Image Upload Section */}
 				<ImageUpload
 					imagePreview={imagePreview}
 					setImageUrl={handleImageUrl}
 				/>
 
+				{/* Ingredient List Section */}
 				<IngredientList
 					ingredients={ingredients}
 					onAddIngredient={handleAddIngredient}
@@ -244,6 +271,7 @@ const EditFoodItem = () => {
 					onIngredientChange={handleIngredientChange}
 				/>
 
+				{/* Price Section */}
 				<label
 					htmlFor="price"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -256,10 +284,12 @@ const EditFoodItem = () => {
 					placeholder="Enter price..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
 				/>
+				{/* Error message for price */}
 				{errors.price && (
 					<p className="text-md text-red-500">Price is required.</p>
 				)}
 
+				{/* Submit Button */}
 				<button
 					type="submit"
 					disabled={isSubmitting}

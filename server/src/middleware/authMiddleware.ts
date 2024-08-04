@@ -8,31 +8,33 @@ export const authenticateUser = (
 	res: Response,
 	next: NextFunction
 ): void => {
+	console.log('Request Headers:', req.headers); // Log the headers for debugging
 	const authHeader = req.headers.authorization;
+	console.log('Auth Header:', authHeader); // Log the authorization header
 
-	// Extract token from cookies or authorization header
-	const token =
-		req.cookies?.token || (authHeader ? authHeader.split(' ')[1] : null);
-
-	if (!token) {
-		console.error('Authentication token missing');
-		res.status(401).json({ message: 'Authentication invalid - token' });
+	if (!authHeader || !authHeader.startsWith('Bearer ')) {
+		console.error('Authentication token missing or malformed');
+		res.status(401).json({
+			message: 'Authentication invalid - token missing or malformed',
+		});
 		return;
 	}
 
+	const token = authHeader.split(' ')[1];
+	console.log('Token:', token); // Log the token
+
 	try {
-		// Verify the token and log the payload
 		const payload = verifyJWT(token);
+		console.log('Token Payload:', payload); // Log the payload for debugging
 
 		if (!payload) {
-			console.error('Invalid token');
+			console.error('Invalid token payload');
 			res.status(401).json({
 				message: 'Authentication invalid - payload',
 			});
 			return;
 		}
 
-		// Type assertion to AuthenticatedRequest and set user information
 		(req as AuthenticatedRequest).user = {
 			userId: payload.userId,
 			userStatus: payload.userStatus as USER_STATUS,

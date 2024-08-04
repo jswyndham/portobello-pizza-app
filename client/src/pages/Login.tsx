@@ -8,6 +8,8 @@ import { LoginData } from '../types/userInterfaces';
 
 const Login = () => {
 	const {
+		register,
+		handleSubmit,
 		reset,
 		formState: { isSubmitting },
 	} = useForm<LoginData>();
@@ -29,16 +31,21 @@ const Login = () => {
 			);
 
 			if (response.ok) {
-				const { user, token } = await response.json(); // Assuming the token is returned with the user data
+				const { user, token } = await response.json(); // The token is returned with the user data
 
-				// Success modal
+				// Store token in local storage
+				localStorage.setItem('authToken', token);
+
 				toast.success(
 					`You have successfully logged in, ${user.firstName}!`
 				);
-				// Dispatch global login state
-				dispatch({ type: 'LOGIN', payload: { token } }); // Include token in payload
+
+				// Dispatch global login state, include token in payload
+				dispatch({ type: 'LOGIN', payload: { token, user } });
+
 				// Reset the form
 				reset();
+
 				// Navigate to home page
 				navigate('/');
 			} else {
@@ -81,6 +88,8 @@ const Login = () => {
 							<LoginForm
 								onSubmit={onSubmit}
 								isSubmitting={isSubmitting}
+								register={register}
+								handleSubmit={handleSubmit}
 							/>
 						</div>
 					</article>

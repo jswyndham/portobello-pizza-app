@@ -13,11 +13,9 @@ import { authenticateUser } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
-// Casting routes as express.RequestHandler. This aligns with Express's expected types and ensures TypeScript recognizes them as valid request handlers.
-
+// Routes
 router.post(
 	'/register',
-	authenticateUser as express.RequestHandler,
 	validateRegisterUser,
 	registerUser as express.RequestHandler
 );
@@ -26,7 +24,7 @@ router.get(
 	'/status',
 	authenticateUser as express.RequestHandler,
 	authStatus as express.RequestHandler
-);
+); // No authentication middleware here
 router.post(
 	'/logout',
 	authenticateUser as express.RequestHandler,

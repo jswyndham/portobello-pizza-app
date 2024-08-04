@@ -20,9 +20,10 @@ const Members = () => {
 	useEffect(() => {
 		const fetchMembers = async () => {
 			try {
+				// Retrieve the token from local storage
+				const token = localStorage.getItem('authToken');
 				if (!token) {
-					console.error('No token available');
-					setError('Token not available.');
+					setError('You are not authorized to access this page');
 					setIsLoading(false);
 					return;
 				}
@@ -117,6 +118,7 @@ const Members = () => {
 				<div className="m-2">
 					<HeadingOne headingOneText="Members List" />
 				</div>
+
 				{isLoggedIn && (
 					<>
 						<div className="p-4 lg:mt-12">

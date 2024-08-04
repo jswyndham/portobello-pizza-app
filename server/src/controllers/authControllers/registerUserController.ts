@@ -25,36 +25,43 @@ export const registerUser = async (
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
+		console.log('Validation errors:', errors.array()); // Log validation errors
 		res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
 		return;
 	}
 
 	try {
 		const { firstName, lastName, email, password, userStatus } = req.body;
+
+		console.log('Creating user:', { firstName, lastName, email }); // Log user details
+
 		const hashedPassword = await hashPassword(password);
 		const isFirstAccount = (await User.countDocuments()) === 0;
 		let role: UserStatus = userStatus || USER_STATUS.MANAGER;
 
 		if (isFirstAccount) {
 			role = USER_STATUS.ADMIN;
-		}
+		} else {
+			// Check user authentication and authorization for subsequent registrations
+			if (!req.user) {
+				res.status(StatusCodes.UNAUTHORIZED).json({
+					message: 'User not authenticated',
+				});
+				return;
+			}
 
-		// Check user authorization
-		if (!req.user) {
-			res.status(StatusCodes.UNAUTHORIZED).json({
-				message: 'User not authenticated',
-			});
-			return;
-		}
-
-		// Check for permissions
-		if (
-			!hasPermission(req.user.userStatus as UserStatus, 'AUTH_REGISTER')
-		) {
-			res.status(StatusCodes.FORBIDDEN).json({
-				message: 'You do not have permission to register a new user',
-			});
-			return;
+			if (
+				!hasPermission(
+					req.user.userStatus as UserStatus,
+					'AUTH_REGISTER'
+				)
+			) {
+				res.status(StatusCodes.FORBIDDEN).json({
+					message:
+						'You do not have permission to register a new user',
+				});
+				return;
+			}
 		}
 
 		const existingUser = await User.findOne({ email });
@@ -73,6 +80,8 @@ export const registerUser = async (
 			userStatus: role,
 		});
 
+		console.log('Create user:', user); // Log created user
+
 		const auditLog = new AuditLog({
 			action: 'REGISTER',
 			subjectType: 'User',
@@ -80,7 +89,6 @@ export const registerUser = async (
 			userId: req.user?.userId || user._id,
 			details: {
 				reason: 'A new user registered',
-
 				user: {
 					firstName: user.firstName,
 					lastName: user.lastName,
@@ -90,6 +98,8 @@ export const registerUser = async (
 			},
 		});
 		await auditLog.save();
+
+		console.log('Register Audit Log:', auditLog); // Log audit log
 
 		clearAllCache();
 

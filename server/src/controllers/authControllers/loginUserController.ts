@@ -20,14 +20,24 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		// Find the user by email
 		const user = await User.findOne({ email });
 		if (!user) {
-			throw new UnauthenticatedError('User not found');
+			res.status(StatusCodes.UNAUTHORIZED).json({
+				message: 'User not found',
+			});
+			return;
 		}
+
+		console.log('Find user by eamil: ', user);
 
 		// Validate user credentials
 		const isValidUser = await comparePassword(password, user.password);
 		if (!isValidUser) {
-			throw new UnauthenticatedError('Invalid login');
+			res.status(StatusCodes.UNAUTHORIZED).json({
+				message: 'Invalid login',
+			});
+			return;
 		}
+
+		console.log('Is a valid user: ', isValidUser);
 
 		const userStatus = user.userStatus as USER_STATUS;
 
@@ -68,6 +78,10 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			details: { reason: 'User logged in' },
 		});
 		await auditLog.save();
+
+		console.log('Token upon login: ', token);
+
+		console.log('User login: ', user);
 
 		res.status(StatusCodes.OK).json({
 			msg: 'User is logged in',

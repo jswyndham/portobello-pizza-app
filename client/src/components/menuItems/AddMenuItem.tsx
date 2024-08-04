@@ -8,16 +8,18 @@ import {
 import IngredientList from './IngredientList';
 import ImageUpload from './ImageUpload';
 import { FoodMenuFormData, MenuFormData } from '../../types/foodItemInterfaces';
-import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { DrinkMenuFormData } from '../../types/drinkItemInterfaces';
+import Loading from '../Loading';
+import ErrorMessage from '../ErrorMessage';
 
 const AddMenuItem = () => {
-	const { state } = useAuth();
 	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>(['']);
-	const [isDrink, setIsDrink] = useState(false);
+	const [isDrink, setIsDrink] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const {
 		register,
@@ -41,7 +43,7 @@ const AddMenuItem = () => {
 	const watchedMenuCategory = watch('menuCategory', '');
 	const watchedIngredients = watch('ingredients', ingredients);
 
-	// Sync ingredients state with form state
+	// Sync ingredients array state with form state
 	useEffect(() => {
 		setValue('ingredients', ingredients);
 	}, [ingredients, setValue]);
@@ -53,6 +55,17 @@ const AddMenuItem = () => {
 
 	const onSubmit: SubmitHandler<MenuFormData> = async (data) => {
 		try {
+			// Retrieve the token from local storage
+			const token = localStorage.getItem('authToken');
+			console.log('Retrieved token from local storage:', token);
+
+			if (!token) {
+				setError('You are not authorized to access this page');
+				setIsLoading(false);
+				return;
+			}
+
+			// Define the form data
 			const formData = {
 				...data,
 				ingredients: ingredients.filter(
@@ -60,6 +73,7 @@ const AddMenuItem = () => {
 				),
 			};
 
+			// Define the fetch response
 			const response = await fetch(
 				isDrink
 					? 'http://localhost:5001/api/v1/drinkMenu'
@@ -68,12 +82,13 @@ const AddMenuItem = () => {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
-						Authorization: `Bearer ${state.token}`,
+						Authorization: `Bearer ${token}`,
 					},
 					body: JSON.stringify(formData),
 				}
 			);
 
+			// After the fetch response is successful, reset the form, ingredients array, and navigate to the menu page
 			if (response.ok) {
 				const menuItem = await response.json();
 				setIngredients(menuItem.ingredients || []);
@@ -88,6 +103,7 @@ const AddMenuItem = () => {
 		}
 	};
 
+	// Handle the image from cloudinary, sets the image value and displays the image preview
 	const handleImageUrl = (file: any) => {
 		const fileUrl = file.secure_url;
 
@@ -95,16 +111,19 @@ const AddMenuItem = () => {
 		setValue('imageUrl', fileUrl);
 	};
 
+	// Handles the new value in the ingredients array by replacing the default value
 	const handleAddIngredient = () => {
 		setIngredients((prevIngredients) => [...prevIngredients, '']);
 	};
 
+	// Handles the removal of ingredients by filtering the chosen index number out of the array
 	const handleRemoveIngredient = (index: number) => {
 		setIngredients((prevIngredients) =>
 			prevIngredients.filter((_, i) => i !== index)
 		);
 	};
 
+	// Update the ingredients value based on index position
 	const handleIngredientChange = (index: number, value: string) => {
 		setIngredients((prevIngredients) =>
 			prevIngredients.map((ingredient, i) =>
@@ -113,12 +132,27 @@ const AddMenuItem = () => {
 		);
 	};
 
+	// Loading Screen
+	if (isLoading) {
+		return (
+			<div>
+				<Loading />
+			</div>
+		);
+	}
+
+	// Error screen
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
+
 	return (
 		<section className="flex justify-center items-center w-screen sm:w-full h-full py-28">
 			<form
 				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 				onSubmit={handleSubmit(onSubmit)}
 			>
+				{/* Menu Category Label and Select Dropdown */}
 				<label
 					htmlFor="menuCategory"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -138,12 +172,14 @@ const AddMenuItem = () => {
 						</option>
 					))}
 				</select>
+				{/* Error message for menu category */}
 				{(errors as FieldErrorsImpl<FoodMenuFormData>).menuCategory && (
 					<p className="text-md text-red-500">
 						Menu category is required.
 					</p>
 				)}
 
+				{/* Drink Category Section */}
 				{isDrink && (
 					<>
 						<label
@@ -167,6 +203,7 @@ const AddMenuItem = () => {
 								)
 							)}
 						</select>
+						{/* Error message for drink category */}
 						{(errors as FieldErrorsImpl<DrinkMenuFormData>)
 							.drinkCategory && (
 							<p className="text-md text-red-500">
@@ -176,6 +213,7 @@ const AddMenuItem = () => {
 					</>
 				)}
 
+				{/* Meat or Veg Section for Food Items */}
 				{!isDrink && (
 					<>
 						<label
@@ -202,6 +240,7 @@ const AddMenuItem = () => {
 					</>
 				)}
 
+				{/* Menu Item Name Section */}
 				<label
 					htmlFor="name"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -213,10 +252,12 @@ const AddMenuItem = () => {
 					placeholder="Enter name..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
 				/>
+				{/* Error message for item name */}
 				{errors.name && (
 					<p className="text-md text-red-500">Name is required.</p>
 				)}
 
+				{/* Image Upload and Ingredient List Section for Food Items */}
 				{!isDrink && (
 					<>
 						<ImageUpload
@@ -233,6 +274,7 @@ const AddMenuItem = () => {
 					</>
 				)}
 
+				{/* Price Section */}
 				<label
 					htmlFor="price"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -245,10 +287,12 @@ const AddMenuItem = () => {
 					placeholder="Enter price..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
 				/>
+				{/* Error message for price */}
 				{errors.price && (
 					<p className="text-md text-red-500">Price is required.</p>
 				)}
 
+				{/* Submit Button */}
 				<button
 					type="submit"
 					disabled={isSubmitting}

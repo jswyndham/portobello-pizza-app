@@ -13,8 +13,10 @@
 	"include": [
 		"src/**/*.ts",
 		"tests/**/*.ts",
-		"jest.config.js",
-		"src/types/express.d.ts"
+		"jest.config.ts",
+		"src/types/express.d.ts",
+		"tests/foodMenu.test.ts",
+		"../auth.test.ts"
 	],
 	"exclude": ["node_modules"]
 }

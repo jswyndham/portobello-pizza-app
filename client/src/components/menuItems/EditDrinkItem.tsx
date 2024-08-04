@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import { useCache } from '../../context/cacheContext';
 import { DrinkMenuFormData } from '../../types/drinkItemInterfaces';
+import ErrorMessage from '../ErrorMessage';
 
 const EditDrinkItem = () => {
 	const { id } = useParams<{ id: string }>();
@@ -13,6 +14,7 @@ const EditDrinkItem = () => {
 	const navigate = useNavigate();
 	const [ingredients, setIngredients] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [error, setError] = useState<string | null>(null);
 	const { cache, setCache } = useCache();
 
 	const {
@@ -31,7 +33,7 @@ const EditDrinkItem = () => {
 
 	// ********* useEffect hooks *************
 
-	// fetch the drink item object and set cache in the browser
+	// Fetch the drink item object and set cache in the browser
 	useEffect(() => {
 		const fetchDrinkMenuItem = async () => {
 			if (id) {
@@ -48,6 +50,15 @@ const EditDrinkItem = () => {
 					setIsLoading(false);
 				} else {
 					try {
+						// Retrieve the token from local storage
+						const token = localStorage.getItem('authToken');
+						if (!token) {
+							setError(
+								'You are not authorized to access this page'
+							);
+							setIsLoading(false);
+							return;
+						}
 						setIsLoading(true);
 						const response = await fetch(
 							`http://localhost:5001/api/v1/drinkMenu/${id}`
@@ -57,16 +68,17 @@ const EditDrinkItem = () => {
 							const item = data.drinkMenuItem;
 							reset({
 								drinkCategory: item.drinkCategory || '',
+								name: item.name || '',
 								ingredients: item.ingredients || [],
 								price: item.price || 0,
 							});
-
+							setIngredients(item.ingredients || []);
 							setCache(cacheKey, item); // Cache the fetched item
 						} else {
-							console.error('Food menu item not found:', data);
+							console.error('Drink menu item not found:', data);
 						}
 					} catch (error) {
-						console.error('Error fetching food menu item:', error);
+						console.error('Error fetching drink menu item:', error);
 					} finally {
 						setIsLoading(false);
 					}
@@ -79,7 +91,7 @@ const EditDrinkItem = () => {
 
 	// ************ submit handler ************
 
-	// submit new values for the existing food menu item
+	// Submit new values for the existing drink menu item
 	const onSubmit: SubmitHandler<DrinkMenuFormData> = async (data) => {
 		try {
 			const formData = {
@@ -113,7 +125,7 @@ const EditDrinkItem = () => {
 		}
 	};
 
-	// Loading...
+	// Loading screen
 	if (isLoading) {
 		return (
 			<div>
@@ -122,12 +134,18 @@ const EditDrinkItem = () => {
 		);
 	}
 
+	// Error screen
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
+
 	return (
 		<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 md:pt-52">
 			<form
 				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 				onSubmit={handleSubmit(onSubmit)}
 			>
+				{/* Drink Category Label and Select Dropdown */}
 				<label
 					htmlFor="drinkCategory"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -147,12 +165,14 @@ const EditDrinkItem = () => {
 						</option>
 					))}
 				</select>
+				{/* Error message for drink category */}
 				{errors.drinkCategory && (
 					<p className="text-md text-red-500">
 						Drink category is required.
 					</p>
 				)}
 
+				{/* Menu Item Name Section */}
 				<label
 					htmlFor="name"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -164,10 +184,12 @@ const EditDrinkItem = () => {
 					placeholder="Enter name..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
 				/>
+				{/* Error message for item name */}
 				{errors.name && (
 					<p className="text-md text-red-500">Name is required.</p>
 				)}
 
+				{/* Price Section */}
 				<label
 					htmlFor="price"
 					className="font-handlee-regular text-lg p-2 font-semibold"
@@ -180,10 +202,12 @@ const EditDrinkItem = () => {
 					placeholder="Enter price..."
 					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
 				/>
+				{/* Error message for price */}
 				{errors.price && (
 					<p className="text-md text-red-500">Price is required.</p>
 				)}
 
+				{/* Submit Button */}
 				<button
 					type="submit"
 					disabled={isSubmitting}

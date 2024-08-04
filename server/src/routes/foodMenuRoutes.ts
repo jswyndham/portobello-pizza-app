@@ -14,8 +14,6 @@ const upload = multer();
 
 const router = express.Router();
 
-// Casting routes as express.RequestHandler. This aligns with Express's expected types and ensures TypeScript recognizes them as valid request handlers.
-
 router
 	.route('/')
 	.post(
@@ -29,7 +27,7 @@ router
 router
 	.route('/:id')
 	.get(
-		// authenticateUser as express.RequestHandler,
+		authenticateUser as express.RequestHandler,
 		getFoodMenuItem as express.RequestHandler
 	)
 	.patch(

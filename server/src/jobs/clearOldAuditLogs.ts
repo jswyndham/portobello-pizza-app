@@ -13,6 +13,12 @@ const clearOldAuditLogs = async (): Promise<void> => {
 };
 
 // Schedule the job to run daily at midnight
-cron.schedule('0 0 * * *', clearOldAuditLogs);
+const clearOldAuditLogsJob = cron.schedule('0 0 * * *', clearOldAuditLogs, {
+	scheduled: process.env.NODE_ENV !== 'test',
+});
 
-export default clearOldAuditLogs;
+if (process.env.NODE_ENV === 'test') {
+	clearOldAuditLogsJob.stop();
+}
+
+export { clearOldAuditLogs, clearOldAuditLogsJob };

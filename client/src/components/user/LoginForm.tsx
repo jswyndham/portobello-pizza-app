@@ -1,16 +1,25 @@
 import { FC } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+	SubmitHandler,
+	UseFormRegister,
+	UseFormHandleSubmit,
+} from 'react-hook-form';
 import 'react-toastify/dist/ReactToastify.css';
 import { LoginData } from '../../types/userInterfaces';
 
 interface LoginFormProps {
 	onSubmit: SubmitHandler<LoginData>;
 	isSubmitting: boolean;
+	register: UseFormRegister<LoginData>;
+	handleSubmit: UseFormHandleSubmit<LoginData>;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ onSubmit, isSubmitting }) => {
-	const { register, handleSubmit } = useForm<LoginData>();
-
+const LoginForm: FC<LoginFormProps> = ({
+	onSubmit,
+	isSubmitting,
+	register,
+	handleSubmit,
+}) => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="w-full p-8 md:p-16">
 			{/* EMAIL */}

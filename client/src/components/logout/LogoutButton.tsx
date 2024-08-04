@@ -21,27 +21,33 @@ const LogoutButton: React.FC = () => {
 			);
 
 			if (response.ok) {
+				// Remove token from local storage
+				localStorage.removeItem('authToken');
+
 				// Logout of AuthContext
-				await logout();
+				logout();
 
 				// Dispatch the global 'logout' state
 				dispatch({ type: 'LOGOUT' });
+
+				// Toast modal
 				toast.success('Logout successful');
+
 				// Navigate to the home page upon logout
 				navigate('/');
 			} else {
 				const errorData = await response.json();
 				console.error('Logout failed:', errorData.message);
-				toast.error('Logout failed');
+				toast.error('Logout failed: ', errorData.message);
 			}
 		} catch (error) {
 			console.error('An error occurred while logging out:', error);
-			toast.error('Logout failed');
+			toast.error('Logout failed: ');
 		}
 	};
 
 	return (
-		<div className="flex justify-end">
+		<div className="relative flex justify-end">
 			<ToastContainer
 				position="top-center"
 				autoClose={5000}
@@ -52,7 +58,7 @@ const LogoutButton: React.FC = () => {
 				pauseOnFocusLoss
 				draggable
 				pauseOnHover
-				className="toast-container"
+				className="toast-container absolute right-0 left-0 bottom-0"
 				toastClassName="toast"
 			/>
 			<button
