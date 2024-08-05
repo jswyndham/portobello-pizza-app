@@ -5,6 +5,7 @@ import AuditLog from '../../models/AuditLogModel';
 import { AuthenticatedRequest } from '../../types/request';
 import { clearAllCache } from '../../cache/cache';
 import { FoodMenu as FoodMenuInterface } from '../../models/FoodMenuModel'; // Import the FoodMenu interface
+import logger from '../../logger';
 
 type FoodMenuKeys = keyof FoodMenuInterface;
 
@@ -96,7 +97,7 @@ export const editFoodMenu = async (
 			foodItem,
 		});
 	} catch (error) {
-		console.error('Error editing food item:', error);
+		logger.error('Error editing food item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				(error as Error).message ||

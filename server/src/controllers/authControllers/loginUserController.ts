@@ -8,6 +8,7 @@ import AuditLog from '../../models/AuditLogModel';
 import { StatusCodes } from 'http-status-codes';
 import { USER_STATUS } from '../../constants/userStatus';
 import dotenv from 'dotenv';
+import logger from '../../logger';
 
 dotenv.config();
 
@@ -26,8 +27,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			return;
 		}
 
-		console.log('Find user by eamil: ', user);
-
 		// Validate user credentials
 		const isValidUser = await comparePassword(password, user.password);
 		if (!isValidUser) {
@@ -36,8 +35,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			});
 			return;
 		}
-
-		console.log('Is a valid user: ', isValidUser);
 
 		const userStatus = user.userStatus as USER_STATUS;
 
@@ -65,7 +62,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			const userCacheKey = `user_${user._id}`;
 			setCache(userCacheKey, userData, 3600);
 		} catch (cacheError) {
-			console.error('Failed to cache user data:', cacheError);
+			logger.error('Failed to cache user data:', cacheError);
 			// Continue without caching if an error occurs
 		}
 
@@ -78,10 +75,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			details: { reason: 'User logged in' },
 		});
 		await auditLog.save();
-
-		console.log('Token upon login: ', token);
-
-		console.log('User login: ', user);
 
 		res.status(StatusCodes.OK).json({
 			msg: 'User is logged in',
@@ -96,7 +89,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 			token,
 		});
 	} catch (error: any) {
-		console.error('Error signing in user:', error);
+		logger.error('Error signing in user:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message || 'An error occurred while signing in the user',

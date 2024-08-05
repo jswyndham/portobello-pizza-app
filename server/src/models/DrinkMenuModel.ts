@@ -26,16 +26,4 @@ const DrinkMenuSchema: Schema = new Schema({
 	},
 });
 
-// Add custom validation middleware in a pre-save hook
-// Only require ingredients if drinkCategory is 'COCKTAIL'
-// DrinkMenuSchema.pre('save', function (next) {
-// 	if (
-// 		this.drinkCategory === DRINK_CATEGORY.COCKTAIL.value &&
-// 		(!Array.isArray(this.ingredients) || this.ingredients.length === 0)
-// 	) {
-// 		return next(new Error('Ingredients are required for cocktails.'));
-// 	}
-// 	next();
-// });
-
 export default mongoose.model<DrinkMenu>('DrinkMenu', DrinkMenuSchema);

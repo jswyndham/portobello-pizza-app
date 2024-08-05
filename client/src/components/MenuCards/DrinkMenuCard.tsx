@@ -64,11 +64,9 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 				if (data.items && Array.isArray(data.items)) {
 					setDrinkItems(data.items);
 				} else {
-					console.error('API response is not an array:', data);
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				console.error('Error fetching drink items:', error);
 				setError('Error fetching drink items.');
 			} finally {
 				setIsLoading(false);
@@ -81,7 +79,8 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	const onSubmitDelete = async (id: string) => {
 		try {
 			if (!token) {
-				console.error('No token available');
+				setError('No token available');
+				toast.error('No token available');
 				return;
 			}
 
@@ -102,18 +101,19 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 				);
 			} else {
 				const errorData = await response.json();
+				setError(`Failed to delete menu item: ${errorData.message}`);
 				toast.error(`Failed to delete menu item: ${errorData.message}`);
-				console.error('Failed to delete menu item:', errorData.message);
 			}
 		} catch (error) {
-			console.error('Error deleting item:', error);
+			setError('Error deleting item.');
+			toast.error('Error deleting item.');
 		}
 	};
 
 	const onSubmitEdit = async (id: string) => {
 		try {
 			if (!token) {
-				console.error('No token available');
+				toast.error('No token available');
 				return;
 			}
 
@@ -134,10 +134,12 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-				toast.error('Failed to get menu item:', errorData.message);
+				setError(`Failed to get menu item: ${errorData.message}`);
+				toast.error(`Failed to get menu item: ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error finding menu item:', error);
+			setError('Error finding menu item.');
+			toast.error('Error finding menu item.');
 		}
 	};
 

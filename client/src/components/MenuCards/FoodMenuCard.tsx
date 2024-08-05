@@ -76,11 +76,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				if (data.items && Array.isArray(data.items)) {
 					setFoodItems(data.items);
 				} else {
-					console.error('API response is not an array:', data);
+					toast.error('API response is not an array:', data);
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				console.error('Error fetching food items:', error);
+				toast.error('Error fetching food items');
 				setError('Error fetching food items.');
 			} finally {
 				setIsLoading(false);
@@ -114,10 +114,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				const errorData = await response.json();
 				// Error modal
 				toast.error(`Failed to delete menu item: ${errorData.message}`);
-				console.error('Failed to delete menu item:', errorData.message);
+				setError(`Failed to delete menu item:', ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error deleting item:', error);
+			toast.error('Error deleting item');
+			setError('Error deleting item');
 		}
 	};
 
@@ -142,10 +143,12 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-				toast.error('Failed to get menu item:', errorData.message);
+				toast.error(`Failed to get menu item:', ${errorData.message}`);
+				setError(`Failed to get menu item:', ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error finding menu item:', error);
+			toast.error('Error finding menu item');
+			setError('Error finding menu item');
 		}
 	};
 
@@ -168,19 +171,6 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			setItemIdToDelete(null);
 		}
 	};
-
-	// Handle pagination
-	// const handleNextPage = () => {
-	// 	if (page < totalPages) {
-	// 		setPage(page + 1);
-	// 	}
-	// };
-
-	// const handlePrevPage = () => {
-	// 	if (page > 1) {
-	// 		setPage(page - 1);
-	// 	}
-	// };
 
 	if (isLoading) {
 		return (

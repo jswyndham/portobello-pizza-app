@@ -5,6 +5,7 @@ import AuditLog from '../../models/AuditLogModel';
 import { AuthenticatedRequest } from '../../types/request';
 import { clearAllCache } from '../../cache/cache';
 import hasPermission from '../../utils/hasPermission';
+import logger from '../../logger';
 
 export const createFoodMenu = async (
 	req: AuthenticatedRequest,
@@ -81,7 +82,7 @@ export const createFoodMenu = async (
 			foodItem,
 		});
 	} catch (error) {
-		console.error('Error creating food item:', error);
+		logger.error('Error creating food item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				(error as Error).message ||

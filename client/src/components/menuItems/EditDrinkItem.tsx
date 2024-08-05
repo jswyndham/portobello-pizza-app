@@ -7,6 +7,7 @@ import Loading from '../Loading';
 import { useCache } from '../../context/cacheContext';
 import { DrinkMenuFormData } from '../../types/drinkItemInterfaces';
 import ErrorMessage from '../ErrorMessage';
+import { ToastContainer, toast } from 'react-toastify';
 
 const EditDrinkItem = () => {
 	const { id } = useParams<{ id: string }>();
@@ -75,10 +76,12 @@ const EditDrinkItem = () => {
 							setIngredients(item.ingredients || []);
 							setCache(cacheKey, item); // Cache the fetched item
 						} else {
-							console.error('Drink menu item not found:', data);
+							toast.error('Drink menu item not found:', data);
+							setError(`Drink menu item not found:', ${data}`);
 						}
 					} catch (error) {
-						console.error('Error fetching drink menu item:', error);
+						toast.error('Error fetching drink menu item');
+						setError('Error fetching drink menu item');
 					} finally {
 						setIsLoading(false);
 					}
@@ -118,10 +121,12 @@ const EditDrinkItem = () => {
 				navigate('/drinksmenu');
 			} else {
 				const errorData = await response.json();
-				console.error('Failed to submit menu item:', errorData.message);
+				toast.error('Failed to submit menu item:', errorData.message);
+				setError(`Failed to submit menu item: ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error submitting form:', error);
+			toast.error('Error submitting form');
+			setError('Error submitting form');
 		}
 	};
 
@@ -140,85 +145,106 @@ const EditDrinkItem = () => {
 	}
 
 	return (
-		<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 md:pt-52">
-			<form
-				className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
-				onSubmit={handleSubmit(onSubmit)}
-			>
-				{/* Drink Category Label and Select Dropdown */}
-				<label
-					htmlFor="drinkCategory"
-					className="font-handlee-regular text-lg p-2 font-semibold"
+		<>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				className="toast-container"
+				toastClassName="toast"
+			/>
+			<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 md:pt-52">
+				<form
+					className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
+					onSubmit={handleSubmit(onSubmit)}
 				>
-					Drink Category
-				</label>
-				<select
-					{...register('drinkCategory', { required: true })}
-					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-				>
-					<option value="" disabled>
-						-- Select --
-					</option>
-					{Object.values(DRINK_CATEGORY).map((category, index) => (
-						<option key={index} value={category.value}>
-							{category.label}
+					{/* Drink Category Label and Select Dropdown */}
+					<label
+						htmlFor="drinkCategory"
+						className="font-handlee-regular text-lg p-2 font-semibold"
+					>
+						Drink Category
+					</label>
+					<select
+						{...register('drinkCategory', { required: true })}
+						className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
+					>
+						<option value="" disabled>
+							-- Select --
 						</option>
-					))}
-				</select>
-				{/* Error message for drink category */}
-				{errors.drinkCategory && (
-					<p className="text-md text-red-500">
-						Drink category is required.
-					</p>
-				)}
+						{Object.values(DRINK_CATEGORY).map(
+							(category, index) => (
+								<option key={index} value={category.value}>
+									{category.label}
+								</option>
+							)
+						)}
+					</select>
+					{/* Error message for drink category */}
+					{errors.drinkCategory && (
+						<p className="text-md text-red-500">
+							Drink category is required.
+						</p>
+					)}
 
-				{/* Menu Item Name Section */}
-				<label
-					htmlFor="name"
-					className="font-handlee-regular text-lg p-2 font-semibold"
-				>
-					Menu Item Name
-				</label>
-				<input
-					{...register('name', { required: true })}
-					placeholder="Enter name..."
-					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-				/>
-				{/* Error message for item name */}
-				{errors.name && (
-					<p className="text-md text-red-500">Name is required.</p>
-				)}
+					{/* Menu Item Name Section */}
+					<label
+						htmlFor="name"
+						className="font-handlee-regular text-lg p-2 font-semibold"
+					>
+						Menu Item Name
+					</label>
+					<input
+						{...register('name', { required: true })}
+						placeholder="Enter name..."
+						className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
+					/>
+					{/* Error message for item name */}
+					{errors.name && (
+						<p className="text-md text-red-500">
+							Name is required.
+						</p>
+					)}
 
-				{/* Price Section */}
-				<label
-					htmlFor="price"
-					className="font-handlee-regular text-lg p-2 font-semibold"
-				>
-					Price
-				</label>
-				<input
-					type="number"
-					{...register('price', { required: true })}
-					placeholder="Enter price..."
-					className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
-				/>
-				{/* Error message for price */}
-				{errors.price && (
-					<p className="text-md text-red-500">Price is required.</p>
-				)}
+					{/* Price Section */}
+					<label
+						htmlFor="price"
+						className="font-handlee-regular text-lg p-2 font-semibold"
+					>
+						Price
+					</label>
+					<input
+						type="number"
+						{...register('price', { required: true })}
+						placeholder="Enter price..."
+						className="p-3 mb-3 bg-amber-50 drop-shadow-sm rounded-md border border-slate-300"
+					/>
+					{/* Error message for price */}
+					{errors.price && (
+						<p className="text-md text-red-500">
+							Price is required.
+						</p>
+					)}
 
-				{/* Submit Button */}
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					className={`w-11/12 my-3 p-2 mx-auto bg-blue-500 border border-slate-200 text-white text-lg font-bold rounded-lg drop-shadow-lg hover:shadow-lg hover:shadow-slate-400 hover:bg-blue-600 hover:text-slate-100 disabled:shadow-none focus:shadow-md focus:shadow-slate-400 focus:text-slate-200 ${
-						isSubmitting ? 'opacity-50' : 'opacity-100'
-					}`}
-				>
-					{isSubmitting ? 'Submitting...' : 'Submit'}
-				</button>
-			</form>
-		</section>
+					{/* Submit Button */}
+					<button
+						type="submit"
+						disabled={isSubmitting}
+						className={`w-11/12 my-3 p-2 mx-auto bg-blue-500 border border-slate-200 text-white text-lg font-bold rounded-lg drop-shadow-lg hover:shadow-lg hover:shadow-slate-400 hover:bg-blue-600 hover:text-slate-100 disabled:shadow-none focus:shadow-md focus:shadow-slate-400 focus:text-slate-200 ${
+							isSubmitting ? 'opacity-50' : 'opacity-100'
+						}`}
+					>
+						{isSubmitting ? 'Submitting...' : 'Submit'}
+					</button>
+				</form>
+			</section>
+		</>
 	);
 };
 

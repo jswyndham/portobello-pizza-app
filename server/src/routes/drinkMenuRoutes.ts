@@ -10,16 +10,16 @@ import { authenticateUser } from '../middleware/authMiddleware';
 import { validateDrinkMenu } from '../validators/drinkMenuValidator';
 import multer from 'multer';
 
+// Casting routes as express.RequestHandler. This aligns with Express's expected types and ensures TypeScript recognizes them as valid request handlers.
+
 const upload = multer();
 
 const router = express.Router();
 
-// Casting routes as express.RequestHandler. This aligns with Express's expected types and ensures TypeScript recognizes them as valid request handlers.
-
 router
 	.route('/')
 	.post(
-		upload.none(), // Multer is needed to parse the multipart form data
+		upload.none(),
 		authenticateUser as express.RequestHandler,
 		validateDrinkMenu,
 		createDrinkMenu as express.RequestHandler
@@ -30,7 +30,7 @@ router
 	.route('/:id/')
 	.get(getDrinkMenuItem as express.RequestHandler)
 	.patch(
-		authenticateUser,
+		authenticateUser as express.RequestHandler,
 		validateDrinkMenu,
 		editDrinkMenu as express.RequestHandler
 	)

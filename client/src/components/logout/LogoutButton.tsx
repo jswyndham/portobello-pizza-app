@@ -37,11 +37,10 @@ const LogoutButton: React.FC = () => {
 				navigate('/');
 			} else {
 				const errorData = await response.json();
-				console.error('Logout failed:', errorData.message);
+
 				toast.error('Logout failed: ', errorData.message);
 			}
 		} catch (error) {
-			console.error('An error occurred while logging out:', error);
 			toast.error('Logout failed: ');
 		}
 	};

@@ -6,6 +6,7 @@ import AuditLog from '../../models/AuditLogModel';
 import { clearAllCache } from '../../cache/cache';
 import DrinkMenu from '../../models/DrinkMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
+import logger from '../../logger';
 
 export const deleteDrinkMenu = async (
 	req: AuthenticatedRequest,
@@ -67,7 +68,7 @@ export const deleteDrinkMenu = async (
 			drinkItemId: deleteDrinkMenuItem._id,
 		});
 	} catch (error: any) {
-		console.error('Error deleting drink menu item:', error);
+		logger.error('Error deleting drink menu item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message ||

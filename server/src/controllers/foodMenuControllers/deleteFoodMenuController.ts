@@ -6,6 +6,7 @@ import AuditLog from '../../models/AuditLogModel';
 import { AuthenticatedRequest } from '../../types/request';
 import { clearAllCache } from '../../cache/cache';
 import mongoose from 'mongoose';
+import logger from '../../logger';
 
 export const deleteFoodMenu = async (
 	req: AuthenticatedRequest,
@@ -80,7 +81,7 @@ export const deleteFoodMenu = async (
 			foodItemId: foodMenuItem._id,
 		});
 	} catch (error: any) {
-		console.error('Error deleting food menu item:', error);
+		logger.error('Error deleting food menu item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message ||

@@ -6,6 +6,7 @@ import { validationResult } from 'express-validator';
 import hasPermission from '../../utils/hasPermission';
 import { USER_STATUS } from '../../constants';
 import { AuthenticatedRequest } from '../../types/request';
+import logger from '../../logger';
 
 export const getAllUsers = async (
 	req: AuthenticatedRequest,
@@ -65,7 +66,7 @@ export const getAllUsers = async (
 
 		res.status(StatusCodes.OK).json(allUsers);
 	} catch (error: any) {
-		console.error('Error fetching users:', error);
+		logger.error('Error fetching users:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message || 'An error occurred while requesting users',

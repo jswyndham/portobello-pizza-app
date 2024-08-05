@@ -11,6 +11,7 @@ import {
 	foodMenuRoutes,
 	userRoutes,
 } from './routes';
+import logger from './logger';
 
 dotenv.config(); // Load environment variables
 
@@ -52,7 +53,7 @@ const startServer = async () => {
 			);
 		});
 	} catch (error) {
-		console.error('Error starting server:', error);
+		logger.error('Error starting server:', error);
 		process.exit(1);
 	}
 };

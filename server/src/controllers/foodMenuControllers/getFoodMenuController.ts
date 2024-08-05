@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import FoodMenu from '../../models/FoodMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
 import { getCache, setCache } from '../../cache/cache';
+import logger from '../../logger';
 
 export const getFoodMenu = async (
 	req: AuthenticatedRequest,
@@ -55,7 +56,7 @@ export const getFoodMenu = async (
 
 		res.status(StatusCodes.OK).json(responseData);
 	} catch (error: any) {
-		console.error('Error getting food menu items:', error);
+		logger.error('Error getting food menu items:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message ||

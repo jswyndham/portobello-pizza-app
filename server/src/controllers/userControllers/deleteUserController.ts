@@ -5,6 +5,7 @@ import AuditLog from '../../models/AuditLogModel';
 import { clearAllCache, clearCache } from '../../cache/cache';
 import User from '../../models/UserModel';
 import { AuthenticatedRequest } from '../../types/request';
+import logger from '../../logger';
 
 export const deleteUser = async (
 	req: AuthenticatedRequest,
@@ -75,7 +76,7 @@ export const deleteUser = async (
 			userId: deletedUser._id,
 		});
 	} catch (error: any) {
-		console.error('Error deleting user:', error);
+		logger.error('Error deleting user:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message: error.message || 'An error occurred while deleting user',
 		});

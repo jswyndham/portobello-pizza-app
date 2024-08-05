@@ -1,9 +1,9 @@
 import request from 'supertest';
 import app from '../src/server';
 import mongoose, { ConnectOptions } from 'mongoose';
-import FoodMenu from '../src/models/FoodMenuModel';
 import User from '../src/models/UserModel';
 import jwt from 'jsonwebtoken';
+import DrinkMenu from '../src/models/DrinkMenuModel';
 import { connectToDatabase, disconnectFromDatabase } from './setup';
 
 const url = `mongodb://127.0.0.1:27017/test_database`;
@@ -17,7 +17,7 @@ beforeAll(async () => {
 }, 40000);
 
 beforeEach(async () => {
-	await FoodMenu.deleteMany({});
+	await DrinkMenu.deleteMany({});
 	await User.deleteMany({});
 	await mongoose.connection.db.dropDatabase();
 }, 40000);
@@ -28,7 +28,7 @@ afterAll(async () => {
 
 let emailCounter = 1;
 
-const getEmail = () => `testuser${emailCounter++}@example.com`;
+const getEmail = () => `testusers${emailCounter++}@example.com`;
 
 // Function to generate a JWT for testing
 const generateJWT = (userId: string, userStatus: string) => {
@@ -37,15 +37,15 @@ const generateJWT = (userId: string, userStatus: string) => {
 	});
 };
 
-describe('FoodMenu API', () => {
-	// Create a new food menu item
-	it('should register a new food menu item', async () => {
+describe('DrinkMenu API', () => {
+	// Create a new drink menu item
+	it('should create a new drink menu item', async () => {
 		const email = getEmail();
 
 		const registerRes = await request(app)
 			.post('/api/v1/auth/register')
 			.send({
-				firstName: 'John',
+				firstName: 'James',
 				lastName: 'Doe',
 				email,
 				password: 'Password123!',
@@ -64,35 +64,27 @@ describe('FoodMenu API', () => {
 		expect(token).toBeDefined();
 
 		const res = await request(app)
-			.post('/api/v1/foodMenu')
+			.post('/api/v1/drinkMenu')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				menuCategory: 'PIZZA',
-				pizzaType: 'MEAT',
-				name: 'Test Pizza',
-				ingredients: JSON.stringify([
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				]),
+				drinkCategory: 'BEER',
+				name: 'Test Drink',
 				price: 666,
-				imageUrl: 'http://example.com/image.png', // optional
 			});
 
 		expect(res.statusCode).toEqual(201);
-		expect(res.body).toHaveProperty('msg', 'New food item created');
-		expect(res.body.foodItem).toHaveProperty('name', 'Test Pizza');
+		expect(res.body).toHaveProperty('msg', 'New drink item created');
+		expect(res.body.drinkItem).toHaveProperty('name', 'Test Drink');
 	}, 40000);
 
-	// Get a single food item (needed for edit food menu)
-	it('should get food menu items', async () => {
+	// Get a single drink item (needed for edit drink menu)
+	it('should get drink menu items', async () => {
 		const email = getEmail();
 
 		const registerRes = await request(app)
 			.post('/api/v1/auth/register')
 			.send({
-				firstName: 'John',
+				firstName: 'James',
 				lastName: 'Doe',
 				email,
 				password: 'Password123!',
@@ -111,60 +103,47 @@ describe('FoodMenu API', () => {
 		expect(token).toBeDefined();
 
 		await request(app)
-			.post('/api/v1/foodMenu')
+			.post('/api/v1/drinkMenu')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				menuCategory: 'PIZZA',
-				pizzaType: 'MEAT',
-				name: 'Test Pizza 1',
-				ingredients: JSON.stringify([
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				]),
+				drinkCategory: 'BEER',
+				name: 'Test Drink 1',
+				ingredients: ['Water', 'Hops', 'Yeast', 'Malt'],
 				price: 666,
-				imageUrl: 'http://example.com/image.png', // optional
+				size: '500ml',
 			});
 
 		await request(app)
-			.post('/api/v1/foodMenu')
+			.post('/api/v1/drinkMenu')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				menuCategory: 'PIZZA',
-				pizzaType: 'MEAT',
-				name: 'Test Pizza 2',
-				ingredients: JSON.stringify([
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				]),
+				drinkCategory: 'BEER',
+				name: 'Test Drink 2',
+
 				price: 666,
-				imageUrl: 'http://example.com/image.png', // optional
 			});
 
 		const res = await request(app)
-			.get('/api/v1/foodMenu')
+			.get('/api/v1/drinkMenu')
 			.set('Authorization', `Bearer ${token}`)
 			.query({ page: 1, limit: 10 });
 
 		expect(res.statusCode).toEqual(200);
 		expect(res.body.items).toBeInstanceOf(Array);
 		expect(res.body.items.length).toBeGreaterThanOrEqual(2);
-		expect(res.body.items[0]).toHaveProperty('name', 'Test Pizza 1');
-		expect(res.body.items[1]).toHaveProperty('name', 'Test Pizza 2');
+		expect(res.body.items[0]).toHaveProperty('name', 'Test Drink 1');
+		expect(res.body.items[1]).toHaveProperty('name', 'Test Drink 2');
 	}, 40000);
 
-	// Delete a food item
-	it('should delete a food menu item', async () => {
+	// Delete a drink item
+	it('should delete a drink menu item', async () => {
 		const email = getEmail();
 
-		// Register Jane Doe
+		// Register Amy Doe
 		const registerRes = await request(app)
 			.post('/api/v1/auth/register')
 			.send({
-				firstName: 'Jane',
+				firstName: 'Amy',
 				lastName: 'Doe',
 				email,
 				password: 'Password123!',
@@ -174,7 +153,7 @@ describe('FoodMenu API', () => {
 
 		expect(registerRes.statusCode).toEqual(201);
 
-		// Login Jane Doe
+		// Login Amy Doe
 		const loginRes = await request(app).post('/api/v1/auth/login').send({
 			email,
 			password: 'Password123!',
@@ -183,49 +162,42 @@ describe('FoodMenu API', () => {
 		const token = loginRes.body.token;
 		expect(token).toBeDefined();
 
-		// Create a food menu item
+		// Create a drink menu item
 		const createRes = await request(app)
-			.post('/api/v1/foodMenu')
+			.post('/api/v1/drinkMenu')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				menuCategory: 'PIZZA',
-				pizzaType: 'MEAT',
-				name: 'Test Pizza To Delete',
-				ingredients: JSON.stringify([
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				]),
+				drinkCategory: 'COCKTAIL',
+				name: 'Test Cocktail To Delete',
+
 				price: 666,
-				imageUrl: 'http://example.com/image.png', // optional
 			});
 
 		expect(createRes.statusCode).toEqual(201);
-		expect(createRes.body).toHaveProperty('msg', 'New food item created');
-		expect(createRes.body.foodItem).toHaveProperty(
+		expect(createRes.body).toHaveProperty('msg', 'New drink item created');
+		expect(createRes.body.drinkItem).toHaveProperty(
 			'name',
-			'Test Pizza To Delete'
+			'Test Cocktail To Delete'
 		);
 
-		// Delete the food menu item
+		// Delete the drink menu item
 		const deleteRes = await request(app)
-			.delete(`/api/v1/foodMenu/${createRes.body.foodItem._id}`)
+			.delete(`/api/v1/drinkMenu/${createRes.body.drinkItem._id}`)
 			.set('Authorization', `Bearer ${token}`);
 
 		expect(deleteRes.statusCode).toEqual(200);
-		expect(deleteRes.body).toHaveProperty('msg', 'Food menu item deleted');
+		expect(deleteRes.body).toHaveProperty('msg', 'Drink menu item deleted');
 	}, 40000);
 
-	// Edit a food menu item
-	it('should edit a food menu item', async () => {
+	// Edit a drink menu item
+	it('should edit a drink menu item', async () => {
 		const email = getEmail();
 
-		// Register Jane Doe
+		// Register Amy Doe
 		const registerRes = await request(app)
 			.post('/api/v1/auth/register')
 			.send({
-				firstName: 'Jane',
+				firstName: 'Amy',
 				lastName: 'Doe',
 				email,
 				password: 'Password123!',
@@ -235,7 +207,7 @@ describe('FoodMenu API', () => {
 
 		expect(registerRes.statusCode).toEqual(201);
 
-		// Login Jane Doe
+		// Login Amy Doe
 		const loginRes = await request(app).post('/api/v1/auth/login').send({
 			email,
 			password: 'Password123!',
@@ -244,52 +216,41 @@ describe('FoodMenu API', () => {
 		const token = loginRes.body.token;
 		expect(token).toBeDefined();
 
-		// Create a food menu item
+		// Create a drink menu item
 		const createRes = await request(app)
-			.post('/api/v1/foodMenu')
+			.post('/api/v1/drinkMenu')
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				menuCategory: 'PIZZA',
-				pizzaType: 'MEAT',
-				name: 'Test Pizza To Edit',
-				ingredients: JSON.stringify([
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				]),
+				drinkCategory: 'COCKTAIL',
+				name: 'Test Cocktail To Edit',
+
 				price: 666,
-				imageUrl: 'http://example.com/image.png', // optional
 			});
 
 		expect(createRes.statusCode).toEqual(201);
-		expect(createRes.body).toHaveProperty('msg', 'New food item created');
-		expect(createRes.body.foodItem).toHaveProperty(
+		expect(createRes.body).toHaveProperty('msg', 'New drink item created');
+		expect(createRes.body.drinkItem).toHaveProperty(
 			'name',
-			'Test Pizza To Edit'
+			'Test Cocktail To Edit'
 		);
 
-		// Edit the food menu item
+		// Edit the drink menu item
 		const editRes = await request(app)
-			.patch(`/api/v1/foodMenu/${createRes.body.foodItem._id}`)
+			.patch(`/api/v1/drinkMenu/${createRes.body.drinkItem._id}`)
 			.set('Authorization', `Bearer ${token}`)
 			.send({
-				menuCategory: 'PASTA',
-				name: 'Test Pasta',
-				ingredients: JSON.stringify([
-					'test chicken',
-					'test basil',
-					'test chilli',
-					'test tomato paste',
-				]),
+				drinkCategory: 'BEER',
+				name: 'Test Beer Edit',
 				price: 777,
-				imageUrl: 'http://example.com/new-image.png', // optional
 			});
 
 		expect(editRes.statusCode).toEqual(200);
-		expect(editRes.body).toHaveProperty('msg', 'Food item edited');
-		expect(editRes.body.foodItem).toHaveProperty('name', 'Test Pasta');
-		expect(editRes.body.foodItem).toHaveProperty('menuCategory', 'PASTA');
-		expect(editRes.body.foodItem).toHaveProperty('price', 777);
+		expect(editRes.body).toHaveProperty(
+			'message',
+			'Drink menu item updated successfully'
+		);
+		expect(editRes.body.drinkItem).toHaveProperty('name', 'Test Beer Edit');
+		expect(editRes.body.drinkItem).toHaveProperty('drinkCategory', 'BEER');
+		expect(editRes.body.drinkItem).toHaveProperty('price', 777);
 	}, 40000);
 });

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../src/server';
 import mongoose, { ConnectOptions } from 'mongoose';
-import User from '../src/models/UserModel';
+import { connectToDatabase, disconnectFromDatabase } from './setup';
 import { clearOldAuditLogsJob } from '../src/jobs/clearOldAuditLogs';
 
 const url = `mongodb://127.0.0.1:27017/test_database`;
@@ -11,21 +11,18 @@ const options: ConnectOptions = {
 };
 
 beforeAll(async () => {
-	if (mongoose.connection.readyState === 0) {
-		await mongoose.connect(url, options);
-	}
+	await connectToDatabase();
 }, 60000);
 
 beforeEach(async () => {
-	await User.deleteMany({});
+	await mongoose.connection.db.dropDatabase();
 }, 60000);
 
 afterAll(async () => {
 	// Stop the cron job
 	clearOldAuditLogsJob.stop();
-
 	// Close the Mongoose connection
-	await mongoose.disconnect();
+	await disconnectFromDatabase();
 	// Ensure all other asynchronous operations are cleared
 	jest.clearAllTimers();
 	jest.clearAllMocks();
@@ -67,6 +64,7 @@ describe('Auth API', () => {
 		expect(res.statusCode).toEqual(200);
 		expect(res.body).toHaveProperty('msg', 'User is logged in');
 		expect(res.body.user).toHaveProperty('email', 'johndoe2@example.com');
+		expect(token).toBeDefined();
 	}, 40000);
 
 	it('should logout a user', async () => {

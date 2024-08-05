@@ -5,6 +5,7 @@ import { clearAllCache, clearCache } from '../../cache/cache';
 import hasPermission from '../../utils/hasPermission';
 import DrinkMenu from '../../models/DrinkMenuModel';
 import { AuthenticatedRequest } from '../../types/request';
+import logger from '../../logger';
 
 export const editDrinkMenu = async (
 	req: AuthenticatedRequest,
@@ -77,7 +78,7 @@ export const editDrinkMenu = async (
 			drinkItem: updatedDrinkItem,
 		});
 	} catch (error: any) {
-		console.error('Error editing drink item:', error);
+		logger.error('Error editing drink item:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message ||

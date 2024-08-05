@@ -1,4 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import logger from '../../src/logger';
 
 interface DecodedToken extends JwtPayload {
 	userId: string;
@@ -11,12 +12,21 @@ export const verifyJWT = (token: string): DecodedToken | null => {
 			token,
 			process.env.JWT_SECRET as string
 		) as DecodedToken;
+
+		if (
+			typeof decoded !== 'object' ||
+			!decoded.userId ||
+			!decoded.userStatus
+		) {
+			return null;
+		}
+
 		return {
 			userId: decoded.userId,
 			userStatus: decoded.userStatus,
 		};
 	} catch (err) {
-		// Handle token verification errors if necessary
+		logger.error('Error during token verification:', err); // Add logging for debugging
 		return null;
 	}
 };

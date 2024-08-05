@@ -9,12 +9,7 @@ export const validateDrinkMenu = [
 		.isString()
 		.notEmpty()
 		.withMessage('A name for the drink item is required'),
-	body('ingredients')
-		.optional()
-		.isString()
-		.withMessage('Drink ingredients is required'),
 	body('price')
 		.isNumeric()
 		.withMessage('Price for the drink item is required'),
-	body('imageUrl').optional().isString(),
 ];

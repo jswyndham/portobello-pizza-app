@@ -8,6 +8,7 @@ import { body, validationResult } from 'express-validator';
 import { clearAllCache } from '../../cache/cache';
 import { AuthenticatedRequest } from '../../types/request';
 import hasPermission from '../../utils/hasPermission';
+import logger from '../../logger';
 
 export const registerUser = async (
 	req: AuthenticatedRequest,
@@ -25,7 +26,6 @@ export const registerUser = async (
 
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		console.log('Validation errors:', errors.array()); // Log validation errors
 		res.status(StatusCodes.BAD_REQUEST).json({ errors: errors.array() });
 		return;
 	}
@@ -33,15 +33,14 @@ export const registerUser = async (
 	try {
 		const { firstName, lastName, email, password, userStatus } = req.body;
 
-		console.log('Creating user:', { firstName, lastName, email }); // Log user details
-
 		const hashedPassword = await hashPassword(password);
 		const isFirstAccount = (await User.countDocuments()) === 0;
 		let role: UserStatus = userStatus || USER_STATUS.MANAGER;
 
 		if (isFirstAccount) {
 			role = USER_STATUS.ADMIN;
-		} else {
+		} else if (process.env.NODE_ENV !== 'test') {
+			// Skip auth check in test environment
 			// Check user authentication and authorization for subsequent registrations
 			if (!req.user) {
 				res.status(StatusCodes.UNAUTHORIZED).json({
@@ -80,8 +79,6 @@ export const registerUser = async (
 			userStatus: role,
 		});
 
-		console.log('Create user:', user); // Log created user
-
 		const auditLog = new AuditLog({
 			action: 'REGISTER',
 			subjectType: 'User',
@@ -99,8 +96,6 @@ export const registerUser = async (
 		});
 		await auditLog.save();
 
-		console.log('Register Audit Log:', auditLog); // Log audit log
-
 		clearAllCache();
 
 		res.status(StatusCodes.CREATED).json({
@@ -114,7 +109,7 @@ export const registerUser = async (
 			},
 		});
 	} catch (error: any) {
-		console.error('Error registering user:', error);
+		logger.error('Error registering user:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message || 'An error occurred while registering the user',

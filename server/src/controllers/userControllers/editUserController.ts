@@ -6,6 +6,7 @@ import hasPermission from '../../utils/hasPermission';
 import User from '../../models/UserModel';
 import { hashPassword } from '../../utils/passwordUtils';
 import { AuthenticatedRequest } from '../../types/request';
+import logger from '../../logger';
 
 export const editUser = async (
 	req: AuthenticatedRequest,
@@ -82,7 +83,7 @@ export const editUser = async (
 			user: updatedUser,
 		});
 	} catch (error: any) {
-		console.error('Error editing user:', error);
+		logger.error('Error editing user:', error);
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			message:
 				error.message || 'An error occurred while editing user details',

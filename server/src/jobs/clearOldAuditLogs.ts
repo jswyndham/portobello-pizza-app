@@ -1,5 +1,6 @@
 import cron from 'node-cron';
 import AuditLog from '../models/AuditLogModel';
+import logger from '../logger';
 
 const clearOldAuditLogs = async (): Promise<void> => {
 	try {
@@ -8,7 +9,7 @@ const clearOldAuditLogs = async (): Promise<void> => {
 
 		await AuditLog.deleteMany({ createdAt: { $lt: threeMonthsAgo } });
 	} catch (error) {
-		console.error('Error clearing old audit logs:', error);
+		logger.error('Error clearing old audit logs:', error);
 	}
 };
 

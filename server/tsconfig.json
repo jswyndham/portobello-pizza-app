@@ -16,7 +16,7 @@
 		"jest.config.ts",
 		"src/types/express.d.ts",
 		"tests/foodMenu.test.ts",
-		"../auth.test.ts"
+		"tests/auth.test.ts"
 	],
 	"exclude": ["node_modules"]
 }
