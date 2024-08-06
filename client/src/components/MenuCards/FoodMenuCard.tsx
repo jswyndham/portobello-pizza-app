@@ -39,6 +39,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 
 	// Auth context & global state
 	const { state } = useAuth();
+	const { token } = state;
 	const { isLoggedIn } = state;
 
 	// Motion animation
@@ -72,22 +73,19 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12&menuCategory=${selectedCategory}`,
 					{
 						method: 'GET',
-						headers: {
-							Authorization: `Bearer ${state.token}`, // Add the token here
-						},
-						credentials: 'include', // If you are using cookies for session management
 					}
 				);
+
 				const data = await response.json();
 
 				if (response.ok && data.items && Array.isArray(data.items)) {
 					setFoodItems(data.items);
 				} else {
-					toast.error('API response is not an array:', data);
+					toast.error('API response is not in the expected format.');
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				toast.error('Error fetching food items');
+				toast.error('Error fetching food items.');
 				setError('Error fetching food items.');
 			} finally {
 				setIsLoading(false);
@@ -95,7 +93,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		};
 
 		fetchFoodItems();
-	}, [page, selectedCategory, state.token]); // Ensure the token is part of the dependencies
+	}, [page, selectedCategory, token]);
 
 	// Submit menu item deletion
 	const onSubmitDelete = async (id: string) => {
@@ -133,6 +131,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	const onSubmitEdit = async (id: string) => {
 		setIsLoading(true);
 		try {
+			if (!token) {
+				toast.error('No token available');
+				return;
+			}
+
 			const response = await fetch(
 				`http://localhost:5001/api/v1/foodMenu/${id}`,
 				{
@@ -145,17 +148,21 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			);
 			if (response.ok) {
 				const data = await response.json();
-
-				setFoodItemToEdit(data);
+				console.log('Fetched food item:', data); // Log the response data
+				setFoodItemToEdit(data.foodMenuItem);
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-				toast.error(`Failed to get menu item:', ${errorData.message}`);
-				setError(`Failed to get menu item:', ${errorData.message}`);
+				console.error('Failed to get menu item:', errorData.message); // Log the error
+				toast.error(`Failed to get menu item: ${errorData.message}`);
+				setError(`Failed to get menu item: ${errorData.message}`);
 			}
 		} catch (error) {
+			console.error('Error finding menu item:', error); // Log the error
 			toast.error('Error finding menu item');
 			setError('Error finding menu item');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -187,9 +194,9 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		);
 	}
 
-	if (error) {
-		return <ErrorMessage errorMessage={error} />;
-	}
+	// if (error) {
+	// 	return <ErrorMessage errorMessage={error} />;
+	// }
 
 	if (foodItems.length === 0) {
 		return <ItemNotFound item="food menu item" />;

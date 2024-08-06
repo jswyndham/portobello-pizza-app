@@ -61,9 +61,6 @@ const EditFoodItem = () => {
 					setIsLoading(false);
 				} else {
 					try {
-						// Check token from local storage
-						console.log('Edit token: ', token);
-
 						if (!token) {
 							setError(
 								'You are not authorized to access this page'
@@ -74,11 +71,20 @@ const EditFoodItem = () => {
 
 						setIsLoading(true);
 						const response = await fetch(
-							`http://localhost:5001/api/v1/foodMenu/${id}`
+							`http://localhost:5001/api/v1/foodMenu/${id}`,
+							{
+								method: 'GET',
+								headers: {
+									Authorization: `Bearer ${token}`,
+								},
+								credentials: 'include',
+							}
 						);
 						const data = await response.json();
-						if (data.foodMenuItem) {
-							const item = data.foodMenuItem;
+						console.log('Fetched food item:', data); // Log the response data
+						if (data && data.items) {
+							// Change this line to access the correct property
+							const item = data.items; // Adjust how the data is accessed
 							reset({
 								menuCategory: item.menuCategory || '',
 								pizzaType: item.pizzaType || '',
@@ -91,10 +97,12 @@ const EditFoodItem = () => {
 							setIngredients(item.ingredients || []);
 							setCache(cacheKey, item); // Cache the fetched item
 						} else {
+							console.error('Food menu item not found');
 							toast.error('Food menu item not found');
 							setError('Food menu item not found');
 						}
 					} catch (error) {
+						console.error('Error fetching food menu item:', error); // Log the error
 						toast.error('Error fetching food menu item');
 						setError('Error fetching food menu item');
 					} finally {
@@ -105,7 +113,7 @@ const EditFoodItem = () => {
 		};
 
 		fetchFoodMenuItem();
-	}, [id, reset, cache, setCache]);
+	}, [id, reset, cache, setCache, token]);
 
 	// Set ingredient values
 	useEffect(() => {
@@ -145,6 +153,7 @@ const EditFoodItem = () => {
 			if (response.ok) {
 				toast.success('Your menu item was successfully edited!');
 				reset();
+				navigate('/');
 			} else {
 				const errorData = await response.json();
 
@@ -197,9 +206,9 @@ const EditFoodItem = () => {
 	}
 
 	// Error screen
-	if (error) {
-		return <ErrorMessage errorMessage={error} />;
-	}
+	// if (error) {
+	// 	return <ErrorMessage errorMessage={error} />;
+	// }
 
 	return (
 		<>

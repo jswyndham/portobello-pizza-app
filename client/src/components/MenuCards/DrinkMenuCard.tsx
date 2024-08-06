@@ -57,7 +57,9 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 			try {
 				const response = await fetch(
 					`http://localhost:5001/api/v1/drinkMenu?page=${page}&limit=12&drinkCategory=${selectedCategory}`,
-					{ method: 'GET' }
+					{
+						method: 'GET',
+					}
 				);
 				const data = await response.json();
 
