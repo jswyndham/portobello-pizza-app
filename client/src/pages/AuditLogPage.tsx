@@ -10,78 +10,84 @@ import { ToastContainer, toast } from 'react-toastify';
 const AuditLogs = () => {
 	const { id } = useParams<{ id: string }>();
 
-	const [auditLog, setAuditLog] = useState<AuditLog[]>([]); // Initialize as empty array
+	const [auditLog, setAuditLog] = useState<AuditLog[]>([]);
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [totalPages, setTotalPages] = useState<number>(1);
 
 	const { state } = useAuth();
 	const { isLoggedIn, token } = state;
 
-	useEffect(() => {
-		const fetchAuditLogs = async () => {
-			setIsLoading(true);
-			try {
-				if (!token) {
-					toast.error('No token available');
-					setError('No token available');
-					setIsLoading(false);
-					return;
-				}
-
-				const response = await fetch(
-					`http://localhost:5001/api/v1/auditlogs/${id}`,
-					{
-						method: 'GET',
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-						credentials: 'include',
-					}
-				);
-
-				const data = await response.json();
-
-				if (data && data.data && Array.isArray(data.data.auditLogs)) {
-					setAuditLog(data.data.auditLogs);
-				} else {
-					toast.error(
-						'API response is not in expected format:',
-						data
-					);
-					setError('Unexpected API response format.');
-				}
-			} catch (error) {
-				toast.error('Error fetching audit logs');
-				setError('Error fetching audit logs');
-			} finally {
+	const fetchAuditLogs = async (page: number) => {
+		setIsLoading(true);
+		try {
+			if (!token) {
+				toast.error('No token available');
+				setError('No token available');
 				setIsLoading(false);
+				return;
 			}
-		};
 
-		fetchAuditLogs();
-	}, [id, token]);
+			const response = await fetch(
+				`http://localhost:5001/api/v1/auditlogs/${id}?page=${page}&limit=20`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+					credentials: 'include',
+				}
+			);
 
-	// Loading spinner
+			const data = await response.json();
+
+			if (data && data.data && Array.isArray(data.data.auditLogs)) {
+				setAuditLog(data.data.auditLogs);
+				setCurrentPage(data.data.page);
+				setTotalPages(data.data.totalPages);
+			} else {
+				toast.error('API response is not in expected format:', data);
+				setError('Unexpected API response format.');
+			}
+		} catch (error) {
+			toast.error('Error fetching audit logs');
+			setError('Error fetching audit logs');
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchAuditLogs(currentPage);
+	}, [id, token, currentPage]);
+
+	const formatDate = (date: Date): string => {
+		return format(date, 'yyyy-MM-dd h:mm a');
+	};
+
 	if (isLoading) {
-		return (
-			<div>
-				<Loading />
-			</div>
-		);
+		return <Loading />;
 	}
 
-	// Error warning
 	if (error) {
 		return <ErrorMessage errorMessage={error} />;
 	}
 
-	// No audit logs found
 	if (auditLog.length === 0) {
 		return <div>No audit logs found.</div>;
 	}
 
-	const formatDate = (date: Date): string => {
-		return format(date, 'yyyy-MM-dd h:mm a');
+	const handleNextPage = () => {
+		if (currentPage < totalPages) {
+			setCurrentPage(currentPage + 1);
+		}
+	};
+
+	const handlePrevPage = () => {
+		if (currentPage > 1) {
+			setCurrentPage(currentPage - 1);
+		}
 	};
 
 	return (
@@ -106,7 +112,7 @@ const AuditLogs = () => {
 					</div>
 					{isLoggedIn && (
 						<>
-							<div className="p-4 lg:mt-12">
+							<div className="p-4 lg:mt-12 flex flex-col justify-center items-center">
 								<div className="w-full h-fit grid grid-cols-1">
 									{auditLog.map((auditLogs) => (
 										<AuditLogList
@@ -125,6 +131,33 @@ const AuditLogs = () => {
 											details={auditLogs.details}
 										/>
 									))}
+								</div>
+
+								<div className="w-11/12 2xl:w-6/12 mt-4 flex justify-center text-xl space-x-32 md:space-x-96">
+									<button
+										type="button"
+										onClick={handlePrevPage}
+										disabled={currentPage === 1}
+										className={`btn ${
+											currentPage === 1
+												? 'hidden'
+												: 'text-blue-200 font-bold hover:underline hover:underline-offset-4 hover:text-blue-400 p-12'
+										}`}
+									>
+										Prev
+									</button>
+									<button
+										type="button"
+										onClick={handleNextPage}
+										disabled={currentPage === totalPages}
+										className={`btn ${
+											currentPage === totalPages
+												? 'hidden'
+												: 'text-blue-200 font-bold hover:underline hover:underline-offset-4 hover:text-blue-400 p-12'
+										}`}
+									>
+										Next
+									</button>
 								</div>
 							</div>
 						</>

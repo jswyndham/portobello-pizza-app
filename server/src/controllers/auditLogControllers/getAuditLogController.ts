@@ -11,6 +11,9 @@ export const getAuditLogs = async (
 ): Promise<void> => {
 	try {
 		const { userId } = req.params;
+		const page = parseInt(req.query.page as string, 10) || 1;
+		const limit = parseInt(req.query.limit as string, 10) || 20;
+		const skip = (page - 1) * limit;
 
 		if (!req.user) {
 			res.status(StatusCodes.UNAUTHORIZED).json({
@@ -30,14 +33,20 @@ export const getAuditLogs = async (
 			return;
 		}
 
-		const auditLogs = await AuditLog.find({ userId }).sort({
-			createdAt: 1,
-		});
+		const auditLogs = await AuditLog.find({ userId })
+			.sort({ createdAt: 1 })
+			.skip(skip)
+			.limit(limit);
+
+		const totalLogs = await AuditLog.countDocuments({ userId });
+		const totalPages = Math.ceil(totalLogs / limit);
 
 		res.status(StatusCodes.OK).json({
 			status: 'success',
 			data: {
 				auditLogs,
+				page,
+				totalPages,
 			},
 		});
 	} catch (error: any) {
