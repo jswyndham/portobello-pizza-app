@@ -1,10 +1,11 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RegisterData } from '../types/userInterfaces';
 import RegisterForm from '../components/user/RegisterForm';
+import { Loading } from '../components';
 
 const Register: FC = () => {
 	const {
@@ -14,8 +15,21 @@ const Register: FC = () => {
 	} = useForm<RegisterData>();
 	const navigate = useNavigate();
 
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	useEffect(() => {
+		// Retrieve the token from local storage
+		const token = localStorage.getItem('authToken');
+		if (!token) {
+			toast.error('You are not authorized to access this page');
+			setIsLoading(false);
+			return;
+		}
+	}, []);
+
 	const onSubmit: SubmitHandler<RegisterData> = async (data) => {
 		try {
+			setIsLoading(true);
 			const response = await fetch(
 				'http://localhost:5001/api/v1/auth/register',
 				{
@@ -56,16 +70,21 @@ const Register: FC = () => {
 					toast.error(
 						`Failed to register user: ${errorData.message}`
 					);
-					console.error('Failed to register new user');
 				}
 			}
 		} catch (error) {
-			console.error('Error submitting form:', error);
 			toast.error(
 				'An error occurred while trying to register a new user'
 			);
+		} finally {
+			setIsLoading(false);
 		}
 	};
+
+	// Loading Screen
+	if (isLoading || isSubmitting) {
+		return <Loading />;
+	}
 
 	return (
 		<>

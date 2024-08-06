@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginForm from '../components/user/LoginForm';
 import { LoginData } from '../types/userInterfaces';
+import { useState } from 'react';
+import { ErrorMessage, Loading } from '../components';
 
 const Login = () => {
 	const {
@@ -13,11 +15,16 @@ const Login = () => {
 		reset,
 		formState: { isSubmitting },
 	} = useForm<LoginData>();
+
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
 	const navigate = useNavigate();
 	const { dispatch } = useAuth();
 
 	const onSubmit: SubmitHandler<LoginData> = async (data) => {
 		try {
+			setIsLoading(true);
 			const response = await fetch(
 				'http://localhost:5001/api/v1/auth/login',
 				{
@@ -49,16 +56,27 @@ const Login = () => {
 				// Navigate to home page
 				navigate('/');
 			} else {
-				console.error('Failed to login user');
-				toast.error(
-					'Failed to login user. Please check your credentials and try again.'
-				);
+				const errorData = await response.json();
+				toast.error(`Failed to login user: ${errorData.message}`);
+				setError(`Failed to login user: ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error submitting form:', error);
 			toast.error('An error occurred while trying to login.');
+			setError(`Error submitting form`);
+		} finally {
+			setIsLoading(false);
 		}
 	};
+
+	// Loading Screen
+	if (isLoading || isSubmitting) {
+		return <Loading />;
+	}
+
+	// Error screen
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
 
 	return (
 		<>

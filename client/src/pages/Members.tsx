@@ -6,6 +6,7 @@ import MemberList from '../components/user/MemberList';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Members = () => {
 	const [userMembers, setUserMembers] = useState<userData[]>([]);
@@ -23,6 +24,7 @@ const Members = () => {
 				// Retrieve the token from local storage
 				const token = localStorage.getItem('authToken');
 				if (!token) {
+					toast.error('You are not authorized to access this page');
 					setError('You are not authorized to access this page');
 					setIsLoading(false);
 					return;
@@ -62,11 +64,11 @@ const Members = () => {
 				if (Array.isArray(data)) {
 					setUserMembers(data);
 				} else {
-					console.error('API response is not an array:', data);
+					toast.error('API response is not an array:', data);
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				console.error('Error fetching members:', error);
+				toast.error('Error fetching members list');
 				// Assert error type as Error
 				if (error instanceof Error) {
 					setError(error.message);
@@ -113,68 +115,87 @@ const Members = () => {
 	}
 
 	return (
-		<section className="w-full h-screen bg-main-gradient">
-			<article className="w-full pt-36 lg:pt-52 px-1">
-				<div className="m-2">
-					<HeadingOne headingOneText="Members List" />
-				</div>
+		<>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				className="toast-container"
+				toastClassName="toast"
+			/>
+			<section className="w-full h-screen bg-main-gradient">
+				<article className="w-full pt-36 lg:pt-52 px-1">
+					<div className="m-2">
+						<HeadingOne headingOneText="Members List" />
+					</div>
 
-				{isLoggedIn && (
-					<>
-						<div className="p-4 lg:mt-12">
-							<div className="flex justify-center">
-								<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-row justify-between h-fit p-2 xl:py-4 xl:px-20 text-sm md:text-lg lg:text-xl bg-black text-white border-b-2 border-forth font-dmsans font-bold">
-									<p>User Name</p>
-									<p className="md:ml-24">User Status</p>
-									<p>Last Logged In</p>
+					{isLoggedIn && (
+						<>
+							<div className="p-4 lg:mt-12">
+								<div className="flex justify-center">
+									<div className="w-full xl:w-9/12 2xl:max-w-7xl flex flex-row justify-between h-fit p-2 xl:py-4 xl:px-20 text-sm md:text-lg lg:text-xl bg-black text-white border-b-2 border-forth font-dmsans font-bold">
+										<p>User Name</p>
+										<p className="md:ml-24">User Status</p>
+										<p>Last Logged In</p>
+									</div>
+								</div>
+								<div className="w-full h-fit grid grid-cols-1">
+									<AnimatePresence>
+										{userMembers.map((userMember) => (
+											<motion.div
+												key={userMember._id}
+												initial={{ opacity: 0, y: 20 }}
+												animate={{ opacity: 1, y: 0 }}
+												exit={{ opacity: 0, y: -20 }}
+												transition={{ duration: 0.3 }}
+											>
+												<MemberList
+													firstName={
+														userMember.firstName
+													}
+													lastName={
+														userMember.lastName
+													}
+													userStatus={
+														userMember.userStatus
+													}
+													lastLogin={
+														userMember.lastLogin
+															? formatDate(
+																	new Date(
+																		userMember.lastLogin
+																	)
+															  )
+															: 'Never'
+													}
+													userId={userMember._id}
+													onClick={() =>
+														handleAuditLog(
+															userMember._id
+														)
+													}
+													onDelete={() =>
+														handleRemoveUser(
+															userMember._id
+														)
+													}
+												/>
+											</motion.div>
+										))}
+									</AnimatePresence>
 								</div>
 							</div>
-							<div className="w-full h-fit grid grid-cols-1">
-								<AnimatePresence>
-									{userMembers.map((userMember) => (
-										<motion.div
-											key={userMember._id}
-											initial={{ opacity: 0, y: 20 }}
-											animate={{ opacity: 1, y: 0 }}
-											exit={{ opacity: 0, y: -20 }}
-											transition={{ duration: 0.3 }}
-										>
-											<MemberList
-												firstName={userMember.firstName}
-												lastName={userMember.lastName}
-												userStatus={
-													userMember.userStatus
-												}
-												lastLogin={
-													userMember.lastLogin
-														? formatDate(
-																new Date(
-																	userMember.lastLogin
-																)
-														  )
-														: 'Never'
-												}
-												userId={userMember._id}
-												onClick={() =>
-													handleAuditLog(
-														userMember._id
-													)
-												}
-												onDelete={() =>
-													handleRemoveUser(
-														userMember._id
-													)
-												}
-											/>
-										</motion.div>
-									))}
-								</AnimatePresence>
-							</div>
-						</div>
-					</>
-				)}
-			</article>
-		</section>
+						</>
+					)}
+				</article>
+			</section>
+		</>
 	);
 };
 

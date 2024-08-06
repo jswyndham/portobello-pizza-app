@@ -1,9 +1,11 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
-import { checkAuthStatus } from './authCheck'; // Import the separate auth check function
+import { checkAuthStatus } from './authCheck';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialState = {
-	isLoggedIn: false,
-	token: null,
+	isLoggedIn: !!localStorage.getItem('authToken'),
+	token: localStorage.getItem('authToken'),
 };
 
 const authReducer = (state, action) => {
@@ -33,6 +35,10 @@ export const AuthProvider = ({ children }) => {
 	}, [dispatch]);
 
 	const logout = async () => {
+		// Remove token from local storage immediately
+		localStorage.removeItem('authToken');
+		dispatch({ type: 'LOGOUT' });
+
 		try {
 			const response = await fetch(
 				'http://localhost:5001/api/v1/auth/logout',
@@ -43,18 +49,30 @@ export const AuthProvider = ({ children }) => {
 			);
 
 			if (response.ok) {
-				dispatch({ type: 'LOGOUT' });
+				toast.success('Successfully logged out');
 			} else {
-				console.error('Failed to logout');
+				const errorData = await response.json();
+				toast.error(`Failed to logout: ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error logging out:', error);
+			toast.error('Error logging out');
 		}
 	};
 
 	return (
 		<AuthContext.Provider value={{ state, dispatch, logout }}>
 			{children}
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
 		</AuthContext.Provider>
 	);
 };

@@ -137,7 +137,7 @@ const Navbar = () => {
 											style={{ opacity: 0 }}
 											animate={{ opacity: 1 }}
 											exit={{ opacity: 0 }}
-											transition={{ duration: 0.3 }}
+											transition={{ duration: 0.2 }}
 										>
 											<IoMdArrowDropdown className="text-2xl mt-1 ml-2" />
 										</motion.div>
@@ -148,7 +148,7 @@ const Navbar = () => {
 											style={{ opacity: 0 }}
 											animate={{ opacity: 1 }}
 											exit={{ opacity: 0 }}
-											transition={{ duration: 0.3 }}
+											transition={{ duration: 0.2 }}
 										>
 											<IoMdArrowDropup className="text-2xl mt-1 ml-2" />
 										</motion.div>
@@ -159,7 +159,11 @@ const Navbar = () => {
 							<AnimatePresence>
 								{isFoodMenuOpen && (
 									<motion.div
-										className="absolute w-52 top-28 right-96 -mr-6 2xl:mr-32 bg-forth bg-opacity-75 rounded-b-md shadow-lg backdrop-blur-sm"
+										className={`absolute w-48 2xl:w-60 ${
+											isLoggedIn
+												? 'mr-52 2xl:mr-96'
+												: 'mr-16 2xl:mr-44'
+										} top-28 right-80 bg-forth bg-opacity-75 rounded-b-md shadow-lg backdrop-blur-sm`}
 										ref={foodMenuRef}
 										initial="closed"
 										style={{ opacity: 0 }}

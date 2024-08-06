@@ -1,10 +1,13 @@
 import { ImageUploadProps } from '../../types/foodItemInterfaces';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	imagePreview,
 	setImageUrl,
 }) => {
+	const [error, setError] = useState<string | null>(null);
+
 	const cloudinaryRef = useRef<any>(null);
 	const widgetRef = useRef<any>(null);
 
@@ -22,6 +25,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 						setImageUrl(file);
 					} else if (error) {
 						console.error('Upload error:', error);
+						toast.error('Upload error:', error);
+						setError('Upload error');
 					}
 				}
 			);
@@ -29,31 +34,46 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 	}, [setImageUrl]);
 
 	return (
-		<div className="flex flex-col my-2">
-			<button
-				type="button"
-				onClick={() => {
-					if (widgetRef.current) {
-						widgetRef.current.open();
-					}
-				}}
-				className="text-lg p-3 my-5 bg-green-500 text-white rounded-md font-bold border border-slate-500 drop-shadow-lg hover:shadow-md hover:shadow-slate-400 hover:bg-green-600"
-			>
-				Upload Image
-			</button>
-			{imagePreview && (
-				<div className="mb-3">
-					<p className="py-2 text-xl font-noto-serif-display font-semibold">
-						Image Preview:
-					</p>
-					<img
-						src={imagePreview}
-						alt="Image Preview"
-						className="w-56 h-48 object-cover drop-shadow-lg shadow-md shadow-slate-400 rounded-md"
-					/>
-				</div>
-			)}
-		</div>
+		<>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				className="toast-container"
+				toastClassName="toast"
+			/>
+			<div className="flex flex-col my-2">
+				<button
+					type="button"
+					onClick={() => {
+						if (widgetRef.current) {
+							widgetRef.current.open();
+						}
+					}}
+					className="text-lg p-3 my-5 bg-green-500 text-white rounded-md font-bold border border-slate-500 drop-shadow-lg hover:shadow-md hover:shadow-slate-400 hover:bg-green-600"
+				>
+					Upload Image
+				</button>
+				{imagePreview && (
+					<div className="mb-3">
+						<p className="py-2 text-xl font-noto-serif-display font-semibold">
+							Image Preview:
+						</p>
+						<img
+							src={imagePreview}
+							alt="Image Preview"
+							className="w-56 h-48 object-cover drop-shadow-lg shadow-md shadow-slate-400 rounded-md"
+						/>
+					</div>
+				)}
+			</div>
+		</>
 	);
 };
 

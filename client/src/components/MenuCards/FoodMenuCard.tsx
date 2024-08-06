@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { RxCross2 } from 'react-icons/rx';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EditFoodItem } from '../menuItems';
@@ -69,11 +70,17 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			try {
 				const response = await fetch(
 					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12&menuCategory=${selectedCategory}`,
-					{ method: 'GET' }
+					{
+						method: 'GET',
+						headers: {
+							Authorization: `Bearer ${state.token}`, // Add the token here
+						},
+						credentials: 'include', // If you are using cookies for session management
+					}
 				);
 				const data = await response.json();
 
-				if (data.items && Array.isArray(data.items)) {
+				if (response.ok && data.items && Array.isArray(data.items)) {
 					setFoodItems(data.items);
 				} else {
 					toast.error('API response is not an array:', data);
@@ -88,7 +95,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		};
 
 		fetchFoodItems();
-	}, [page, selectedCategory]);
+	}, [page, selectedCategory, state.token]); // Ensure the token is part of the dependencies
 
 	// Submit menu item deletion
 	const onSubmitDelete = async (id: string) => {

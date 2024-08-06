@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { AuditLog } from '../types/auditLogInterface';
 import { useParams } from 'react-router-dom';
 import AuditLogList from '../components/user/AuditLogList';
+import { ToastContainer, toast } from 'react-toastify';
 
 const AuditLogs = () => {
 	const { id } = useParams<{ id: string }>();
@@ -21,7 +22,7 @@ const AuditLogs = () => {
 			setIsLoading(true);
 			try {
 				if (!token) {
-					console.error('No token available');
+					toast.error('No token available');
 					setError('No token available');
 					setIsLoading(false);
 					return;
@@ -43,14 +44,14 @@ const AuditLogs = () => {
 				if (data && data.data && Array.isArray(data.data.auditLogs)) {
 					setAuditLog(data.data.auditLogs);
 				} else {
-					console.error(
+					toast.error(
 						'API response is not in expected format:',
 						data
 					);
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				console.error('Error fetching audit logs:', error);
+				toast.error('Error fetching audit logs');
 				setError('Error fetching audit logs');
 			} finally {
 				setIsLoading(false);
@@ -84,38 +85,53 @@ const AuditLogs = () => {
 	};
 
 	return (
-		<section className="w-full h-full bg-main-gradient">
-			<article className="w-full pt-36 lg:pt-52 px-1">
-				<div className="m-2">
-					<HeadingOne headingOneText="Audit Logs" />
-				</div>
-				{isLoggedIn && (
-					<>
-						<div className="p-4 lg:mt-12">
-							<div className="w-full h-fit grid grid-cols-1">
-								{auditLog.map((auditLogs) => (
-									<AuditLogList
-										key={auditLogs._id.toString()}
-										_id={auditLogs._id.toString()}
-										createdAt={
-											auditLogs.createdAt
-												? formatDate(
-														new Date(
-															auditLogs.createdAt
-														)
-												  )
-												: 'Never'
-										}
-										subjectType={auditLogs.subjectType}
-										details={auditLogs.details}
-									/>
-								))}
+		<>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				className="toast-container"
+				toastClassName="toast"
+			/>
+			<section className="w-full h-full bg-main-gradient">
+				<article className="w-full pt-36 lg:pt-52 px-1">
+					<div className="m-2">
+						<HeadingOne headingOneText="Audit Logs" />
+					</div>
+					{isLoggedIn && (
+						<>
+							<div className="p-4 lg:mt-12">
+								<div className="w-full h-fit grid grid-cols-1">
+									{auditLog.map((auditLogs) => (
+										<AuditLogList
+											key={auditLogs._id.toString()}
+											_id={auditLogs._id.toString()}
+											createdAt={
+												auditLogs.createdAt
+													? formatDate(
+															new Date(
+																auditLogs.createdAt
+															)
+													  )
+													: 'Never'
+											}
+											subjectType={auditLogs.subjectType}
+											details={auditLogs.details}
+										/>
+									))}
+								</div>
 							</div>
-						</div>
-					</>
-				)}
-			</article>
-		</section>
+						</>
+					)}
+				</article>
+			</section>
+		</>
 	);
 };
 

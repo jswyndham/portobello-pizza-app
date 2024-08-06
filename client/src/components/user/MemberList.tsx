@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { RxCross2 } from 'react-icons/rx';
 import { AnimatePresence } from 'framer-motion';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
+import Loading from '../Loading';
+import ErrorMessage from '../ErrorMessage';
 
 interface MemberListProps extends useDataProps {
 	onDelete: () => void;
@@ -21,14 +23,19 @@ const MemberList: FC<MemberListProps> = ({
 }) => {
 	const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 	const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const { state } = useAuth();
 	const { token } = state;
 
 	const onSubmitDelete = async (id: string) => {
 		try {
+			setIsLoading(true);
+
 			if (!token) {
-				console.error('No token available');
+				toast.error('No token available');
+				setError('No token available');
 				return;
 			}
 
@@ -50,14 +57,16 @@ const MemberList: FC<MemberListProps> = ({
 				toast.error(
 					`User profile was not deleted: ${errorData.message}`
 				);
-				console.error(
-					'Failed to delete user profile:',
-					errorData.message
+				setError(
+					`Failed to delete user profile:
+					${errorData.message}`
 				);
 			}
 		} catch (error) {
-			console.error('Error deleting item:', error);
 			toast.error('An error occurred while deleting the user profile');
+			setError('Error deleting item');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -75,6 +84,20 @@ const MemberList: FC<MemberListProps> = ({
 			setItemIdToDelete(null);
 		}
 	};
+
+	// Loading Screen
+	if (isLoading) {
+		return (
+			<div>
+				<Loading />
+			</div>
+		);
+	}
+
+	// Error screen
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
 
 	return (
 		<>

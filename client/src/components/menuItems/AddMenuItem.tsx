@@ -8,19 +8,22 @@ import {
 import IngredientList from './IngredientList';
 import ImageUpload from './ImageUpload';
 import { FoodMenuFormData, MenuFormData } from '../../types/foodItemInterfaces';
-import { useNavigate } from 'react-router-dom';
 import { DrinkMenuFormData } from '../../types/drinkItemInterfaces';
 import Loading from '../Loading';
 import ErrorMessage from '../ErrorMessage';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../context/AuthContext'; // Import useAuth
 
 const AddMenuItem = () => {
-	const navigate = useNavigate();
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>(['']);
 	const [isDrink, setIsDrink] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const { state } = useAuth(); // Use useAuth to get the state
+	const { token } = state;
 
 	const {
 		register,
@@ -56,8 +59,7 @@ const AddMenuItem = () => {
 
 	const onSubmit: SubmitHandler<MenuFormData> = async (data) => {
 		try {
-			// Retrieve the token from local storage
-			const token = localStorage.getItem('authToken');
+			setIsLoading(true);
 
 			if (!token) {
 				setError('You are not authorized to access this page');
@@ -90,18 +92,22 @@ const AddMenuItem = () => {
 
 			// After the fetch response is successful, reset the form, ingredients array, and navigate to the menu page
 			if (response.ok) {
+				toast.success('Your menu item was successfully added!');
 				const menuItem = await response.json();
 				setIngredients(menuItem.ingredients || []);
 				reset();
-				navigate(isDrink ? '/drinksmenu' : '/foodmenu');
+				setImagePreview(null); // Clear the image preview
 			} else {
 				const errorData = await response.json();
-				toast.error('Failed to submit menu item:', errorData.message);
-				setError(`Failed to submit menu item:', ${errorData.message}`);
+
+				toast.error(`Failed to submit menu item: ${errorData.message}`);
+				setError(`Failed to submit menu item: ${errorData.message}`);
 			}
 		} catch (error) {
 			toast.error('Error submitting form');
 			setError('Error submitting form');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -165,7 +171,7 @@ const AddMenuItem = () => {
 			/>
 			<section className="flex justify-center items-center w-screen sm:w-full h-full py-28">
 				<form
-					className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
+					className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"
 					onSubmit={handleSubmit(onSubmit)}
 				>
 					{/* Menu Category Label and Select Dropdown */}

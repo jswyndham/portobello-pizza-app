@@ -7,6 +7,7 @@ import type { FoodMenu as FoodMenuModel } from '../../../server/src/models/FoodM
 import Loading from '../components/Loading';
 import ItemNotFound from '../components/itemNotFound/ItemNotFound';
 import { MenuSection } from '../types/seoInterface';
+import { ToastContainer, toast } from 'react-toastify';
 
 function SaladMenu() {
 	const [menuItems, setMenuItems] = useState<MenuSection[]>([]);
@@ -59,11 +60,11 @@ function SaladMenu() {
 
 					setMenuItems(groupedItems);
 				} else {
-					console.error('API response is not an array:', data);
+					toast.error('API response is not an array:', data);
 					setError('Unexpected API response format.');
 				}
 			} catch (error) {
-				console.error('Error fetching menu items:', error);
+				toast.error('Error fetching menu items');
 				setError('Error fetching menu items.');
 			} finally {
 				setIsLoading(false);
@@ -89,36 +90,51 @@ function SaladMenu() {
 	}
 
 	return (
-		<article className="w-screen h-full bg-main-gradient min-h-screen">
-			<Helmet>
-				<title>
-					Porto Bello Salad Menu | Italian Food on Koh Tao Island
-				</title>
-				<meta
-					name="description"
-					content="Enjoy the best salad dishes on Koh Tao Island at Porto Bello, Koh Tao. Check out our variety of salad dishes with fresh ingredients."
-				/>
-				<link
-					rel="canonical"
-					href="http://www.portobello.com/saladmenu"
-				/>
-			</Helmet>
-			<MenuJSONLD menuItems={menuItems} />
-			<article className="h-full pt-12 px-2 xl:pt-24 flex flex-col justify-center items-center">
-				<HeadingOne headingOneText={'Salad Menu'} />
+		<>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				className="toast-container"
+				toastClassName="toast"
+			/>
+			<article className="w-screen h-full bg-main-gradient min-h-screen">
+				<Helmet>
+					<title>
+						Porto Bello Salad Menu | Italian Food on Koh Tao Island
+					</title>
+					<meta
+						name="description"
+						content="Enjoy the best salad dishes on Koh Tao Island at Porto Bello, Koh Tao. Check out our variety of salad dishes with fresh ingredients."
+					/>
+					<link
+						rel="canonical"
+						href="http://www.portobello.com/saladmenu"
+					/>
+				</Helmet>
+				<MenuJSONLD menuItems={menuItems} />
+				<article className="h-full pt-12 px-2 xl:pt-24 flex flex-col justify-center items-center">
+					<HeadingOne headingOneText={'Salad Menu'} />
 
-				{menuItems.map((section) => (
-					<article
-						key={section.sectionName}
-						className="w-full flex flex-col justify-center items-center"
-					>
-						<div className="w-full flex justify-center items-center">
-							<FoodMenuCard category={section.sectionName} />
-						</div>
-					</article>
-				))}
+					{menuItems.map((section) => (
+						<article
+							key={section.sectionName}
+							className="w-full flex flex-col justify-center items-center"
+						>
+							<div className="w-full flex justify-center items-center">
+								<FoodMenuCard category={section.sectionName} />
+							</div>
+						</article>
+					))}
+				</article>
 			</article>
-		</article>
+		</>
 	);
 }
 
