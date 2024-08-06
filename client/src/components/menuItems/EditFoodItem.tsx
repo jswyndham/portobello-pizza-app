@@ -81,7 +81,7 @@ const EditFoodItem = () => {
 							}
 						);
 						const data = await response.json();
-						console.log('Fetched food item:', data); // Log the response data
+
 						if (data && data.items) {
 							// Change this line to access the correct property
 							const item = data.items; // Adjust how the data is accessed
@@ -97,12 +97,10 @@ const EditFoodItem = () => {
 							setIngredients(item.ingredients || []);
 							setCache(cacheKey, item); // Cache the fetched item
 						} else {
-							console.error('Food menu item not found');
 							toast.error('Food menu item not found');
 							setError('Food menu item not found');
 						}
 					} catch (error) {
-						console.error('Error fetching food menu item:', error); // Log the error
 						toast.error('Error fetching food menu item');
 						setError('Error fetching food menu item');
 					} finally {
@@ -204,11 +202,6 @@ const EditFoodItem = () => {
 			</div>
 		);
 	}
-
-	// Error screen
-	// if (error) {
-	// 	return <ErrorMessage errorMessage={error} />;
-	// }
 
 	return (
 		<>

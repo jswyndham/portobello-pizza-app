@@ -148,17 +148,15 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			);
 			if (response.ok) {
 				const data = await response.json();
-				console.log('Fetched food item:', data); // Log the response data
 				setFoodItemToEdit(data.foodMenuItem);
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-				console.error('Failed to get menu item:', errorData.message); // Log the error
+
 				toast.error(`Failed to get menu item: ${errorData.message}`);
 				setError(`Failed to get menu item: ${errorData.message}`);
 			}
 		} catch (error) {
-			console.error('Error finding menu item:', error); // Log the error
 			toast.error('Error finding menu item');
 			setError('Error finding menu item');
 		} finally {

@@ -34,7 +34,6 @@ export const verifyJWT = (token: string): UserPayload => {
 		}
 		return decoded as UserPayload;
 	} catch (error) {
-		console.log('JWT verification failed:', error); // Add logging
 		throw new Error('Invalid token');
 	}
 };

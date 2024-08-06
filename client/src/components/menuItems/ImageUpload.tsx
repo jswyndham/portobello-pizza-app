@@ -24,7 +24,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 						const file = result.info; // Assuming this is the file object
 						setImageUrl(file);
 					} else if (error) {
-						console.error('Upload error:', error);
 						toast.error('Upload error:', error);
 						setError('Upload error');
 					}
