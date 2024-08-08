@@ -34,6 +34,7 @@ export default defineConfig({
 		jsxInject: `import React from 'react'`,
 	},
 	build: {
+		outDir: 'dist',
 		rollupOptions: {
 			output: {
 				manualChunks(id) {
