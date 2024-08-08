@@ -1,7 +1,7 @@
 import request from 'supertest';
-import app from '../src/server';
+import app from '../server';
 import mongoose, { ConnectOptions } from 'mongoose';
-import User from '../src/models/UserModel';
+import User from '../models/UserModel';
 import { seedAdminUser } from '../seeds/adminUserSeed';
 import { connectToDatabase, disconnectFromDatabase } from './setup';
 

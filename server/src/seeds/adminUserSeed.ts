@@ -1,6 +1,6 @@
 // seeds/adminUserSeed.js
-import User from '../src/models/UserModel';
-import { USER_STATUS } from '../src/constants';
+import User from '../models/UserModel';
+import { USER_STATUS } from '../constants';
 import bcrypt from 'bcryptjs';
 
 export const seedAdminUser = async () => {

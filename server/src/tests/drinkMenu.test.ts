@@ -1,9 +1,9 @@
 import request from 'supertest';
-import app from '../src/server';
+import app from '../server';
 import mongoose, { ConnectOptions } from 'mongoose';
-import User from '../src/models/UserModel';
+import User from '../models/UserModel';
 import jwt from 'jsonwebtoken';
-import DrinkMenu from '../src/models/DrinkMenuModel';
+import DrinkMenu from '../models/DrinkMenuModel';
 import { connectToDatabase, disconnectFromDatabase } from './setup';
 
 const url = `mongodb://127.0.0.1:27017/test_database`;

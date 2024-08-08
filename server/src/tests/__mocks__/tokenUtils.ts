@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import logger from '../../src/logger';
+import logger from '../../logger';
 
 interface DecodedToken extends JwtPayload {
 	userId: string;
