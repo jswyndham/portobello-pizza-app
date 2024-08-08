@@ -17,11 +17,11 @@
 	"routes": [
 		{
 			"src": "/(.*)",
-			"destination": "/server/dist/server.js"
+			"dest": "/server/dist/server.js"
 		},
 		{
 			"src": "/(.*)",
-			"destination": "/client/dist/$1"
+			"dest": "/client/dist/$1"
 		}
 	]
 }
