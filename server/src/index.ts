@@ -31,9 +31,20 @@ app.use(helmet()); // Set security headers
 app.use(compression()); // Enable gzip compression for responses
 
 // Configure CORS
+const allowedOrigins = [process.env.CLIENT_URL, process.env.NODE_DEV];
+
+// Configure CORS
 app.use(
 	cors({
-		origin: process.env.CLIENT_URL, // Allow requests from this origin
+		origin: function (origin, callback) {
+			// Allow requests with no origin (like mobile apps or curl requests)
+			if (!origin) return callback(null, true);
+			if (allowedOrigins.indexOf(origin) === -1) {
+				const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
+				return callback(new Error(msg), false);
+			}
+			return callback(null, true);
+		},
 		credentials: true, // Allow credentials to be sent with requests
 		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 	})
