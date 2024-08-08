@@ -31,7 +31,7 @@ const Members = () => {
 				}
 
 				const response = await fetch(
-					`http://localhost:5001/api/v1/user`,
+					`${import.meta.env.VITE_API_BASE_URL}/user`,
 					{
 						method: 'GET',
 						headers: {

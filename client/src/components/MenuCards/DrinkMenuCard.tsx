@@ -16,6 +16,7 @@ interface DrinkMenuCardProps {
 	category: string;
 }
 
+// Component for displaying drink menu items
 const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	const [drinkItems, setDrinkItems] = useState<DrinkMenuItem[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -31,11 +32,14 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 	const { isLoggedIn, token } = state;
 
 	const [animationTriggered, setAnimationTriggered] = useState(false);
+
+	// Animation variants for content fade-in effect
 	const contentFadeInVariants = {
 		hidden: { opacity: 0 },
 		visible: { opacity: 1, transition: { delay: 0.5, duration: 2 } },
 	};
 
+	// Animation variants for fade-out effect
 	const fadeOutVariants = {
 		initial: { opacity: 1, scale: 1 },
 		exit: {
@@ -47,16 +51,20 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 
 	const navigate = useNavigate();
 
+	// Trigger animation on component mount
 	useEffect(() => {
 		setAnimationTriggered(true);
 	}, []);
 
+	// Fetch drink items from API on component mount or when category changes
 	useEffect(() => {
 		const fetchDrinkItems = async () => {
 			setIsLoading(true);
 			try {
 				const response = await fetch(
-					`http://localhost:5001/api/v1/drinkMenu?page=${page}&limit=12&drinkCategory=${selectedCategory}`,
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/drinkMenu?page=${page}&limit=12&drinkCategory=${selectedCategory}`,
 					{
 						method: 'GET',
 					}
@@ -78,6 +86,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 		fetchDrinkItems();
 	}, [page, selectedCategory]);
 
+	// Handle delete submission
 	const onSubmitDelete = async (id: string) => {
 		try {
 			if (!token) {
@@ -87,7 +96,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/drinkMenu/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/drinkMenu/${id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -112,6 +121,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 		}
 	};
 
+	// Handle edit submission
 	const onSubmitEdit = async (id: string) => {
 		try {
 			if (!token) {
@@ -120,7 +130,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/drinkMenu/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/drinkMenu/${id}`,
 				{
 					method: 'GET',
 					headers: {
@@ -145,16 +155,19 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 		}
 	};
 
+	// Handle edit button click
 	const handleEdit = (drinkItem: DrinkMenuItem) => {
 		onSubmitEdit(drinkItem._id);
 		navigate(`/admin/editdrink/${drinkItem._id}`);
 	};
 
+	// Handle delete button click
 	const handleDelete = (id: string) => {
 		setIsDeleteOpen(true);
 		setItemIdToDelete(id);
 	};
 
+	// Confirm deletion
 	const confirmDelete = () => {
 		if (itemIdToDelete) {
 			onSubmitDelete(itemIdToDelete);
@@ -163,6 +176,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 		}
 	};
 
+	// Render loading state
 	if (isLoading) {
 		return (
 			<div>
@@ -171,14 +185,17 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 		);
 	}
 
+	// Render error state
 	if (error) {
 		return <ErrorMessage errorMessage={error} />;
 	}
 
+	// Render empty state if no drink items found
 	if (drinkItems.length === 0) {
 		return <ItemNotFound item="drink menu item" />;
 	}
 
+	// Render drink items
 	return (
 		<>
 			<ToastContainer
@@ -199,7 +216,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={contentFadeInVariants}
-					className="w-11/12 h-fit grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 justify-center items-center mb-20 bg-white"
+					className="w-11/12 h-fit grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-1 justify-center items-center mb-20"
 				>
 					<AnimatePresence>
 						{drinkItems.map((drink) => (
@@ -232,11 +249,11 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 										</div>
 										<div className="relative flex flex-row h-fit py-2 border-y-2 border-slate-600 bg-card-gradient bg-opacity-70">
 											<div className="w-full text-left drop-shadow-lg py-1 pl-4">
-												<h2 className="text-lg lg:text-xl font-semibold font-cinzel text-black">
+												<h2 className="text-lg font-cinzel text-black">
 													{drink.name}
 												</h2>
 											</div>
-											<div className="flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
+											<div className="flex flex-row justify-end text-lg text-black flex-grow font-cinzel py-1 px-4">
 												<p>฿ </p>
 												<p className="font-semibold">
 													{drink.price}
@@ -247,11 +264,11 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 								) : (
 									<div className="relative flex flex-row h-fit py-2 border-y-2 border-slate-600 bg-card-gradient bg-opacity-70">
 										<div className="w-full text-left drop-shadow-lg py-1 pl-4">
-											<h2 className="text-lg lg:text-xl font-semibold font-cinzel text-black">
+											<h2 className="text-lg font-cinzel text-black">
 												{drink.name}
 											</h2>
 										</div>
-										<div className="flex flex-row justify-end text-lg lg:text-xl text-black flex-grow font-cinzel py-1 px-4">
+										<div className="flex flex-row justify-end text-lg text-black flex-grow font-cinzel py-1 px-4">
 											<p>฿ </p>
 											<p className="font-semibold">
 												{drink.price}

@@ -194,7 +194,7 @@ const SidebarMenu = () => {
 									variants={menuVariants}
 								>
 									<ul className="w-full flex flex-col py-4 justify-end items-center">
-										<Link to="/pizzamenu">
+										<Link to="/pizza">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -202,7 +202,7 @@ const SidebarMenu = () => {
 												Pizza
 											</li>
 										</Link>
-										<Link to="/pastamenu">
+										<Link to="/pasta">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -210,7 +210,7 @@ const SidebarMenu = () => {
 												Pasta
 											</li>
 										</Link>
-										<Link to="/calzonemenu">
+										<Link to="/calzone">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -218,7 +218,7 @@ const SidebarMenu = () => {
 												Calzone
 											</li>
 										</Link>
-										<Link to="/startermenu">
+										<Link to="/starter">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -226,7 +226,7 @@ const SidebarMenu = () => {
 												Starters
 											</li>
 										</Link>
-										<Link to="/mainsmenu">
+										<Link to="/mains">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -234,7 +234,7 @@ const SidebarMenu = () => {
 												Mains
 											</li>
 										</Link>
-										<Link to="/sidesmenu">
+										<Link to="/sides">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -242,7 +242,7 @@ const SidebarMenu = () => {
 												Sides
 											</li>
 										</Link>
-										<Link to="/saladmenu">
+										<Link to="/salad">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"
@@ -250,7 +250,7 @@ const SidebarMenu = () => {
 												Salad
 											</li>
 										</Link>
-										<Link to="/dessertmenu">
+										<Link to="/dessert">
 											<li
 												onClick={handleMenuItemClick}
 												className="px-14 py-2 my-3 text-white hover:bg-gray-600 hover:text-yellow-300 transition-all duration-300"

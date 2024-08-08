@@ -11,19 +11,19 @@ import { useAuth } from '../../context/AuthContext';
 import { FoodMenuItem } from '../../types/foodItemInterfaces';
 import Loading from '../Loading';
 import ItemNotFound from '../itemNotFound/ItemNotFound';
-import ErrorMessage from '../ErrorMessage';
 
 interface FoodMenuCardProps {
 	category: string;
 }
 
+// Component for displaying food menu items
 const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
-	// Card states
+	// Card states for food items, loading state, and error state
 	const [foodItems, setFoodItems] = useState<FoodMenuItem[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
-	// Pagination states
+	// Pagination and category states
 	const [page] = useState(1);
 	const [selectedCategory] = useState<string>(category);
 
@@ -42,7 +42,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	const { token } = state;
 	const { isLoggedIn } = state;
 
-	// Motion animation
+	// Motion animation states and variants
 	const [animationTriggered, setAnimationTriggered] = useState(false);
 	const contentFadeInVariants = {
 		hidden: { opacity: 0 },
@@ -60,17 +60,20 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 
 	const navigate = useNavigate();
 
+	// Trigger animation on component mount
 	useEffect(() => {
 		setAnimationTriggered(true);
 	}, []);
 
-	// Fetch menu Items
+	// Fetch food items from API on component mount or when category changes
 	useEffect(() => {
 		const fetchFoodItems = async () => {
 			setIsLoading(true);
 			try {
 				const response = await fetch(
-					`http://localhost:5001/api/v1/foodMenu?page=${page}&limit=12&menuCategory=${selectedCategory}`,
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?page=${page}&limit=12&menuCategory=${selectedCategory}`,
 					{
 						method: 'GET',
 					}
@@ -99,7 +102,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	const onSubmitDelete = async (id: string) => {
 		try {
 			const response = await fetch(
-				`http://localhost:5001/api/v1/foodMenu/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/foodMenu/${id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -109,7 +112,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				}
 			);
 			if (response.ok) {
-				// Success modal
+				// Success toast notification
 				toast.success(`You have successfully deleted a menu item!`);
 				// Remove the deleted item from the state
 				setFoodItems((prevItems) =>
@@ -117,7 +120,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				);
 			} else {
 				const errorData = await response.json();
-				// Error modal
+				// Error toast notification
 				toast.error(`Failed to delete menu item: ${errorData.message}`);
 				setError(`Failed to delete menu item:', ${errorData.message}`);
 			}
@@ -137,7 +140,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/foodMenu/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/foodMenu/${id}`,
 				{
 					method: 'GET',
 					headers: {
@@ -152,7 +155,6 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				setIsEditOpen(true);
 			} else {
 				const errorData = await response.json();
-
 				toast.error(`Failed to get menu item: ${errorData.message}`);
 				setError(`Failed to get menu item: ${errorData.message}`);
 			}
@@ -164,18 +166,19 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		}
 	};
 
-	// Handle editing
+	// Handle editing a menu item
 	const handleEdit = (foodItem: FoodMenuItem) => {
 		onSubmitEdit(foodItem._id);
 		navigate(`/admin/editfood/${foodItem._id}`);
 	};
 
-	// Handle delete functions
+	// Handle delete button click
 	const handleDelete = (id: string) => {
 		setIsDeleteOpen(true);
 		setItemIdToDelete(id);
 	};
 
+	// Confirm deletion of a menu item
 	const confirmDelete = () => {
 		if (itemIdToDelete) {
 			onSubmitDelete(itemIdToDelete);
@@ -184,6 +187,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		}
 	};
 
+	// Render loading state
 	if (isLoading) {
 		return (
 			<div>
@@ -192,14 +196,17 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		);
 	}
 
+	// Render error state (commented out)
 	// if (error) {
 	// 	return <ErrorMessage errorMessage={error} />;
 	// }
 
+	// Render empty state if no food items found
 	if (foodItems.length === 0) {
 		return <ItemNotFound item="food menu item" />;
 	}
 
+	// Render food items
 	return (
 		<>
 			<ToastContainer
@@ -232,6 +239,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 								layout
 								className="relative w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
 							>
+								{/* If user is logged in, show edit and delete buttons */}
 								{isLoggedIn && (
 									<article className="absolute w-full bg-slate-500 bg-opacity-50 backdrop-blur-sm">
 										<div className="flex justify-between p-2">
@@ -253,6 +261,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 									</article>
 								)}
 
+								{/* Display food item details */}
 								<article className="w-full h-full flex flex-col">
 									{food.imageUrl ? (
 										<img
@@ -300,8 +309,10 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 					</AnimatePresence>
 				</motion.div>
 
+				{/* Render edit modal if edit is open */}
 				{isEditOpen && foodItemToEdit && <EditFoodItem />}
 
+				{/* Render delete confirmation modal if delete is open */}
 				<AnimatePresence>
 					{isDeleteOpen && (
 						<ConfirmDeleteModal

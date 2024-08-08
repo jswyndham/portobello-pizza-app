@@ -20,7 +20,9 @@ function DessertMenu() {
 				setIsLoading(true);
 
 				const response = await fetch(
-					'http://localhost:5001/api/v1/foodMenu?menuCategory=DESSERT'
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?menuCategory=DESSERT`
 				);
 				const data = await response.json();
 
@@ -115,7 +117,7 @@ function DessertMenu() {
 					/>
 					<link
 						rel="canonical"
-						href="http://www.portobello.com/dessertmenu"
+						href="http://www.portobellokohtao.com/dessert"
 					/>
 				</Helmet>
 				<MenuJSONLD menuItems={menuItems} />

@@ -30,7 +30,9 @@ const AuditLogs = () => {
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/auditlogs/${id}?page=${page}&limit=20`,
+				`${
+					import.meta.env.VITE_API_BASE_URL
+				}/auditlogs/${id}?page=${page}&limit=20`,
 				{
 					method: 'GET',
 					headers: {

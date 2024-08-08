@@ -172,7 +172,7 @@ const Navbar = () => {
 										variants={menuVariants}
 									>
 										<ul className="w-full flex flex-col py-4 justify-end items-center">
-											<Link to="/pizzamenu">
+											<Link to="/pizza">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -182,7 +182,7 @@ const Navbar = () => {
 													Pizza
 												</li>
 											</Link>
-											<Link to="/pastamenu">
+											<Link to="/pasta">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -192,7 +192,7 @@ const Navbar = () => {
 													Pasta
 												</li>
 											</Link>
-											<Link to="/calzonemenu">
+											<Link to="/calzone">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -202,7 +202,7 @@ const Navbar = () => {
 													Calzone
 												</li>
 											</Link>
-											<Link to="/startermenu">
+											<Link to="/starter">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -212,7 +212,7 @@ const Navbar = () => {
 													Starters
 												</li>
 											</Link>
-											<Link to="/mainsmenu">
+											<Link to="/mains">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -222,7 +222,7 @@ const Navbar = () => {
 													Mains
 												</li>
 											</Link>
-											<Link to="/sidesmenu">
+											<Link to="/sides">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -232,7 +232,7 @@ const Navbar = () => {
 													Sides
 												</li>
 											</Link>
-											<Link to="/saladmenu">
+											<Link to="/salad">
 												<li
 													onClick={
 														handleMenuItemClick
@@ -242,7 +242,7 @@ const Navbar = () => {
 													Salad
 												</li>
 											</Link>
-											<Link to="/dessertmenu">
+											<Link to="/dessert">
 												<li
 													onClick={
 														handleMenuItemClick

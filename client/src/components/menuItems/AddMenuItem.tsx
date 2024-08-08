@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler, FieldErrorsImpl } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import {
 	MENU_CATEGORY,
 	MEAT_OR_VEG,
@@ -24,6 +25,7 @@ const AddMenuItem = () => {
 
 	const { state } = useAuth(); // Use useAuth to get the state
 	const { token } = state;
+	const navigate = useNavigate(); // Use useNavigate to programmatically navigate
 
 	const {
 		register,
@@ -57,6 +59,14 @@ const AddMenuItem = () => {
 		setIsDrink(watchedMenuCategory === MENU_CATEGORY.DRINK.value);
 	}, [watchedMenuCategory]);
 
+	// Create a mapping of menu category values to their corresponding labels
+	const menuCategoryLabelMap: Record<string, string> = Object.values(
+		MENU_CATEGORY
+	).reduce((acc, category) => {
+		acc[category.value] = category.label;
+		return acc;
+	}, {} as Record<string, string>);
+
 	const onSubmit: SubmitHandler<MenuFormData> = async (data) => {
 		try {
 			setIsLoading(true);
@@ -78,8 +88,8 @@ const AddMenuItem = () => {
 			// Define the fetch response
 			const response = await fetch(
 				isDrink
-					? 'http://localhost:5001/api/v1/drinkMenu'
-					: 'http://localhost:5001/api/v1/foodMenu',
+					? `${import.meta.env.VITE_API_BASE_URL}/drinkMenu`
+					: `${import.meta.env.VITE_API_BASE_URL}/foodMenu`,
 				{
 					method: 'POST',
 					headers: {
@@ -97,6 +107,15 @@ const AddMenuItem = () => {
 				setIngredients(menuItem.ingredients || []);
 				reset();
 				setImagePreview(null); // Clear the image preview
+
+				// Navigate to the correct menu category page using the label
+				if (isDrink) {
+					navigate('/drinksmenu');
+				} else {
+					const menuCategoryLabel =
+						menuCategoryLabelMap[data.menuCategory];
+					navigate(`/${menuCategoryLabel}`);
+				}
 			} else {
 				const errorData = await response.json();
 

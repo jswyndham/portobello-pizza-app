@@ -73,35 +73,35 @@ const router = createBrowserRouter([
 				],
 			},
 			{
-				path: 'pizzamenu',
+				path: 'pizza',
 				element: <PizzaMenu />,
 			},
 			{
-				path: 'pastamenu',
+				path: 'pasta',
 				element: <PastaMenu />,
 			},
 			{
-				path: 'calzonemenu',
+				path: 'calzone',
 				element: <CalzoneMenu />,
 			},
 			{
-				path: 'startermenu',
+				path: 'starter',
 				element: <StarterMenu />,
 			},
 			{
-				path: 'mainsmenu',
+				path: 'mains',
 				element: <MainMenu />,
 			},
 			{
-				path: 'sidesmenu',
+				path: 'sides',
 				element: <SidesMenu />,
 			},
 			{
-				path: 'saladmenu',
+				path: 'salad',
 				element: <SaladMenu />,
 			},
 			{
-				path: 'dessertmenu',
+				path: 'dessert',
 				element: <DessertMenu />,
 			},
 			{

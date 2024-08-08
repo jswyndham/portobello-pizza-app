@@ -10,7 +10,7 @@ const ProtectedRoute: FC<ProtectedRouteProps> = ({ element }) => {
 	const { state } = useAuth();
 	const { isLoggedIn } = state;
 
-	return isLoggedIn ? element : <Navigate to="/login" />;
+	return isLoggedIn ? element : <Navigate to="/admin/login" />;
 };
 
 export default ProtectedRoute;

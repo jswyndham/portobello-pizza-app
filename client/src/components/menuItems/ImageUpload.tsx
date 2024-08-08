@@ -16,8 +16,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 			cloudinaryRef.current = window.cloudinary;
 			widgetRef.current = cloudinaryRef.current.createUploadWidget(
 				{
-					cloudName: 'ducq9yzyn',
-					uploadPreset: 'u9bu7hdq',
+					cloudName: 'dx0xxpzx1',
+					uploadPreset: 'go1jodq2',
 				},
 				(error: any, result: any) => {
 					if (!error && result && result.event === 'success') {

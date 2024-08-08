@@ -44,6 +44,7 @@ const EditFoodItem = () => {
 	// Fetch the food item object and set cache in the browser
 	useEffect(() => {
 		const fetchFoodMenuItem = async () => {
+			setIsLoading(true);
 			if (id) {
 				const cacheKey = `foodMenuItem-${id}`;
 				if (cache[cacheKey]) {
@@ -71,7 +72,9 @@ const EditFoodItem = () => {
 
 						setIsLoading(true);
 						const response = await fetch(
-							`http://localhost:5001/api/v1/foodMenu/${id}`,
+							`${
+								import.meta.env.VITE_API_BASE_URL
+							}/foodMenu/${id}`,
 							{
 								method: 'GET',
 								headers: {
@@ -137,7 +140,7 @@ const EditFoodItem = () => {
 			};
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/foodMenu/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/foodMenu/${id}`,
 				{
 					method: 'PATCH',
 					headers: {

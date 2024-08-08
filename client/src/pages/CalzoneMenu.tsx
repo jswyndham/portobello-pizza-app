@@ -20,8 +20,14 @@ function CalzoneMenu() {
 				setIsLoading(true);
 
 				const response = await fetch(
-					'http://localhost:5001/api/v1/foodMenu?menuCategory=CALZONE'
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?menuCategory=CALZONE`,
+					{
+						method: 'GET',
+					}
 				);
+
 				const data = await response.json();
 
 				if (data.items && Array.isArray(data.items)) {
@@ -116,7 +122,7 @@ function CalzoneMenu() {
 					/>
 					<link
 						rel="canonical"
-						href="http://www.portobello.com/calzonemenu"
+						href="http://www.portobellokohtao.com/calzone"
 					/>
 				</Helmet>
 				<MenuJSONLD menuItems={menuItems} />

@@ -69,7 +69,7 @@ const Home = () => {
 					/>
 					<meta
 						property="og:url"
-						content="http://www.portobello.com/"
+						content="http://www.portobellokohtao.com/"
 					/>
 					<meta
 						property="og:image"
@@ -92,7 +92,7 @@ const Home = () => {
 						imagePath: '/images/portobello-logo-round-black.png',
 					}}
 					telephone="+66 77 457 029"
-					url="https://www.portobello.com/"
+					url="https://www.portobellokohtao.com/"
 					openingHours={openingHours}
 					priceRange="$$"
 					servesCuisine={['Italian', 'Mediterranean']}

@@ -2,41 +2,41 @@ export const menuCategories = [
 	{
 		title: 'Pizza',
 		imageUrl: '/images/pizza-small.jpg',
-		link: 'pizzamenu',
+		link: 'pizza',
 	},
 	{
 		title: 'Pasta',
 		imageUrl: '/images/pasta.jpg',
-		link: 'pastamenu',
+		link: 'pasta',
 	},
 	{
 		title: 'Calzone',
 		imageUrl: '/images/calzone.jpg',
-		link: 'calzonemenu',
+		link: 'calzone',
 	},
 	{
 		title: 'Starters',
 		imageUrl: '/images/sides-meats.jpg',
-		link: 'startermenu',
+		link: 'starter',
 	},
 	{
 		title: 'Mains',
 		imageUrl: '/images/mains.jpg',
-		link: 'mainsmenu',
+		link: 'mains',
 	},
 	{
 		title: 'Sides',
 		imageUrl: '/images/side-salad.jpg',
-		link: 'sidesmenu',
+		link: 'sides',
 	},
 	{
 		title: 'Salad',
 		imageUrl: '/images/salad.jpg',
-		link: 'saladmenu',
+		link: 'salad',
 	},
 	{
 		title: 'Dessert',
 		imageUrl: '/images/dessert.jpg',
-		link: 'dessertmenu',
+		link: 'dessert',
 	},
 ];

@@ -40,7 +40,7 @@ const MemberList: FC<MemberListProps> = ({
 			}
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/user/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/user/${id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -50,8 +50,8 @@ const MemberList: FC<MemberListProps> = ({
 				}
 			);
 			if (response.ok) {
-				toast.success('You have successfully deleted a user profile');
 				onDelete(); // Call the onDelete function to update the state
+				toast.success('You have successfully deleted a user profile');
 			} else {
 				const errorData = await response.json();
 				toast.error(

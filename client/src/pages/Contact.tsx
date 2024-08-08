@@ -39,7 +39,7 @@ const Contact = () => {
 				/>
 				<link
 					rel="canonical"
-					href="https://www.portobello.com/contact"
+					href="https://www.portobellokohtao.com/contact"
 				/>
 				<meta property="og:type" content="website" />
 				<meta
@@ -52,7 +52,7 @@ const Contact = () => {
 				/>
 				<meta
 					property="og:url"
-					content="https://www.portobello.com/contact"
+					content="https://www.portobellokohtao.com/contact"
 				/>
 				<meta
 					property="og:image"

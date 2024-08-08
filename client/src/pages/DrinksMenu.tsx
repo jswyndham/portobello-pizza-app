@@ -12,18 +12,6 @@ import { Helmet } from 'react-helmet-async';
 // import MenuJSONLD from '../components/seo/MenuJSONLD';
 
 function DrinkMenu() {
-	// Define the categories
-	// const drinkCategories = [
-	// 	'WHITE WINE',
-	// 	'RED WINE',
-	// 	'BEER',
-	// 	'COCKTAIL',
-	// 	'NON-ALCOHOLIC',
-	// ];
-
-	// Create the menuItems array from the categories
-	// const menuItems = drinkCategories.map((category) => category);
-
 	return (
 		<section className="w-screen h-full bg-main-gradient">
 			{/* Serverside SEO using react-helmet-async */}
@@ -37,7 +25,7 @@ function DrinkMenu() {
 				/>
 				<link
 					rel="canonical"
-					href="https://www.portobello.com/drinksmenu"
+					href="https://www.portobellokohtao.com/drinksmenu"
 				/>
 			</Helmet>
 			{/* <MenuJSONLD menuItems={menuItems} /> */}

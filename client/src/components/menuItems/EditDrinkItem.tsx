@@ -37,6 +37,7 @@ const EditDrinkItem = () => {
 	// Fetch the drink item object and set cache in the browser
 	useEffect(() => {
 		const fetchDrinkMenuItem = async () => {
+			setIsLoading(true);
 			if (id) {
 				const cacheKey = `drinkMenuItem-${id}`;
 				if (cache[cacheKey]) {
@@ -62,7 +63,9 @@ const EditDrinkItem = () => {
 						}
 						setIsLoading(true);
 						const response = await fetch(
-							`http://localhost:5001/api/v1/drinkMenu/${id}`
+							`${
+								import.meta.env.VITE_API_BASE_URL
+							}/drinkMenu/${id}`
 						);
 						const data = await response.json();
 						if (data.drinkMenuItem) {
@@ -105,7 +108,7 @@ const EditDrinkItem = () => {
 			};
 
 			const response = await fetch(
-				`http://localhost:5001/api/v1/drinkMenu/${id}`,
+				`${import.meta.env.VITE_API_BASE_URL}/drinkMenu/${id}`,
 				{
 					method: 'PATCH',
 					headers: {

@@ -20,7 +20,9 @@ function SaladMenu() {
 				setIsLoading(true);
 
 				const response = await fetch(
-					'http://localhost:5001/api/v1/foodMenu?menuCategory=SALAD'
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?menuCategory=SALAD`
 				);
 				const data = await response.json();
 
@@ -115,7 +117,7 @@ function SaladMenu() {
 					/>
 					<link
 						rel="canonical"
-						href="http://www.portobello.com/saladmenu"
+						href="http://www.portobellokohtao.com/salad"
 					/>
 				</Helmet>
 				<MenuJSONLD menuItems={menuItems} />

@@ -20,7 +20,9 @@ function MainMenu() {
 				setIsLoading(true);
 
 				const response = await fetch(
-					'http://localhost:5001/api/v1/foodMenu?menuCategory=MAIN'
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?menuCategory=MAIN`
 				);
 				const data = await response.json();
 
@@ -115,7 +117,7 @@ function MainMenu() {
 					/>
 					<link
 						rel="canonical"
-						href="http://www.portobello.com/mainsmenu"
+						href="http://www.portobellokohtao.com/mains"
 					/>
 				</Helmet>
 				<MenuJSONLD menuItems={menuItems} />

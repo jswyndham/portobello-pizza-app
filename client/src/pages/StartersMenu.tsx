@@ -16,13 +16,21 @@ function StarterMenu() {
 
 	useEffect(() => {
 		const fetchMenuItems = async () => {
+			setIsLoading(true);
 			try {
-				setIsLoading(true);
-
 				const response = await fetch(
-					'http://localhost:5001/api/v1/foodMenu?menuCategory=STARTER'
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?menuCategory=STARTER`,
+					{
+						method: 'GET',
+					}
 				);
 				const data = await response.json();
+
+				if (!response.ok) {
+					throw new Error('Network response was not ok');
+				}
 
 				if (data.items && Array.isArray(data.items)) {
 					const groupedItems = data.items.reduce(
@@ -65,6 +73,7 @@ function StarterMenu() {
 				}
 			} catch (error) {
 				toast.error('Error fetching menu items');
+
 				setError('Error fetching menu items.');
 			} finally {
 				setIsLoading(false);
@@ -116,7 +125,7 @@ function StarterMenu() {
 					/>
 					<link
 						rel="canonical"
-						href="http://www.portobello.com/startersmenu"
+						href="http://www.portobellokohtao.com/starters"
 					/>
 				</Helmet>
 				<MenuJSONLD menuItems={menuItems} />

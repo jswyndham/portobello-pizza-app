@@ -10,7 +10,7 @@ export const checkAuthStatus = async (dispatch: React.Dispatch<AuthAction>) => {
 
 	try {
 		const response = await fetch(
-			'http://localhost:5001/api/v1/auth/status',
+			`${import.meta.env.VITE_API_BASE_URL}/auth/status`,
 			{
 				method: 'GET',
 				headers: {

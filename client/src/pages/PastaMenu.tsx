@@ -20,7 +20,10 @@ function PastaMenu() {
 				setIsLoading(true);
 
 				const response = await fetch(
-					'http://localhost:5001/api/v1/foodMenu?menuCategory=PASTA'
+					`${
+						import.meta.env.VITE_API_BASE_URL
+					}/foodMenu?menuCategory=PASTA`,
+					{ method: 'GET' }
 				);
 				const data = await response.json();
 
@@ -115,7 +118,7 @@ function PastaMenu() {
 					/>
 					<link
 						rel="canonical"
-						href="http://www.portobello.com/pastamenu"
+						href="http://www.portobellokohtao.com/pasta"
 					/>
 				</Helmet>
 				<MenuJSONLD menuItems={menuItems} />

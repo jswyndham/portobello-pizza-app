@@ -12,7 +12,7 @@ export default {
 		},
 		backgroundImage: {
 			'main-gradient':
-				'linear-gradient(to bottom, #E4C59E 0%, white 30%, white 80%, #991E23 100%)',
+				'linear-gradient(to bottom, #CD6056 0%, white 20%, white 85%, #991E23 100%)',
 			'main-gradient-two':
 				'linear-gradient(to bottom, white 0%, white 70%, #991E23 100%)',
 			'heading-two-gradient':

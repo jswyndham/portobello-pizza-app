@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { RegisterData } from '../types/userInterfaces';
 import RegisterForm from '../components/user/RegisterForm';
 import { Loading } from '../components';
+import { useAuth } from '../context/AuthContext';
 
 const Register: FC = () => {
 	const {
@@ -14,12 +15,15 @@ const Register: FC = () => {
 		setError,
 	} = useForm<RegisterData>();
 	const navigate = useNavigate();
+	const { state } = useAuth();
+	const { token } = state;
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
 		// Retrieve the token from local storage
 		const token = localStorage.getItem('authToken');
+
 		if (!token) {
 			toast.error('You are not authorized to access this page');
 			setIsLoading(false);
@@ -30,12 +34,19 @@ const Register: FC = () => {
 	const onSubmit: SubmitHandler<RegisterData> = async (data) => {
 		try {
 			setIsLoading(true);
+
+			if (!token) {
+				toast.error('No token available');
+				return;
+			}
+
 			const response = await fetch(
-				'http://localhost:5001/api/v1/auth/register',
+				`${import.meta.env.VITE_API_BASE_URL}/auth/register`,
 				{
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`, // Add the token here
 					},
 					body: JSON.stringify(data),
 					credentials: 'include',
