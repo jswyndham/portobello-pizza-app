@@ -45,7 +45,7 @@ const FoodMenuSchema: Schema = new Schema({
 
 // Add custom validation middleware in a pre-save hook
 // Only require ingredients if foodCategory is 'PIZZA'
-FoodMenuSchema.pre('save', function (next) {
+FoodMenuSchema.pre('save', function (next: (err?: Error | undefined) => void) {
 	const foodMenu = this as any as FoodMenu; // Explicitly cast `this` to `any` first, then to `FoodMenu`
 	if (
 		foodMenu.menuCategory !== MENU_CATEGORY.PIZZA.value &&
