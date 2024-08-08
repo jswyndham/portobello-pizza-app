@@ -60,7 +60,7 @@ const limiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-app.use(limiter); // Apply rate limiting globally
+app.use(limiter); // Apply rate limiting globally...
 
 // *** ROUTER ***
 app.use('/api/v1/auth', authRoutes);
