@@ -1,13 +1,11 @@
 import { ImageUploadProps } from '../../types/foodItemInterfaces';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	imagePreview,
 	setImageUrl,
 }) => {
-	const [error, setError] = useState<string | null>(null);
-
 	const cloudinaryRef = useRef<any>(null);
 	const widgetRef = useRef<any>(null);
 
@@ -16,16 +14,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 			cloudinaryRef.current = window.cloudinary;
 			widgetRef.current = cloudinaryRef.current.createUploadWidget(
 				{
-					cloudName: 'dx0xxpzx1',
-					uploadPreset: 'go1jodq2',
+					cloudName: 'ducq9yzyn',
+					uploadPreset: 'u9bu7hdq',
 				},
 				(error: any, result: any) => {
 					if (!error && result && result.event === 'success') {
-						const file = result.info; // Assuming this is the file object
+						const file = result.info;
 						setImageUrl(file);
 					} else if (error) {
 						toast.error('Upload error:', error);
-						setError('Upload error');
 					}
 				}
 			);

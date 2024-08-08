@@ -206,6 +206,11 @@ const EditFoodItem = () => {
 		);
 	}
 
+	// Render error state
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
+
 	return (
 		<>
 			<ToastContainer

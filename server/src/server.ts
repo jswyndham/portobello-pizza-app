@@ -12,28 +12,46 @@ import {
 	userRoutes,
 } from './routes';
 import logger from './logger';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config(); // Load environment variables
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+// *** MIDDLEWARE ***
+app.use(express.json()); // Parse JSON bodies
 
-// Middleware to parse cookies
-app.use(cookieParser());
+app.use(cookieParser()); // Parse cookies
+
+app.use(helmet()); // Set security headers
+
+app.use(compression()); // Enable gzip compression for responses
 
 // Configure CORS
 app.use(
 	cors({
-		origin: 'http://localhost:5173', // Allow requests from this origin
+		origin: process.env.CLIENT_URL, // Allow requests from this origin
 		credentials: true, // Allow credentials to be sent with requests
 		optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 	})
 );
 
-// ROUTER
+// Moderate rate limiting configuration
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 200, // limit each IP to 200 requests per windowMs
+	message:
+		'Too many requests from this IP, please try again after 15 minutes',
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+app.use(limiter); // Apply rate limiting globally
+
+// *** ROUTER ***
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/auditlogs', auditLogRoutes);

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import User from '../../models/UserModel';
-import { UnauthenticatedError } from '../../errors/customErrors';
 import { comparePassword } from '../../utils/passwordUtils';
 import { createJWT } from '../../utils/tokenUtils';
 import { setCache } from '../../cache/cache';

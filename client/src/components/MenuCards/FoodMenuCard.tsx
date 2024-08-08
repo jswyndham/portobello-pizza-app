@@ -11,6 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FoodMenuItem } from '../../types/foodItemInterfaces';
 import Loading from '../Loading';
 import ItemNotFound from '../itemNotFound/ItemNotFound';
+import ErrorMessage from '../ErrorMessage';
 
 interface FoodMenuCardProps {
 	category: string;
@@ -196,10 +197,10 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 		);
 	}
 
-	// Render error state (commented out)
-	// if (error) {
-	// 	return <ErrorMessage errorMessage={error} />;
-	// }
+	// Render error state
+	if (error) {
+		return <ErrorMessage errorMessage={error} />;
+	}
 
 	// Render empty state if no food items found
 	if (foodItems.length === 0) {
