@@ -16,6 +16,7 @@ const router = express.Router();
 // Routes
 router.post(
 	'/register',
+	authenticateUser as express.RequestHandler,
 	validateRegisterUser,
 	registerUser as express.RequestHandler
 );
