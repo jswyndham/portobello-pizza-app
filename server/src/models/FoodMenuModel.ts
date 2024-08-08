@@ -4,9 +4,9 @@ import { MENU_CATEGORY, MenuCategory, MeatOrVeg } from '../constants';
 export interface FoodMenu extends Document {
 	_id: Types.ObjectId;
 	menuCategory: MenuCategory['value'];
-	pizzaType?: MeatOrVeg['value'];
+	pizzaType: MeatOrVeg['value'];
 	name: string;
-	imageUrl?: string; // Optional field for image URL
+	imageUrl: string;
 	ingredients: string[];
 	price: number;
 }
@@ -21,7 +21,7 @@ const FoodMenuSchema: Schema = new Schema({
 	},
 	pizzaType: {
 		type: String,
-		required: false, // Make this field optional
+		required: false,
 	},
 	name: {
 		type: String,
