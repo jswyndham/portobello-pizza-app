@@ -4,9 +4,9 @@ import { MENU_CATEGORY, MenuCategory, MeatOrVeg } from '../constants';
 export interface FoodMenu extends Document {
 	_id: Types.ObjectId;
 	menuCategory: MenuCategory['value'];
-	pizzaType: MeatOrVeg['value'];
+	pizzaType?: MeatOrVeg['value'];
 	name: string;
-	imageUrl: string;
+	imageUrl?: string; // Optional field for image URL
 	ingredients: string[];
 	price: number;
 }
@@ -21,7 +21,7 @@ const FoodMenuSchema: Schema = new Schema({
 	},
 	pizzaType: {
 		type: String,
-		required: false,
+		required: false, // Make this field optional
 	},
 	name: {
 		type: String,
@@ -46,9 +46,11 @@ const FoodMenuSchema: Schema = new Schema({
 // Add custom validation middleware in a pre-save hook
 // Only require ingredients if foodCategory is 'PIZZA'
 FoodMenuSchema.pre('save', function (next) {
+	const foodMenu = this as any as FoodMenu; // Explicitly cast `this` to `any` first, then to `FoodMenu`
 	if (
-		this.menuCategory !== MENU_CATEGORY.PIZZA.value &&
-		(!Array.isArray(this.ingredients) || this.ingredients.length === 0)
+		foodMenu.menuCategory !== MENU_CATEGORY.PIZZA.value &&
+		(!Array.isArray(foodMenu.ingredients) ||
+			foodMenu.ingredients.length === 0)
 	) {
 		return next(new Error('Ingredients are required for cocktails.'));
 	}
