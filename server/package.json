@@ -3,11 +3,11 @@
 	"version": "1.0.0",
 	"main": "dist/server.js",
 	"scripts": {
-		"start": "ts-node src/server.ts",
+		"start": "ts-node src/index.ts",
 		"build": "tsc && cd ../client && npm run build",
 		"test": "jest",
 		"test:watch": "jest --watch",
-		"server": "nodemon --exec ts-node src/server.ts",
+		"server": "nodemon --exec ts-node src/index.ts",
 		"client": "cd .. && cd client && npm run dev",
 		"dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
 	},
@@ -24,6 +24,7 @@
 		"@types/nodemon": "^1.19.6",
 		"bcryptjs": "^2.4.3",
 		"cloudinary": "^1.41.3",
+		"compression": "^1.7.4",
 		"concurrently": "^8.2.2",
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
