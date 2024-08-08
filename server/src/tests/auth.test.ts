@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../server';
+import app from '..';
 import mongoose, { ConnectOptions } from 'mongoose';
 import { connectToDatabase, disconnectFromDatabase } from './setup';
 import { clearOldAuditLogsJob } from '../jobs/clearOldAuditLogs';
