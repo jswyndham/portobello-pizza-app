@@ -15,6 +15,10 @@
 	"routes": [
 		{
 			"src": "/(.*)",
+			"dest": "/server/dist/$1"
+		},
+		{
+			"src": "/(.*)",
 			"dest": "/client/dist/$1"
 		}
 	]
