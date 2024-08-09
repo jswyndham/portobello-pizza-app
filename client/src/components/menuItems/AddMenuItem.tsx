@@ -114,7 +114,11 @@ const AddMenuItem = () => {
 				} else {
 					const menuCategoryLabel =
 						menuCategoryLabelMap[data.menuCategory];
-					navigate(`/${menuCategoryLabel}`);
+					navigate(
+						`${
+							import.meta.env.VITE_API_BASE_URL
+						}/${menuCategoryLabel}`
+					);
 				}
 			} else {
 				const errorData = await response.json();
