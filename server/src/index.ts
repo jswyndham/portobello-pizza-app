@@ -22,7 +22,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // *** MIDDLEWARE ***
-app.use(express.json()); // Parse JSON bodies
+app.use(express.json()); // Parse JSON bodies..
 
 app.use(cookieParser()); // Parse cookies
 
