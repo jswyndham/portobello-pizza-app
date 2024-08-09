@@ -82,9 +82,9 @@ function DessertMenu() {
 	}
 
 	// Error screen
-	if (error) {
-		return <ErrorMessage errorMessage={error} />;
-	}
+	// if (error) {
+	// 	return <ErrorMessage errorMessage={error} />;
+	// }
 
 	// 'Not found' screen
 	if (menuItems.length === 0) {
