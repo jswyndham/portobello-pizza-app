@@ -288,16 +288,16 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 
 									<article className="flex flex-col justify-between items-center">
 										<div className="w-full bg-food-menu-gradient border-y-2 border-yellow-500 text-center drop-shadow-lg">
-											<h2 className="text-2xl font-semibold font-cinzel text-white py-1 lg:py-2 ">
+											<h2 className="text-xl font-semibold font-cinzel text-white py-1 lg:py-2 ">
 												{food.name}
 											</h2>
 										</div>
-										<div className="h-16 flex-grow items-center my-2 px-5 lg:py-1">
-											<p className="text-xl text-slate-700 text-center flex-grow font-dmsans py-1">
+										<div className="h-16 lg:h-20 flex-grow items-center my-2 px-5 lg:py-1">
+											<p className="text-md lg:text-lg text-slate-700 text-center flex-grow font-dmsans py-1">
 												{food.ingredients.join(', ')}
 											</p>
 										</div>
-										<div className="w-full flex flex-row text-2xl text-black bg-slate-200 flex-grow font-cinzel py-2 px-4">
+										<div className="w-full flex flex-row text-xl text-black bg-slate-200 flex-grow font-cinzel py-2 px-4">
 											<p>฿ </p>
 											<p className="font-semibold">
 												{food.price}
