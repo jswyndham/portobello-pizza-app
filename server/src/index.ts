@@ -65,6 +65,9 @@ const limiter = rateLimit({
 
 app.use(limiter); // Apply rate limiting globally....
 
+// Trust the proxy headers
+app.set('trust proxy', true);
+
 // *** ROUTER ***
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/user', userRoutes);

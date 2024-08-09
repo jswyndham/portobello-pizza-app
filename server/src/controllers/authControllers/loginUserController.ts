@@ -52,7 +52,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		res.cookie('token', token, {
 			httpOnly: true, // prevent client-side script access to the cookie
 			secure: isProduction, // send the cookie over HTTPS only
-			sameSite: isProduction ? 'none' : 'lax', // use 'none' for cross-site requests in production
+			sameSite: 'none',
 		});
 
 		// Attempt to cache user data

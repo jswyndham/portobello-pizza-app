@@ -85,3 +85,7 @@ body {
 	opacity: 1;
 	max-height: 2000px; /* Adjust as needed */
 }
+
+.animated-element {
+	will-change: transform, opacity;
+}
