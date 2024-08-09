@@ -44,10 +44,10 @@ exports.seedAdminUser = void 0;
 // seeds/adminUserSeed.js
 const UserModel_1 = __importDefault(require('../src/models/UserModel'));
 const constants_1 = require('../src/constants');
-const bcrypt_1 = __importDefault(require('bcrypt'));
+const bcryptjs_1 = __importDefault(require('bcryptjs'));
 const seedAdminUser = () =>
 	__awaiter(void 0, void 0, void 0, function* () {
-		const hashedPassword = yield bcrypt_1.default.hash(
+		const hashedPassword = yield bcryptjs_1.default.hash(
 			'AdminPassword123!',
 			10
 		);
