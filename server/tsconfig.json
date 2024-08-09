@@ -2,21 +2,22 @@
 	"compilerOptions": {
 		"target": "ES6",
 		"module": "commonjs",
-		"outDir": "./dist",
-		"rootDir": "./src",
+		"outDir": "./dist", // Consistent output directory
+		"rootDir": "./src", // Root directory is set to src
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
+		"diagnostics": true,
+		"listFiles": true,
+		"listEmittedFiles": true,
 		"typeRoots": ["./node_modules/@types", "./src/types"]
 	},
 	"include": [
-		"src/**/*.ts",
-		"tests/**/*.ts",
-		"src/jest.config.ts",
-		"src/types/express.d.ts",
-		"tests/foodMenu.test.ts",
-		"tests/auth.test.ts"
+		"src/**/*.ts", // Include all TypeScript files in src
+		"tests/**/*.ts", // Include all test files
+		"src/types/**/*.d.ts", // Include custom types
+		"config/jest.config.js" // Include Jest configuration if needed
 	],
 	"exclude": ["node_modules"]
 }
