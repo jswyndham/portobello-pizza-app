@@ -1,7 +1,7 @@
 // seeds/adminUserSeed.js
 import User from '../models/UserModel';
 import { USER_STATUS } from '../constants';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 export const seedAdminUser = async () => {
 	const hashedPassword = await bcrypt.hash('AdminPassword123!', 10);
