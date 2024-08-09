@@ -14,7 +14,7 @@ const LogoutButton: React.FC = () => {
 			// Navigate to the home page upon logout
 			navigate('/');
 		} catch (error) {
-			toast.error('Logout failed');
+			console.log('Error logging out');
 		}
 	};
 
