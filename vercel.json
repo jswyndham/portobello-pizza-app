@@ -15,7 +15,7 @@
 	"rewrites": [
 		{
 			"source": "/(.*)",
-			"destination": "/client/dist/index.html"
+			"destination": "/client/"
 		}
 	]
 }
