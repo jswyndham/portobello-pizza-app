@@ -16,9 +16,9 @@ function DessertMenu() {
 
 	useEffect(() => {
 		const fetchMenuItems = async () => {
-			try {
-				setIsLoading(true);
+			setIsLoading(true);
 
+			try {
 				const response = await fetch(
 					`${
 						import.meta.env.VITE_API_BASE_URL

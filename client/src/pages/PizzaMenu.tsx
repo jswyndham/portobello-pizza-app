@@ -16,9 +16,9 @@ function PizzaMenu() {
 
 	useEffect(() => {
 		const fetchMenuItems = async () => {
-			try {
-				setIsLoading(true);
+			setIsLoading(true);
 
+			try {
 				const response = await fetch(
 					`${
 						import.meta.env.VITE_API_BASE_URL
@@ -30,7 +30,7 @@ function PizzaMenu() {
 
 				const data = await response.json();
 
-				if (data.items && Array.isArray(data.items)) {
+				if (response.ok && data.items && Array.isArray(data.items)) {
 					const groupedItems = data.items.reduce(
 						(sections: MenuSection[], item: FoodMenuModel) => {
 							const section = sections.find(

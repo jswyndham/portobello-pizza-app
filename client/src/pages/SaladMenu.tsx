@@ -16,9 +16,8 @@ function SaladMenu() {
 
 	useEffect(() => {
 		const fetchMenuItems = async () => {
+			setIsLoading(true);
 			try {
-				setIsLoading(true);
-
 				const response = await fetch(
 					`${
 						import.meta.env.VITE_API_BASE_URL

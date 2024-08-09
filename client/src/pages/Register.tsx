@@ -32,9 +32,8 @@ const Register: FC = () => {
 	}, []);
 
 	const onSubmit: SubmitHandler<RegisterData> = async (data) => {
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
-
 			if (!token) {
 				toast.error('No token available');
 				return;

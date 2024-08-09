@@ -23,8 +23,8 @@ const Login = () => {
 	const { dispatch } = useAuth();
 
 	const onSubmit: SubmitHandler<LoginData> = async (data) => {
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
 			const response = await fetch(
 				`${import.meta.env.VITE_API_BASE_URL}/auth/login`,
 				{
