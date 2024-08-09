@@ -1,21 +1,21 @@
 {
 	"builds": [
 		{
-			"src": "client/package.json",
+			"src": "/package.json",
 			"use": "@vercel/static-build",
 			"config": {
-				"distDir": "client/dist"
+				"distDir": "/dist"
 			}
 		},
 		{
-			"src": "server/package.json",
+			"src": "/server/package.json",
 			"use": "@vercel/node"
 		}
 	],
 	"rewrites": [
 		{
 			"source": "/(.*)",
-			"destination": "/client/"
+			"destination": "/"
 		}
 	]
 }
