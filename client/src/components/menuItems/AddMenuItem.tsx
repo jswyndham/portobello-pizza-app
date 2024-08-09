@@ -101,12 +101,10 @@ const AddMenuItem = () => {
 			if (response.ok) {
 				toast.success('Your menu item was successfully added!');
 				const menuItem = await response.json();
-				setIngredients(menuItem.ingredients || []);
-				reset();
-				setImagePreview(null); // Clear the image preview
 
-				// Delay navigation for 2 seconds to allow server time to update
+				// Delay navigation and reset for 2 seconds to allow server time to update
 				setTimeout(() => {
+					// Navigate after delay
 					if (isDrink) {
 						navigate(`/drinksmenu`);
 					} else {
@@ -114,16 +112,22 @@ const AddMenuItem = () => {
 							menuCategoryLabelMap[data.menuCategory];
 						navigate(`/${menuCategoryLabel}`);
 					}
+
+					// Reset the form after the delay
+					setIngredients(menuItem.ingredients || []);
+					setImagePreview(null); // Clear the image preview
+					reset();
+					setIsLoading(false);
 				}, 2000);
 			} else {
 				const errorData = await response.json();
 				toast.error(`Failed to submit menu item: ${errorData.message}`);
 				setError(`Failed to submit menu item: ${errorData.message}`);
+				setIsLoading(false);
 			}
 		} catch (error) {
 			toast.error('Error submitting form');
 			setError('Error submitting form');
-		} finally {
 			setIsLoading(false);
 		}
 	};
