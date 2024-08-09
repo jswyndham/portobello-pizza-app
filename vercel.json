@@ -19,10 +19,6 @@
 		},
 		{
 			"src": "/(.*)",
-			"dest": "/client/dist/$1"
-		},
-		{
-			"src": "/(.*)",
 			"dest": "/client/dist/index.html"
 		}
 	]
