@@ -31,7 +31,10 @@ app.use(helmet()); // Set security headers
 app.use(compression()); // Enable gzip compression for responses
 
 // Configure CORS
-const allowedOrigins = [process.env.CLIENT_URL, process.env.NODE_DEV];
+const allowedOrigins =
+	process.env.NODE_ENV === 'production'
+		? ['https://portobello-pizza-app.vercel.app']
+		: ['http://localhost:3000'];
 
 // Configure CORS
 app.use(
