@@ -32,7 +32,7 @@ function StarterMenu() {
 					throw new Error('Network response was not ok');
 				}
 
-				if (data.items && Array.isArray(data.items)) {
+				if (response.ok && data.items && Array.isArray(data.items)) {
 					const groupedItems = data.items.reduce(
 						(sections: MenuSection[], item: FoodMenuModel) => {
 							const section = sections.find(
