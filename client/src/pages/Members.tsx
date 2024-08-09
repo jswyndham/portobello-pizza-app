@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Members = () => {
 	const [userMembers, setUserMembers] = useState<userData[]>([]);

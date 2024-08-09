@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 import { RxCross2 } from 'react-icons/rx';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EditFoodItem } from '../menuItems';
@@ -106,7 +107,7 @@ const DrinkMenuCard: FC<DrinkMenuCardProps> = ({ category }) => {
 				}
 			);
 			if (response.ok) {
-				toast.success(`You have successfully deleted a menu item!`);
+				toast.success('You have successfully deleted a menu item!');
 				setDrinkItems((prevItems) =>
 					prevItems.filter((item) => item._id !== id)
 				);

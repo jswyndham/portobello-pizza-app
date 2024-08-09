@@ -6,6 +6,7 @@ import { AuditLog } from '../types/auditLogInterface';
 import { useParams } from 'react-router-dom';
 import AuditLogList from '../components/user/AuditLogList';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AuditLogs = () => {
 	const { id } = useParams<{ id: string }>();

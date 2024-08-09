@@ -8,6 +8,7 @@ import Loading from '../components/Loading';
 import ItemNotFound from '../components/itemNotFound/ItemNotFound';
 import { MenuSection } from '../types/seoInterface';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SaladMenu() {
 	const [menuItems, setMenuItems] = useState<MenuSection[]>([]);

@@ -10,6 +10,7 @@ import Loading from '../Loading';
 import { useCache } from '../../context/cacheContext';
 import ErrorMessage from '../ErrorMessage';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditFoodItem = () => {
 	const { id } = useParams<{ id: string }>();

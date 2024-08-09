@@ -1,6 +1,7 @@
 import { ImageUploadProps } from '../../types/foodItemInterfaces';
 import { useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	imagePreview,

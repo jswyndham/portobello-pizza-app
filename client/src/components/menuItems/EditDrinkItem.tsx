@@ -8,6 +8,7 @@ import { useCache } from '../../context/cacheContext';
 import { DrinkMenuFormData } from '../../types/drinkItemInterfaces';
 import ErrorMessage from '../ErrorMessage';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditDrinkItem = () => {
 	const { id } = useParams<{ id: string }>();

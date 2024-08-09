@@ -114,7 +114,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			);
 			if (response.ok) {
 				// Success toast notification
-				toast.success(`You have successfully deleted a menu item!`);
+				toast.success('You have successfully deleted a menu item!');
 				// Remove the deleted item from the state
 				setFoodItems((prevItems) =>
 					prevItems.filter((item) => item._id !== id)

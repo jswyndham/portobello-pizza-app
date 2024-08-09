@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { useDataProps } from '../../types/userInterfaces';
 import { useAuth } from '../../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { RxCross2 } from 'react-icons/rx';
 import { AnimatePresence } from 'framer-motion';
 import ConfirmDeleteModal from '../modal/ConfirmDeleteModal';
