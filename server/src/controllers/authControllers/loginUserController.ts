@@ -48,11 +48,12 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 		});
 
 		// Set authentication cookie
-		const isProduction = process.env.NODE_ENV === 'production';
+		//const isProduction = process.env.NODE_ENV === 'production';
 		res.cookie('token', token, {
 			httpOnly: true, // prevent client-side script access to the cookie
-			secure: isProduction, // send the cookie over HTTPS only
+			secure: true,
 			sameSite: 'none',
+			partitioned: true,
 		});
 
 		// Attempt to cache user data

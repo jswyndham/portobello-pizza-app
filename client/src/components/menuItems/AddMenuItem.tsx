@@ -110,15 +110,11 @@ const AddMenuItem = () => {
 
 				// Navigate to the correct menu category page using the label
 				if (isDrink) {
-					navigate('/drinksmenu');
+					navigate(`/drinksmenu`);
 				} else {
 					const menuCategoryLabel =
 						menuCategoryLabelMap[data.menuCategory];
-					navigate(
-						`${
-							import.meta.env.VITE_API_BASE_URL
-						}/${menuCategoryLabel}`
-					);
+					navigate(`/${menuCategoryLabel}`);
 				}
 			} else {
 				const errorData = await response.json();
