@@ -11,9 +11,6 @@ const LogoutButton: React.FC = () => {
 		try {
 			await logout();
 
-			// Toast modal for successful logout
-			toast.success('Logout successful');
-
 			// Navigate to the home page upon logout
 			navigate('/');
 		} catch (error) {

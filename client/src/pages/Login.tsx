@@ -43,10 +43,6 @@ const Login = () => {
 				// Store token in local storage
 				localStorage.setItem('authToken', token);
 
-				toast.success(
-					`You have successfully logged in, ${user.firstName}!`
-				);
-
 				// Dispatch global login state, include token in payload
 				dispatch({ type: 'LOGIN', payload: { token, user } });
 
