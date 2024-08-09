@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 3001;
 // *** MIDDLEWARE ***
 app.use(express.json()); // Parse JSON bodies..
 
-app.use(cookieParser()); // Parse cookies
+app.use(cookieParser()); // Parse cookies..
 
 app.use(helmet()); // Set security headers
 
