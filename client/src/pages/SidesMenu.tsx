@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ErrorMessage, HeadingOne } from '../components';
+import { HeadingOne } from '../components';
 import FoodMenuCard from '../components/MenuCards/FoodMenuCard';
 import MenuJSONLD from '../components/seo/MenuJSONLD';
 import { Helmet } from 'react-helmet-async';
@@ -12,7 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 function SidesMenu() {
 	const [menuItems, setMenuItems] = useState<MenuSection[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	// const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		const fetchMenuItems = async () => {
@@ -63,11 +63,11 @@ function SidesMenu() {
 					setMenuItems(groupedItems);
 				} else {
 					toast.error('API response is not an array:', data);
-					setError('Unexpected API response format.');
+					// setError('Unexpected API response format.');
 				}
 			} catch (error) {
 				toast.error('Error fetching menu items');
-				setError('Error fetching menu items.');
+				// setError('Error fetching menu items.');
 			} finally {
 				setIsLoading(false);
 			}
@@ -82,9 +82,9 @@ function SidesMenu() {
 	}
 
 	// Error screen
-	if (error) {
-		return <ErrorMessage errorMessage={error} />;
-	}
+	// if (error) {
+	// 	return <ErrorMessage errorMessage={error} />;
+	// }
 
 	// 'Not found' screen
 	if (menuItems.length === 0) {
