@@ -11,7 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 import { FoodMenuItem } from '../../types/foodItemInterfaces';
 import Loading from '../Loading';
 import ItemNotFound from '../itemNotFound/ItemNotFound';
-import ErrorMessage from '../ErrorMessage';
+// import ErrorMessage from '../ErrorMessage';
 
 interface FoodMenuCardProps {
 	category: string;
@@ -22,7 +22,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	// Card states for food items, loading state, and error state
 	const [foodItems, setFoodItems] = useState<FoodMenuItem[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	// const [error, setError] = useState<string | null>(null);
 
 	// Pagination and category states
 	const [page] = useState(1);
@@ -86,11 +86,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 					setFoodItems(data.items);
 				} else {
 					toast.error('API response is not in the expected format.');
-					setError('Unexpected API response format.');
+					// setError('Unexpected API response format.');
 				}
 			} catch (error) {
 				toast.error('Error fetching food items.');
-				setError('Error fetching food items.');
+				// setError('Error fetching food items.');
 			} finally {
 				setIsLoading(false);
 			}
@@ -123,11 +123,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 				const errorData = await response.json();
 				// Error toast notification
 				toast.error(`Failed to delete menu item: ${errorData.message}`);
-				setError(`Failed to delete menu item:', ${errorData.message}`);
+				// setError(`Failed to delete menu item:', ${errorData.message}`);
 			}
 		} catch (error) {
 			toast.error('Error deleting item');
-			setError('Error deleting item');
+			// setError('Error deleting item');
 		}
 	};
 
@@ -157,11 +157,11 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 			} else {
 				const errorData = await response.json();
 				toast.error(`Failed to get menu item: ${errorData.message}`);
-				setError(`Failed to get menu item: ${errorData.message}`);
+				// setError(`Failed to get menu item: ${errorData.message}`);
 			}
 		} catch (error) {
 			toast.error('Error finding menu item');
-			setError('Error finding menu item');
+			// setError('Error finding menu item');
 		} finally {
 			setIsLoading(false);
 		}
@@ -198,9 +198,9 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	}
 
 	// Render error state
-	if (error) {
-		return <ErrorMessage errorMessage={error} />;
-	}
+	// if (error) {
+	// 	return <ErrorMessage errorMessage={error} />;
+	// }
 
 	// Render empty state if no food items found
 	if (foodItems.length === 0) {

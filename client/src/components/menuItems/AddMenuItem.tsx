@@ -77,6 +77,7 @@ const AddMenuItem = () => {
 				return;
 			}
 
+			// Define the form data
 			const formData = {
 				...data,
 				ingredients: ingredients.filter(
@@ -84,6 +85,7 @@ const AddMenuItem = () => {
 				),
 			};
 
+			// Define the fetch response
 			const response = await fetch(
 				isDrink
 					? `${import.meta.env.VITE_API_BASE_URL}/drinkMenu`
@@ -98,12 +100,15 @@ const AddMenuItem = () => {
 				}
 			);
 
+			// After the fetch response is successful, reset the form, ingredients array, and navigate to the menu page
 			if (response.ok) {
+				toast.success('Your menu item was successfully added!');
 				const menuItem = await response.json();
 				setIngredients(menuItem.ingredients || []);
 				reset();
-				setImagePreview(null);
+				setImagePreview(null); // Clear the image preview
 
+				// Navigate to the correct menu category page using the label
 				if (isDrink) {
 					navigate(`/drinksmenu`);
 				} else {
@@ -111,10 +116,9 @@ const AddMenuItem = () => {
 						menuCategoryLabelMap[data.menuCategory];
 					navigate(`/${menuCategoryLabel}`);
 				}
-
-				toast.success('Your menu item was successfully added!');
 			} else {
 				const errorData = await response.json();
+
 				toast.error(`Failed to submit menu item: ${errorData.message}`);
 				setError(`Failed to submit menu item: ${errorData.message}`);
 			}
