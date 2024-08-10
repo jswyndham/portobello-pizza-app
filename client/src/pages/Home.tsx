@@ -50,7 +50,7 @@ const Home = () => {
 
 	return (
 		<>
-			<article className="relative overflow-hidden w-full h-auto bg-red-700 md:mx-auto">
+			<section className="relative overflow-hidden w-full h-auto bg-red-700 md:mx-auto">
 				<Helmet>
 					<title>Portobello - Best Koh Tao Pizza</title>
 					<meta
@@ -128,7 +128,7 @@ const Home = () => {
 					className="w-full hidden lg:flex -mt-1 animated-element"
 				/>
 
-				<div className="bg-main-gradient">
+				<section className="bg-main-gradient">
 					{/* MENU CATEGORY CARDS */}
 					<motion.article
 						initial="hidden"
@@ -159,8 +159,8 @@ const Home = () => {
 							<ImageCarousel />
 						</motion.article>
 					</div>
-				</div>
-			</article>
+				</section>
+			</section>
 		</>
 	);
 };
