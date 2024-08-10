@@ -106,8 +106,7 @@ const Home = () => {
 					variants={logoVariants}
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
-					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-6 lg:top-28 xl:top-32 2xl:top-48 w-3/12 max-w-xl lg:w-60 xl:w-2/12 pt-6 z-10"
-					style={{ willChange: 'transform, opacity' }}
+					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-6 lg:top-28 xl:top-32 2xl:top-48 w-3/12 max-w-xl lg:w-60 xl:w-2/12 pt-6 z-10 animated-element"
 				/>
 
 				{/* Background image */}
@@ -115,7 +114,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
-					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain"
+					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain animated-element"
 				/>
 
 				<motion.img
@@ -124,7 +123,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
-					className="w-full hidden lg:flex -mt-1"
+					className="w-full hidden lg:flex -mt-1 animated-element"
 				/>
 
 				<div className="bg-main-gradient">
@@ -133,6 +132,7 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
+						className="animated-element"
 					>
 						<HomeMidSection />
 					</motion.div>
@@ -142,7 +142,7 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
-						className="flex justify-center items-center"
+						className="flex justify-center items-center animated-element"
 					>
 						<AboutUs />
 					</motion.div>

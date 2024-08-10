@@ -240,7 +240,7 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 								initial="initial"
 								exit="exit"
 								layout
-								className="relative w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70"
+								className="relative w-80 h-fit border border-slate-400 rounded-lg bg-card-gradient bg-opacity-70 animated-element"
 							>
 								{/* If user is logged in, show edit and delete buttons */}
 								{isLoggedIn && (
