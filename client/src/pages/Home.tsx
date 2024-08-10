@@ -115,7 +115,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
-					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain animated-element"
+					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain"
 				/>
 
 				<motion.img
@@ -134,7 +134,6 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
-						className="animated-element"
 					>
 						<HomeMidSection />
 					</motion.article>
@@ -144,7 +143,7 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
-						className="flex justify-center items-center animated-element"
+						className="flex justify-center items-center"
 					>
 						<AboutUs />
 					</motion.article>
@@ -155,7 +154,7 @@ const Home = () => {
 							initial="hidden"
 							animate={animationTriggered ? 'visible' : 'hidden'}
 							variants={logoBackgroundVariants}
-							className="w-full animated-element"
+							className="w-full"
 						>
 							<ImageCarousel />
 						</motion.article>

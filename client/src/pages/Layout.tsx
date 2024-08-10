@@ -58,9 +58,9 @@ function Layout() {
 		<HelmetProvider context={helmetContext}>
 			<LayoutContext.Provider value={value}>
 				<Navbar />
-				<div ref={sidebarRef}>
+				<article ref={sidebarRef}>
 					<SidebarMenu />
-				</div>
+				</article>
 				<section className="z-0 w-screen overflow-hidden">
 					<Outlet />
 				</section>
