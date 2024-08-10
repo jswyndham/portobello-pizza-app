@@ -86,6 +86,7 @@ const AddMenuItem = () => {
 				),
 			};
 
+			// Send request to post item
 			const response = await fetch(
 				isDrink
 					? `${import.meta.env.VITE_API_BASE_URL}/drinkMenu`
@@ -100,23 +101,20 @@ const AddMenuItem = () => {
 				}
 			);
 
+			// If respose returns with 200...
 			if (response.ok) {
 				toast.success('Your menu item was successfully added!');
 				const menuItem = await response.json();
 				setIngredients(menuItem.ingredients || []);
 				reset();
 				setImagePreview(null); // Clear the image preview
-
-				// Delay navigation for 2 seconds to allow server time to update
-				setTimeout(() => {
-					if (isDrink) {
-						navigate(`/drinksmenu`);
-					} else {
-						const menuCategoryLabel =
-							menuCategoryLabelMap[data.menuCategory];
-						navigate(`/${menuCategoryLabel}`);
-					}
-				}, 2000);
+				if (isDrink) {
+					navigate(`/drinksmenu`);
+				} else {
+					const menuCategoryLabel =
+						menuCategoryLabelMap[data.menuCategory];
+					navigate(`/${menuCategoryLabel}`);
+				}
 			} else {
 				const errorData = await response.json();
 				toast.error(`Failed to submit menu item: ${errorData.message}`);
