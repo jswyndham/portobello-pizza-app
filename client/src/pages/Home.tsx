@@ -14,10 +14,7 @@ const Home = () => {
 
 	useEffect(() => {
 		setAnimationTriggered(true);
-		if (animationTriggered) {
-			ref.current.classList.remove('animated-element');
-		}
-	}, [animationTriggered]);
+	}, []);
 
 	const logoVariants = {
 		hidden: { opacity: 0, scale: 0.5 },
@@ -110,6 +107,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-6 lg:top-28 xl:top-32 2xl:top-48 w-3/12 max-w-xl lg:w-60 xl:w-2/12 pt-6 z-10"
+					style={{ willChange: 'transform, opacity' }}
 				/>
 
 				{/* Background image */}
