@@ -155,7 +155,7 @@ const Home = () => {
 							initial="hidden"
 							animate={animationTriggered ? 'visible' : 'hidden'}
 							variants={logoBackgroundVariants}
-							className="w-full"
+							className="w-full animated-element"
 						>
 							<ImageCarousel />
 						</motion.div>
