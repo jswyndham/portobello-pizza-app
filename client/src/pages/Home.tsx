@@ -13,8 +13,8 @@ const Home = () => {
 	const [animationTriggered, setAnimationTriggered] = useState(false);
 
 	useEffect(() => {
+		setAnimationTriggered(true);
 		if (animationTriggered) {
-			setAnimationTriggered(true);
 			ref.current.classList.remove('animated-element');
 		}
 	}, [animationTriggered]);
