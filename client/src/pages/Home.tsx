@@ -9,12 +9,14 @@ import ImageCarousel from '../components/homePage/ImageCarousel';
 import homeImageSmall from '/images/pizza-eneida-nieves.jpg';
 
 const Home = () => {
-	const ref = useRef(null);
-	const [animationTriggered, setAnimationTriggered] = useState(false);
+	const ref = useRef<any>(null);
+	const [animationTriggered] = useState(false);
 
 	useEffect(() => {
-		setAnimationTriggered(true);
-	}, []);
+		if (animationTriggered) {
+			ref.current.classList.remove('animated-element');
+		}
+	}, [animationTriggered]);
 
 	const logoVariants = {
 		hidden: { opacity: 0, scale: 0.5 },
@@ -106,7 +108,7 @@ const Home = () => {
 					variants={logoVariants}
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
-					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-6 lg:top-28 xl:top-32 2xl:top-48 w-3/12 max-w-xl lg:w-60 xl:w-2/12 pt-6 z-10 animated-element"
+					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-6 lg:top-28 xl:top-32 2xl:top-48 w-3/12 max-w-xl lg:w-60 xl:w-2/12 pt-6 z-10"
 				/>
 
 				{/* Background image */}
@@ -114,7 +116,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
-					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain animated-element"
+					className="w-full h-44 sm:h-80 md:h-96 lg:hidden bg-parallax-sm bg-fixed bg-contain"
 				/>
 
 				<motion.img
@@ -123,7 +125,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
-					className="w-full hidden lg:flex -mt-1 animated-element"
+					className="w-full hidden lg:flex -mt-1"
 				/>
 
 				<div className="bg-main-gradient">
@@ -141,7 +143,7 @@ const Home = () => {
 						initial="hidden"
 						animate={animationTriggered ? 'visible' : 'hidden'}
 						variants={contentFadeInVariants}
-						className="flex justify-center items-center animated-element"
+						className="flex justify-center items-center"
 					>
 						<AboutUs />
 					</motion.div>
@@ -152,7 +154,7 @@ const Home = () => {
 							initial="hidden"
 							animate={animationTriggered ? 'visible' : 'hidden'}
 							variants={logoBackgroundVariants}
-							className="w-full animated-element"
+							className="w-full"
 						>
 							<ImageCarousel />
 						</motion.div>
