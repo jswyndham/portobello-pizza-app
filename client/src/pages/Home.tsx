@@ -10,10 +10,11 @@ import homeImageSmall from '/images/pizza-eneida-nieves.jpg';
 
 const Home = () => {
 	const ref = useRef<any>(null);
-	const [animationTriggered] = useState(false);
+	const [animationTriggered, setAnimationTriggered] = useState(false);
 
 	useEffect(() => {
 		if (animationTriggered) {
+			setAnimationTriggered(true);
 			ref.current.classList.remove('animated-element');
 		}
 	}, [animationTriggered]);
