@@ -106,6 +106,7 @@ const Home = () => {
 					variants={logoVariants}
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
+					style={{ willChange: 'transform, opacity' }}
 					className="absolute inset-0 left-8 md:left-12 xl:left-20 2xl:left-32 top-0 md:top-6 lg:top-28 xl:top-32 2xl:top-48 w-3/12 max-w-xl lg:w-60 xl:w-2/12 pt-6 z-10 animated-element"
 				/>
 
@@ -123,6 +124,7 @@ const Home = () => {
 					initial="hidden"
 					animate={animationTriggered ? 'visible' : 'hidden'}
 					variants={logoBackgroundVariants}
+					style={{ willChange: 'transform, opacity' }}
 					className="w-full hidden lg:flex -mt-1 animated-element"
 				/>
 
