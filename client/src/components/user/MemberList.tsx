@@ -27,7 +27,9 @@ const MemberList: FC<MemberListProps> = ({
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 
+	// Auth context & global state
 	const { state } = useAuth();
+	const { isLoggedIn } = state;
 	const { token } = state;
 
 	const onSubmitDelete = async (id: string) => {
@@ -102,19 +104,21 @@ const MemberList: FC<MemberListProps> = ({
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<article
 				onClick={onClick}
 				className="relative w-full flex justify-center mt-2 hover:cursor-pointer"

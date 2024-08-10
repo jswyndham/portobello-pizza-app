@@ -22,6 +22,10 @@ const Login = () => {
 	const navigate = useNavigate();
 	const { dispatch } = useAuth();
 
+	// Auth context & global state
+	const { state } = useAuth();
+	const { isLoggedIn } = state;
+
 	const onSubmit: SubmitHandler<LoginData> = async (data) => {
 		setIsLoading(true);
 		try {
@@ -76,19 +80,21 @@ const Login = () => {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<section className="bg-[url('/images/pasta-fresh-2.jpg')] bg-cover align-middle w-screen min-h-screen">
 				<article className="w-full h-screen backdrop-blur-md flex justify-center lg:items-center">
 					<article className="mx-2 mt-28 md:mt-56 flex flex-col justify-start bg-login-gradient align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">

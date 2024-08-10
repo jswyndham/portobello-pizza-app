@@ -210,19 +210,21 @@ const FoodMenuCard: FC<FoodMenuCardProps> = ({ category }) => {
 	// Render food items
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<section className="pt-8">
 				<motion.div
 					initial="hidden"

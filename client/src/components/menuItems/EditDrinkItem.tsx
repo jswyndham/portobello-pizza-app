@@ -12,8 +12,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const EditDrinkItem = () => {
 	const { id } = useParams<{ id: string }>();
+	// Auth context & global state
 	const { state } = useAuth();
+	const { isLoggedIn } = state;
+
 	const navigate = useNavigate();
+
+	// state
 	const [ingredients, setIngredients] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
@@ -150,19 +155,21 @@ const EditDrinkItem = () => {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 md:pt-52">
 				<form
 					className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"

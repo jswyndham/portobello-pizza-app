@@ -23,8 +23,10 @@ const AddMenuItem = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const { state } = useAuth(); // Use useAuth to get the state
+	// Auth context & global state
+	const { state } = useAuth();
 	const { token } = state;
+	const { isLoggedIn } = state;
 	const navigate = useNavigate(); // Use useNavigate to programmatically navigate
 
 	const {
@@ -173,19 +175,21 @@ const AddMenuItem = () => {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<section className="flex justify-center items-center w-screen sm:w-full h-full py-28">
 				<form
 					className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"

@@ -9,12 +9,18 @@ import ItemNotFound from '../components/itemNotFound/ItemNotFound';
 import { MenuSection } from '../types/seoInterface';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../context/AuthContext';
 
 function PizzaMenu() {
 	const [menuItems, setMenuItems] = useState<MenuSection[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
+	// Auth context & global state
+	const { state } = useAuth();
+	const { isLoggedIn } = state;
+
+	// Fetch menu items
 	useEffect(() => {
 		const fetchMenuItems = async () => {
 			setIsLoading(true);
@@ -95,19 +101,21 @@ function PizzaMenu() {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<article className="w-screen h-full bg-main-gradient min-h-screen">
 				<Helmet>
 					<title>

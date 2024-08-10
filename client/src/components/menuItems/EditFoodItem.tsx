@@ -14,14 +14,20 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const EditFoodItem = () => {
 	const { id } = useParams<{ id: string }>();
-	const { state } = useAuth();
-	const { token } = state;
+
 	const navigate = useNavigate();
+
+	// state
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [ingredients, setIngredients] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const { cache, setCache } = useCache();
+
+	// Auth context & global state
+	const { state } = useAuth();
+	const { isLoggedIn } = state;
+	const { token } = state;
 
 	const {
 		register,
@@ -214,19 +220,21 @@ const EditFoodItem = () => {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<section className="flex justify-center items-center w-screen sm:w-full h-fit pt-24 2xl:pt-0">
 				<form
 					className="w-11/12 md:w-9/12 lg:w-6/12 2xl:w-4/12 z-10 flex flex-col border shadow-md shadow-slate-400 rounded-lg px-6 py-8 mb-10 bg-slate-50"

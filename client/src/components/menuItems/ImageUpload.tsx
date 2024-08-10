@@ -2,11 +2,17 @@ import { ImageUploadProps } from '../../types/foodItemInterfaces';
 import { useEffect, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '../../context/AuthContext';
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
 	imagePreview,
 	setImageUrl,
 }) => {
+	// Auth context & global state
+	const { state } = useAuth();
+	const { isLoggedIn } = state;
+
+	// Reference
 	const cloudinaryRef = useRef<any>(null);
 	const widgetRef = useRef<any>(null);
 
@@ -32,19 +38,21 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<div className="flex flex-col my-2">
 				<button
 					type="button"

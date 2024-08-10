@@ -25,7 +25,7 @@ const authReducer = (state, action) => {
 	}
 };
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(authReducer, initialState);
@@ -35,11 +35,8 @@ export const AuthProvider = ({ children }) => {
 	}, [dispatch]);
 
 	const logout = async () => {
-		// Remove token from local storage immediately
-		localStorage.removeItem('authToken');
-		dispatch({ type: 'LOGOUT' });
-
 		try {
+			// Call logout on the server
 			const response = await fetch(
 				`${import.meta.env.VITE_API_BASE_URL}/auth/logout`,
 				{
@@ -49,6 +46,9 @@ export const AuthProvider = ({ children }) => {
 			);
 
 			if (response.ok) {
+				// Remove token from local storage after server logout
+				localStorage.removeItem('authToken');
+				dispatch({ type: 'LOGOUT' });
 				toast.success('Successfully logged out');
 			} else {
 				const errorData = await response.json();
@@ -56,6 +56,10 @@ export const AuthProvider = ({ children }) => {
 			}
 		} catch (error) {
 			toast.error('Error logging out');
+		} finally {
+			// Remove the token even if the server call fails
+			localStorage.removeItem('authToken');
+			dispatch({ type: 'LOGOUT' });
 		}
 	};
 

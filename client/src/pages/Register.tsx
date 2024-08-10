@@ -15,7 +15,10 @@ const Register: FC = () => {
 		setError,
 	} = useForm<RegisterData>();
 	const navigate = useNavigate();
+
+	// Auth context & global state
 	const { state } = useAuth();
+	const { isLoggedIn } = state;
 	const { token } = state;
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -98,19 +101,21 @@ const Register: FC = () => {
 
 	return (
 		<>
-			<ToastContainer
-				position="top-center"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				className="toast-container"
-				toastClassName="toast"
-			/>
+			{isLoggedIn && (
+				<ToastContainer
+					position="top-center"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					className="toast-container"
+					toastClassName="toast"
+				/>
+			)}
 			<section className="h-full w-screen bg-[url('/images/pizza-and-wine-2.jpg')] bg-cover align-middle">
 				<article className="w-full backdrop-blur-md pt-48 flex justify-center lg:items-center px-2">
 					<article className="flex flex-col justify-start bg-register-gradient align-middle w-full sm:w-9/12 md:w-8/12 lg:w-1/2 max-w-lg h-fit rounded-xl py-8 mb-24 border border-slate-400 shadow-lg shadow-slate-800">
