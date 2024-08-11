@@ -58,12 +58,12 @@ function Layout() {
 	return (
 		<HelmetProvider context={helmetContext}>
 			<LayoutContext.Provider value={value}>
-				<ScrollToTop />
 				<Navbar />
 				<article ref={sidebarRef}>
 					<SidebarMenu />
 				</article>
 				<section className="z-0 w-screen overflow-hidden">
+					<ScrollToTop />
 					<Outlet />
 				</section>
 				<Footer />
