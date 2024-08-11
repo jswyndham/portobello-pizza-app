@@ -25,7 +25,6 @@ import {
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { CacheProvider } from './context/cacheContext';
-import ScrollToTop from './components/ScrollToTop';
 
 const router = createBrowserRouter([
 	{
@@ -122,7 +121,6 @@ function App() {
 		<AuthProvider>
 			<CacheProvider>
 				<RouterProvider router={router} />
-				<ScrollToTop />
 			</CacheProvider>
 		</AuthProvider>
 	);

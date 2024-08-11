@@ -3,6 +3,7 @@ import { Navbar, SidebarMenu } from '../components/navbar';
 import { Outlet } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Footer from '../components/Footer';
+import ScrollToTop from '../components/ScrollToTop';
 
 interface LayoutContextType {
 	showSidebar: boolean;
@@ -57,6 +58,7 @@ function Layout() {
 	return (
 		<HelmetProvider context={helmetContext}>
 			<LayoutContext.Provider value={value}>
+				<ScrollToTop />
 				<Navbar />
 				<article ref={sidebarRef}>
 					<SidebarMenu />
