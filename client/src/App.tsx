@@ -13,18 +13,19 @@ import {
 	Register,
 	AuditLog,
 	EditDrinksPage,
+	PizzaMenu,
+	PastaMenu,
+	CalzoneMenu,
+	StarterMenu,
+	MainMenu,
+	SidesMenu,
+	SaladMenu,
+	DessertMenu,
 } from './pages';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { CacheProvider } from './context/cacheContext';
-import PizzaMenu from './pages/PizzaMenu';
-import PastaMenu from './pages/PastaMenu';
-import CalzoneMenu from './pages/CalzoneMenu';
-import StarterMenu from './pages/StartersMenu';
-import MainMenu from './pages/MainMenu';
-import SidesMenu from './pages/SidesMenu';
-import SaladMenu from './pages/SaladMenu';
-import DessertMenu from './pages/DessertMenu';
+import ScrollToTop from './components/ScrollToTop';
 
 const router = createBrowserRouter([
 	{
@@ -121,6 +122,7 @@ function App() {
 		<AuthProvider>
 			<CacheProvider>
 				<RouterProvider router={router} />
+				<ScrollToTop />
 			</CacheProvider>
 		</AuthProvider>
 	);

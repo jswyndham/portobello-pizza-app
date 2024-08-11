@@ -8,7 +8,7 @@ export { default as CalzoneMenu } from './CalzoneMenu';
 export { default as MainMenu } from './PastaMenu';
 export { default as SidesMenu } from './SidesMenu';
 export { default as SaladMenu } from './SaladMenu';
-export { default as StartersMenu } from './StartersMenu';
+export { default as StarterMenu } from './StartersMenu';
 export { default as DessertMenu } from './DessertMenu';
 export { default as DrinksMenu } from './DrinksMenu';
 export { default as Members } from './Members';

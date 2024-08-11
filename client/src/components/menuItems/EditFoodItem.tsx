@@ -130,6 +130,15 @@ const EditFoodItem = () => {
 
 	// ************ submit handler ************
 
+	// Create a mapping of menu category values to their corresponding labels.
+	// This is created to allow navigation to the correponding menu category.
+	const menuCategoryLabelMap: Record<string, string> = Object.values(
+		MENU_CATEGORY
+	).reduce((acc, category) => {
+		acc[category.value] = category.label;
+		return acc;
+	}, {} as Record<string, string>);
+
 	// Submit new values for the existing food menu item
 	const onSubmit: SubmitHandler<FoodMenuFormData> = async (data) => {
 		try {
@@ -161,7 +170,10 @@ const EditFoodItem = () => {
 			if (response.ok) {
 				toast.success('Your menu item was successfully edited!');
 				reset();
-				navigate('/');
+				const menuCategoryLabel =
+					menuCategoryLabelMap[data.menuCategory];
+
+				navigate(`/${menuCategoryLabel}`);
 			} else {
 				const errorData = await response.json();
 

@@ -61,7 +61,8 @@ const AddMenuItem = () => {
 		setIsDrink(watchedMenuCategory === MENU_CATEGORY.DRINK.value);
 	}, [watchedMenuCategory]);
 
-	// Create a mapping of menu category values to their corresponding labels
+	// Create a mapping of menu category values to their corresponding labels.
+	// This is created to allow navigation to the correponding menu category.
 	const menuCategoryLabelMap: Record<string, string> = Object.values(
 		MENU_CATEGORY
 	).reduce((acc, category) => {
@@ -106,6 +107,7 @@ const AddMenuItem = () => {
 				setIngredients(menuItem.ingredients || []);
 				reset();
 				setImagePreview(null); // Clear the image preview
+				toast.success('Your menu item was successfully created!');
 
 				// Delay navigation for 2 seconds to allow server time to update
 				setTimeout(() => {
@@ -114,6 +116,7 @@ const AddMenuItem = () => {
 					} else {
 						const menuCategoryLabel =
 							menuCategoryLabelMap[data.menuCategory];
+
 						navigate(`/${menuCategoryLabel}`);
 					}
 				}, 2000);
