@@ -1,19 +1,12 @@
 import { menuCategories } from '../../data/menuCategories';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function MenuCards() {
-	const navigate = useNavigate();
-
-	const handleClick = (link: string) => {
-		window.scrollTo(0, 0);
-		navigate(`/${link}`);
-	};
-
 	return (
-		<article className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 justify-center">
+		<div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 justify-center">
 			{menuCategories.map((category) => (
-				<div
-					onClick={() => handleClick(category.link)}
+				<Link
+					to={`/${category.link}`}
 					key={category.title}
 					className="block w-full"
 				>
@@ -29,9 +22,9 @@ function MenuCards() {
 							{category.title}
 						</h2>
 					</div>
-				</div>
+				</Link>
 			))}
-		</article>
+		</div>
 	);
 }
 

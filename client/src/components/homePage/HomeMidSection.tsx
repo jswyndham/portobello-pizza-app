@@ -1,4 +1,5 @@
 import HeadingOne from '../HeadingOne';
+import ScrollToTop from '../ScrollToTop';
 import MenuCards from './MenuCards';
 
 function HomeMidSection() {
@@ -8,6 +9,7 @@ function HomeMidSection() {
 				<HeadingOne headingOneText={"Porto Bello's Food Menu"} />
 
 				<div className="px-2 py-8 lg:p-12 2xl:px-32 2xl:py-16">
+					<ScrollToTop />
 					<MenuCards />
 				</div>
 			</div>
