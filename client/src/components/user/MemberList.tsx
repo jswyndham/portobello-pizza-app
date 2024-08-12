@@ -138,7 +138,7 @@ const MemberList: FC<MemberListProps> = ({
 						</div>
 					)}
 
-					<div className="w-64 flex flex-row justify-start">
+					<div className="w-64 flex flex-row justify-start hover:text-blue-600">
 						<p>{firstName}</p>
 						<p className="ml-3">{lastName}</p>
 					</div>
