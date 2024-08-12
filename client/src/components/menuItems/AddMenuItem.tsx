@@ -104,10 +104,6 @@ const AddMenuItem = () => {
 			if (response.ok) {
 				toast.success('Your menu item was successfully added!');
 				const menuItem = await response.json();
-				setIngredients(menuItem.ingredients || []);
-				reset();
-				setImagePreview(null); // Clear the image preview
-				toast.success('Your menu item was successfully created!');
 
 				// Delay navigation for 2 seconds to allow server time to update
 				setTimeout(() => {
@@ -119,7 +115,11 @@ const AddMenuItem = () => {
 
 						navigate(`/${menuCategoryLabel}`);
 					}
-				}, 2000);
+				}, 2500);
+				setIngredients(menuItem.ingredients || []);
+				reset();
+				setImagePreview(null); // Clear the image preview
+				toast.success('Your menu item was successfully created!');
 			} else {
 				const errorData = await response.json();
 				toast.error(`Failed to submit menu item: ${errorData.message}`);
