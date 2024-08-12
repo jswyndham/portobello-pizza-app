@@ -103,19 +103,17 @@ const AddMenuItem = () => {
 
 			if (response.ok) {
 				const menuItem = await response.json();
-
+				const menuCategoryLabel =
+					menuCategoryLabelMap[data.menuCategory];
+				setIngredients(menuItem.ingredients || []);
+				reset();
+				setImagePreview(null); // Clear the image preview
 				// Delay navigation for 2 seconds to allow server time to update
 				setTimeout(() => {
 					if (isDrink) {
 						reset();
 						navigate(`/drinksmenu`);
 					} else {
-						const menuCategoryLabel =
-							menuCategoryLabelMap[data.menuCategory];
-						setIngredients(menuItem.ingredients || []);
-						reset();
-						setImagePreview(null); // Clear the image preview
-
 						navigate(`/${menuCategoryLabel}`);
 					}
 				}, 3000);
