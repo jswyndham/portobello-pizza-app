@@ -47,10 +47,10 @@ export const getAllUsers = async (
 			return;
 		}
 
-		if (userData) {
-			res.status(StatusCodes.OK).json(userData);
-			return;
-		}
+		// if (userData) {
+		//     res.status(StatusCodes.OK).json(userData);
+		//     return;
+		// }
 
 		// Fetch from DB if not cached
 		const allUsers = await User.find(
