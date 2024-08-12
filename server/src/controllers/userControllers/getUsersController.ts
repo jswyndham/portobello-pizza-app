@@ -25,8 +25,8 @@ export const getAllUsers = async (
 		const skip = (page - 1) * limit;
 
 		// Set cache parameters
-		const cacheKey = `all_users_page_${page}_limit_${limit}`;
-		let userData = getCache(cacheKey);
+		// const cacheKey = `all_users_page_${page}_limit_${limit}`;
+		//  let userData = getCache(cacheKey);
 
 		// Check user authorization
 		if (!req.user) {
@@ -62,7 +62,7 @@ export const getAllUsers = async (
 			.exec();
 
 		// Cache the fetched data
-		setCache(cacheKey, allUsers, 7200); // Cache for 2 hours
+		// setCache(cacheKey, allUsers, 7200); // Cache for 2 hours
 
 		res.status(StatusCodes.OK).json(allUsers);
 	} catch (error: any) {
