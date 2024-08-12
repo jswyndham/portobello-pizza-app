@@ -102,7 +102,6 @@ const AddMenuItem = () => {
 			);
 
 			if (response.ok) {
-				toast.success('Your menu item was successfully added!');
 				const menuItem = await response.json();
 
 				// Delay navigation for 2 seconds to allow server time to update
