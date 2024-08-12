@@ -7,7 +7,7 @@ function HomeMidSection() {
 	const location = useLocation();
 
 	useEffect(() => {
-		if (location.pathname.includes('/menu')) {
+		if (location.pathname.includes('/')) {
 			window.scrollTo(0, 0);
 		}
 	}, [location.pathname]);

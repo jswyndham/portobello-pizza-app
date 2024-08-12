@@ -28,7 +28,8 @@ function SaladMenu() {
 				const response = await fetch(
 					`${
 						import.meta.env.VITE_API_BASE_URL
-					}/foodMenu?menuCategory=SALAD`
+					}/foodMenu?menuCategory=SALAD`,
+					{ method: 'GET' }
 				);
 				const data = await response.json();
 

@@ -117,7 +117,7 @@ function SidesMenu() {
 			<article className="w-screen h-full bg-main-gradient min-h-screen">
 				<Helmet>
 					<title>
-						Porto Bello Mains Menu | Italian Food on Koh Tao Island
+						Porto Bello Sides Menu | Italian Food on Koh Tao Island
 					</title>
 					<meta
 						name="description"

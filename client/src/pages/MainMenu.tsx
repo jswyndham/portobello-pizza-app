@@ -30,7 +30,8 @@ function MainMenu() {
 				const response = await fetch(
 					`${
 						import.meta.env.VITE_API_BASE_URL
-					}/foodMenu?menuCategory=MAIN`
+					}/foodMenu?menuCategory=MAIN`,
+					{ method: 'GET' }
 				);
 				const data = await response.json();
 
