@@ -108,17 +108,19 @@ const AddMenuItem = () => {
 				// Delay navigation for 2 seconds to allow server time to update
 				setTimeout(() => {
 					if (isDrink) {
+						reset();
 						navigate(`/drinksmenu`);
 					} else {
 						const menuCategoryLabel =
 							menuCategoryLabelMap[data.menuCategory];
+						setIngredients(menuItem.ingredients || []);
+						reset();
+						setImagePreview(null); // Clear the image preview
 
 						navigate(`/${menuCategoryLabel}`);
 					}
-				}, 2500);
-				setIngredients(menuItem.ingredients || []);
-				reset();
-				setImagePreview(null); // Clear the image preview
+				}, 3000);
+
 				toast.success('Your menu item was successfully created!');
 			} else {
 				const errorData = await response.json();
