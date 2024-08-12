@@ -35,8 +35,6 @@ function MainMenu() {
 				);
 				const data = await response.json();
 
-				console.log('API Response:', data);
-
 				if (response.ok && data.items && Array.isArray(data.items)) {
 					const groupedItems = data.items.reduce(
 						(sections: MenuSection[], item: FoodMenuModel) => {

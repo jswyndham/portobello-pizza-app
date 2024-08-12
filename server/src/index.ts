@@ -34,7 +34,7 @@ app.use(compression()); // Enable gzip compression for responses
 const allowedOrigins =
 	process.env.NODE_ENV === 'production'
 		? ['https://portobello-pizza-app.vercel.app']
-		: ['http://localhost:3000'];
+		: ['http://localhost:5173'];
 
 // Configure CORS
 app.use(
